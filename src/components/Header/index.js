@@ -1,6 +1,6 @@
 function Header(){
     return (
-        <div>Header</div>
+        <div>Header hear</div>
     )
 }
 export default Header;
