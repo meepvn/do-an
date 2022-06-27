@@ -1,9 +1,12 @@
-import AdminLayout from '../../components/layouts/Admin';
-import Content from './content.js';
-function Product(){
+import AdminLayout from '~/components/Layouts/AdminLayout';
+import ProductContent from '~/components/Contents/AdminContents/ProductContent';
+
+function Product() {
+  return (
     <AdminLayout>
-        <Content />
+      <ProductContent />
     </AdminLayout>
+  );
 }
 
 export default Product;
