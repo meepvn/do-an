@@ -1,8 +1,10 @@
+import AdminLayout from '../../components/layouts/Admin';
+
 function Home() {
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <AdminLayout>
+      <div>Home</div>
+    </AdminLayout>
   );
 }
 
