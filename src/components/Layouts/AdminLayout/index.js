@@ -1,14 +1,16 @@
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
-
+import Footer from './components/Footer';
+import style from'./style.module.scss'
 function AdminLayout({ children }) {
   return (
-    <div>
+    <div className={style.wrapper} >
       <Header />
-      <div className="wrapper">
+      <div className={style.content}>
         <Sidebar />
         {children}
       </div>
+      <Footer />
     </div>
   );
 }

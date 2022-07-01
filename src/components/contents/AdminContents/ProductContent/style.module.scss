@@ -1,0 +1,39 @@
+.wrapper{
+
+    margin: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.content{
+    width: 100%;
+    margin-top: 2rem ;
+    // table{
+    //     width: 100%;
+    //     border-collapse: collapse;
+    //     text-align: center;
+    //     border-radius: 1rem;
+    //     font-size: 1.6rem;
+    //     line-height: 2.5rem;
+    //     td,th{
+    //         padding:.5rem;
+    //     }
+    //     button{
+    //         color: var(--white);
+    //     }
+    //     .delete{
+    //         background-color: var(--danger);
+    //     }
+    //     .edit{
+    //         background-color: var(--warning);
+    //     }
+    // }
+    button{
+        background-color: transparent;
+        padding:8px 12px;
+        border: 1px solid;
+        border-radius: 2rem;
+    }
+}

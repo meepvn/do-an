@@ -1,5 +1,5 @@
 import AdminLayout from '~/components/Layouts/AdminLayout';
-import ProductContent from '~/components/Contents/AdminContents/ProductContent';
+import ProductContent from '~/components/contents/AdminContents/ProductContent';
 
 function Product() {
   return (

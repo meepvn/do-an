@@ -1,25 +1,41 @@
 import SearchBar from '~/components/SearchBar';
-import { useState, useEffect, useMemo } from 'react';
+import style from './style.module.scss'
+import ProductTable from './components/ProductTable';
+
+import { useState,useEffect,useMemo } from 'react';
+import InstockTable from './components/InstockTable';
 function ProductContent() {
   const [filterValue, setFilterValue] = useState('');
   const [data, setData] = useState([]);
+  const [table,setTable] =useState('product');
+  
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users/')
+    fetch(`http://localhost:3100/api/${table}`)
       .then((res) => res.json())
       .then(setData)
       .catch(console.log);
-  }, []);
+  }, [table]);
 
   const filterdData = useMemo(() => {
-    return data.filter((item) => item.username.includes(filterValue));
+    return data.filter((item) => item.TenSP.includes(filterValue));
   }, [filterValue, data]);
 
   return (
-    <div className="content">
+    <div className={style.wrapper}>
       <SearchBar setFilterValue={setFilterValue} />
-      {filterdData.map((item, index) => (
-        <div key={index}>{item.username}</div>
-      ))}
+        <div className={style.content}>
+          <div className={style.nav}>
+              <button onClick={()=>setTable("product")}>Thông tin sản phẩm</button>
+              <button  onClick={()=>setTable("instock")}>Số lượng</button>
+          </div>
+          {
+            table ==='instock'&& <InstockTable data={filterdData}/>  
+          }{
+            table==='product'&&<ProductTable data={filterdData}/>
+          }
+
+        </div>
+        
     </div>
   );
 }
