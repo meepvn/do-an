@@ -1,0 +1,33 @@
+.wrapperTblPro {
+    position: relative;
+    .wrapperBtn {
+        position: absolute;
+        right: 0;
+        top: -4.4rem;
+        button {
+            background-color: var(--addBtn);
+            color: var(--white);
+        }
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        border-radius: 1rem;
+        font-size: 1.6rem;
+        line-height: 2.5rem;
+        td,
+        th {
+            padding: 0.5rem;
+        }
+        button {
+            color: var(--white);
+        }
+        .delete {
+            background-color: var(--danger);
+        }
+        .edit {
+            background-color: var(--warning);
+        }
+    }
+}

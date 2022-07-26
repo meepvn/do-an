@@ -1,0 +1,44 @@
+.wrapperHome{
+    width: 100%;
+    overflow: hidden;
+    .nav{
+        
+        background-color: rgb(255, 56, 92);
+        width: 100%;
+        padding: .5rem 3.2rem;
+        height: 5rem;
+        font-size: 1.4rem;
+        color: var(--black);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        .text{
+            text-align: center;
+            p{
+                text-transform: uppercase;
+            }
+        }
+        button{
+            background-color: transparent;
+            border: 2px solid var(--black);
+            min-width: 8rem;
+            padding:.8rem 1.2rem;
+            max-height: 4rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+    }
+    .img{
+        position: relative;
+        color: var(--white);
+        font-size: 3rem;
+        .content{
+            position: absolute;
+            top:50%;
+            left: 50%;
+            transform: translate(-50%);
+        }
+    }
+
+}

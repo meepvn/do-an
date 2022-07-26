@@ -1,0 +1,63 @@
+.headerHome{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding:0 3.2rem;
+    height: 6rem;
+    background-color: #2d2d2d;
+    color:white;
+
+   .headerRight
+   {
+    display: flex;
+    width: 25%;
+    justify-content: space-between;
+    align-items: center;
+    .image{
+        height: 100%;
+        display: flex;
+        
+    }
+    .gender
+    {   
+        display: flex;
+        flex-grow: 1;
+        height: 100%;
+        font-size: 1.6rem;
+        line-height: 6rem;  
+        margin: 0 2rem;  
+         
+        p{
+            &:hover{
+                background-color: #666;
+            }
+            cursor: pointer;
+            height: 100%;
+            width: 50%;
+            text-align: center;
+            border-right: 1px solid rgba($color: #fff, $alpha: .2);
+            border-left: 1px solid rgba($color: #fff, $alpha: .2);
+        }
+       
+    }
+   }
+   .headerLeft{
+    flex-grow: 1;
+    display: flex;
+    .headerSearch{
+        flex-grow: 1;
+        .searchBar{
+            background-color: wheat;
+        }
+    }
+    .icons{
+        min-width: 15rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 2.2rem;
+        padding: 0 2rem;
+    }
+   }
+   
+}

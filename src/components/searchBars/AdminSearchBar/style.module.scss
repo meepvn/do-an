@@ -1,0 +1,46 @@
+.searchBar{
+    position: relative;
+    border: 1px;
+    border-radius: 9.2rem;
+    padding-left: 1.8rem;
+    // width: 40%;
+    height: 4.6rem;
+    display: flex;
+    overflow: hidden;
+    input{
+        
+        flex: 1;
+        height: 100%;
+        font-size: 1.6rem;
+        padding:1.2rem 0;   
+        background-color: transparent;
+        
+    }
+    &::after{
+        content: "";
+        height: 2.8rem;
+        width: 1px;
+        position: absolute;
+        top: 9px;
+        right: 5rem;
+        background-color:rgba(22, 24, 35, 0.5) ;
+    }
+    &:focus-within{
+        border: 1px solid rgba(22, 24, 35, 0.1) ;
+        box-shadow: 0 0 1rem rgba(22, 24, 35, 0.1) ;
+    }
+    button{
+        width: 4rem;
+        border: none;
+        width: 5rem;
+        font-size: 1.8rem;
+        color: rgba(22, 24, 35, 0.34);
+        background-color: transparent;
+        cursor: pointer;
+        border-bottom-right-radius: 9.2rem;
+        border-top-right-radius: 9.2rem;
+        &:hover{
+            background-color: rgba(22, 24, 35, 0.05);
+        }
+    }
+}

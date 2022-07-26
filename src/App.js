@@ -1,15 +1,28 @@
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
-import Home from '~/pages/Home';
-import Product from '~/pages/Product';
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/product" element={<Product />} />
-      </Routes>
-    </Router>
-  );
-}
 
+import Login from './pages/account/Login';
+import Register from './pages/account/Register';
+import AccountLayout from './layouts/AccountLayout';
+import AdminLayout from './layouts/AdminLayout';
+import Product from './pages/admin/Product';
+
+function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/admin" element={<AdminLayout />}>
+                    <Route path="product" element={<Product />} />
+                    {/* <Route path="customer" element={<Customer />} /> */}
+                </Route>
+                {/* <Route path="/customer" element={<Customer />} /> */}
+                {/* <Route path="/" element={<Home />} /> */}
+                {/* <Route path="/product" element={<Product />} /> */}
+                <Route path="/account" element={<AccountLayout />}>
+                    <Route path="register" element={<Register />} />
+                    <Route path="login" element={<Login />} />
+                </Route>
+            </Routes>
+        </Router>
+    );
+}
 export default App;
