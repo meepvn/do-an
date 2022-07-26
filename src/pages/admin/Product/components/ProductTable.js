@@ -8,7 +8,7 @@ import ModalEditProduct from './ModalEditProduct';
 function ProductTable(props) {
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
-    const [productEdit, setProductEdit] = useState({});
+    const [selectedProduct, setSelectedProduct] = useState({});
     const handleToggleModalAdd = () => {
         setShow(!show);
     };
@@ -20,9 +20,8 @@ function ProductTable(props) {
     const handleDelete = async (idProduct) => {
         const copyData = props.data;
         try {
-            const res = await deleteApi(props.link, idProduct);
+            const res = await deleteApi('product', idProduct);
             const reponse = await res.json();
-            console.log(reponse);
             const test = copyData.filter((item) => item.id !== idProduct);
             console.log('test data', test);
             props.setData(test);
@@ -48,7 +47,7 @@ function ProductTable(props) {
             {showEdit === true ? (
                 <ModalEditProduct
                     setData={props.setData}
-                    curentProduct={productEdit}
+                    curentProduct={selectedProduct}
                     setShowEdit={setShowEdit}
                     link={props.link}
                     handleToggleShowModalEdit={handleToggleShowModalEdit}
@@ -69,9 +68,15 @@ function ProductTable(props) {
                     {props.data.map((item, index) => {
                         return (
                             <tr key={index}>
-                                <td>{item.TenSP}</td>
+                                <td className={style.ImageWrapper}>
+                                    {item.TenSP}
+                                    <img
+                                        src={`http://localhost:3100/images/${item.TenAnh}`}
+                                        alt="img"
+                                    />
+                                </td>
                                 <td>{item.Loai}</td>
-                                <td>{item.GioiTinh === 0 ? 'Nam' : 'Nữ'}</td>
+                                <td>{item.GioiTinh === 1 ? 'Nam' : 'Nữ'}</td>
                                 <td>{item.DonGia}</td>
                                 <td>{item.KhuyenMai}</td>
                                 <td>
@@ -79,7 +84,7 @@ function ProductTable(props) {
                                         className={style.edit}
                                         onClick={() => {
                                             handleToggleShowModalEdit();
-                                            setProductEdit(item);
+                                            setSelectedProduct(item);
                                         }}
                                     >
                                         <FontAwesomeIcon icon={faPenToSquare} /> Sửa

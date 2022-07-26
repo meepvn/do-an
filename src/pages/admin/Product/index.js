@@ -21,7 +21,7 @@ function Product() {
 
     return (
         <div className={style.wrapper}>
-            <AdminSearchBar setFilterValue={setFilterValue} />
+            <AdminSearchBar setFilterValue={setFilterValue} data={data} />
             <div className={style.content}>
                 <div className={style.nav}>
                     <div>

@@ -26,12 +26,12 @@ const updateApi = (link, id, data) => {
     console.log('test', id, data);
     return fetch(`http://localhost:3100/api/${link}/${id}`, Option);
 };
-const addProduct = (link, FormData) => {
+const addProduct = (FormData) => {
     var Option = {
         method: 'POST',
         body: FormData,
     };
-    return fetch(`http://localhost:3100/api/${link}`, Option);
+    return fetch(`http://localhost:3100/api/product`, Option);
 };
 
 export { getData, AddApi, deleteApi, updateApi, addProduct };

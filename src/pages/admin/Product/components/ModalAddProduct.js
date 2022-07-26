@@ -17,11 +17,11 @@ function ModalAddProduct(props) {
     });
     const gender = [
         {
-            id: '0',
+            id: 1,
             name: 'Nam',
         },
         {
-            id: 1,
+            id: 2,
             name: 'Nữ',
         },
     ];
@@ -51,14 +51,14 @@ function ModalAddProduct(props) {
             myForm.append('GioiTinh', inputValue.GioiTinh);
             myForm.append('KhuyenMai', inputValue.KhuyenMai);
             myForm.append('product', inputValue.Anh);
-            const res = await addProduct(props.link, myForm);
+            const res = await addProduct(myForm);
             const reponse = await res.json();
+            console.log('reponse', reponse);
             if (reponse.status !== 'OK') {
                 console.log(reponse);
                 return;
             } else {
                 const newData = await getData();
-                console.log('Error');
                 await props.setData(newData);
                 props.setShow(false);
                 setInputValue({

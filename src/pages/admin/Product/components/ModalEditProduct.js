@@ -30,11 +30,11 @@ function ModalEditProduct(props) {
     });
     const gender = [
         {
-            id: 0,
+            id: 1,
             name: 'Nam',
         },
         {
-            id: 1,
+            id: 2,
             name: 'Nữ',
         },
     ];
@@ -56,7 +56,7 @@ function ModalEditProduct(props) {
         let isValid = validateInput();
         if (isValid === true) {
             // console.log(product.id, inputValue);
-            const res = await updateApi(props.link, product.id, inputValue);
+            const res = await updateApi('product', product.id, inputValue);
             const reponse = await res.json();
             if (reponse !== 'OK') {
                 console.log(reponse.message);
