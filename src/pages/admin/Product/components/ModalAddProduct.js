@@ -1,10 +1,12 @@
 import style from '../style.module.scss';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { addProduct, getData } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { validator } from '~/ultis';
 function ModalAddProduct(props) {
-    const IdRef = useRef();
+    const inputRef = useRef();
+    const [preview, setPreview] = useState();
     const [selectedFile, setSelectedFile] = useState(null);
     const [checked, setChecked] = useState(1);
     const [inputValue, setInputValue] = useState({
@@ -25,7 +27,15 @@ function ModalAddProduct(props) {
             name: 'Nữ',
         },
     ];
-
+    useEffect(() => {
+        if (selectedFile) {
+            const render = new FileReader();
+            render.onloadend = () => {
+                setPreview(render.result);
+            };
+            render.readAsDataURL(selectedFile);
+        } else setPreview(null);
+    }, [selectedFile]);
     const validateInput = () => {
         let isValid = true;
         const arr = ['TenSP', 'Loai', 'DonGia', 'KhuyenMai'];
@@ -37,12 +47,22 @@ function ModalAddProduct(props) {
                 break;
             }
         }
+        if (!validator.positive(inputValue.DonGia)) {
+            console.log('Don gia sai roi');
+            return false;
+        }
+        if (!validator.percent(inputValue.KhuyenMai)) {
+            console.log('KM sai roi');
+            return false;
+        }
         return isValid;
     };
 
     const handleSubmit = async () => {
         console.log('data', inputValue);
         let isValid = validateInput();
+        console.log(isValid);
+        return;
         if (isValid === true) {
             const myForm = new FormData();
             myForm.append('TenSP', inputValue.TenSP);
@@ -87,7 +107,7 @@ function ModalAddProduct(props) {
                 </div>
                 <div className={style.modalContent}>
                     <div className={style.modalInput}>
-                        <label>Tên sản phẩm</label>
+                        <label>Tên sản phẩm:</label>
                         <input
                             type="text"
                             value={inputValue.TenSP}
@@ -98,7 +118,7 @@ function ModalAddProduct(props) {
                         ></input>
                     </div>
                     <div className={style.modalInput}>
-                        <label>Loại sản phẩm</label>
+                        <label>Loại sản phẩm:</label>
                         <input
                             type="text"
                             value={inputValue.Loai}
@@ -109,25 +129,27 @@ function ModalAddProduct(props) {
                         ></input>
                     </div>
                     <div className={style.modalInput}>
-                        <label>Đối tượng</label>
-                        {gender.map((item) => {
-                            return (
-                                <div key={item.id}>
-                                    <input
-                                        type="radio"
-                                        onChange={() => {
-                                            setChecked(item.id);
-                                            setInputValue({ ...inputValue, GioiTinh: item.id });
-                                        }}
-                                        checked={checked === item.id}
-                                    />
-                                    {item.name}
-                                </div>
-                            );
-                        })}
+                        <label>Đối tượng:</label>
+                        <div className={style.gender}>
+                            {gender.map((item) => {
+                                return (
+                                    <div className={style.genderItem} key={item.id}>
+                                        <input
+                                            type="radio"
+                                            onChange={() => {
+                                                setChecked(item.id);
+                                                setInputValue({ ...inputValue, GioiTinh: item.id });
+                                            }}
+                                            checked={checked === item.id}
+                                        />
+                                        {item.name}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                     <div className={style.modalInput}>
-                        <label>Đơn giá</label>
+                        <label>Đơn giá:</label>
                         <input
                             type="number"
                             value={inputValue.DonGia}
@@ -138,7 +160,7 @@ function ModalAddProduct(props) {
                         ></input>
                     </div>
                     <div className={style.modalInput}>
-                        <label>Khuyến mãi</label>
+                        <label>Khuyến mãi:</label>
                         <input
                             type="number"
                             value={inputValue.KhuyenMai}
@@ -148,17 +170,27 @@ function ModalAddProduct(props) {
                             placeholder="Nhập khuyến mãi ..."
                         ></input>
                     </div>
-                </div>
-                <div className={style.addImg}>
-                    <input
-                        type="file"
-                        onChange={(event) => {
-                            setInputValue({ ...inputValue, Anh: event.target.files[0] });
-                        }}
-                    ></input>
-                </div>
-                <div className={style.btn}>
-                    <button onClick={handleSubmit}>ADD</button>
+                    <div className={style.addImg}>
+                        <input
+                            ref={inputRef}
+                            type="file"
+                            style={{ display: 'none' }}
+                            onChange={(event) => {
+                                setSelectedFile(event.target.files[0]);
+                                setInputValue({ ...inputValue, Anh: event.target.files[0] });
+                            }}
+                        ></input>
+                        <button
+                            onClick={(e) => {
+                                inputRef.current.click();
+                            }}
+                        >
+                            Chọn ảnh
+                        </button>
+                    </div>
+                    <div className={style.btn}>
+                        <button onClick={handleSubmit}>Thêm</button>
+                    </div>
                 </div>
             </div>
         </div>

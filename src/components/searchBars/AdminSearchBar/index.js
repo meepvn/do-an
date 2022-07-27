@@ -1,43 +1,80 @@
 import { useState } from 'react';
 import style from './style.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-function AdminSearchBar({ setFilterValue, data }) {
+import { faClose, faFilterCircleXmark, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { removeAccents } from '~/ultis';
+function AdminSearchBar({ setFilterValue, data, filterValue }) {
     const [inputValue, setInputValue] = useState('');
     const [showSuggest, setShowSuggest] = useState(false);
-    const suggestData = data.filter((item) => item.TenSP.includes(inputValue));
+    const suggestData = data.filter((item) =>
+        removeAccents(item.TenSP).toLowerCase().includes(removeAccents(inputValue).toLowerCase()),
+    );
+
     return (
         <div className={style.wrapperSearchBar}>
+            {filterValue && (
+                <button
+                    onClick={() => {
+                        setInputValue('');
+                        setFilterValue('');
+                    }}
+                    className={style.back}
+                >
+                    <FontAwesomeIcon icon={faFilterCircleXmark} /> Bỏ tìm kiếm
+                </button>
+            )}
             <div className={style.searchBar}>
                 <input
                     onChange={(e) => {
-                        setShowSuggest(true);
+                        setShowSuggest(e.target.value !== '');
                         setInputValue(e.target.value);
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && suggestData.length > 0)
+                            setFilterValue(e.target.value);
+                        setShowSuggest(false);
                     }}
                     value={inputValue}
                     placeholder="Nhập tên sản phẩm ..."
                 />
-
-                <button onClick={() => setFilterValue(inputValue)}>
+                {inputValue && (
+                    <button
+                        className={style.clearBtn}
+                        onClick={() => {
+                            setInputValue('');
+                            setShowSuggest(false);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faClose} />
+                    </button>
+                )}
+                <button
+                    className={style.findBtn}
+                    onClick={() => {
+                        if (suggestData.length > 0) setFilterValue(inputValue);
+                    }}
+                >
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </button>
             </div>
-            {showSuggest && inputValue && (
+            {showSuggest && (
                 <div className={style.suggest}>
                     {suggestData.map((item) => {
                         return (
                             <div
                                 className={style.suggestItem}
+                                key={item.id}
                                 onClick={() => {
                                     setFilterValue(item.TenSP);
                                     setInputValue(item.TenSP);
                                     setShowSuggest(!showSuggest);
                                 }}
                             >
-                                {item.TenSP}
+                                <span>{item.TenSP}</span>
                             </div>
                         );
                     })}
+                    {suggestData.length === 0 && <span>Không tìm thấy kết quả</span>}
                 </div>
             )}
         </div>

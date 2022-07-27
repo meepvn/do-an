@@ -23,7 +23,6 @@ const updateApi = (link, id, data) => {
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' },
     };
-    console.log('test', id, data);
     return fetch(`http://localhost:3100/api/${link}/${id}`, Option);
 };
 const addProduct = (FormData) => {

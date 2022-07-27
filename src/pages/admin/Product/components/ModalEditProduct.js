@@ -3,30 +3,14 @@ import { useState } from 'react';
 import { getData, updateApi } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-import { useEffect } from 'react';
-import _ from 'lodash';
-function ModalEditProduct(props) {
-    const product = props.curentProduct;
-    useEffect(() => {
-        if (product && !_.isEmpty(product)) {
-            setInputValue({
-                TenSP: product.TenSP,
-                Loai: product.Loai,
-                DonGia: product.DonGia,
-                GioiTinh: product.GioiTinh,
-                KhuyenMai: product.KhuyenMai,
-            });
-            console.log(product);
-        }
-    }, [props.curentProduct]);
-
-    const [checked, setChecked] = useState(1);
+function ModalEditProduct({ selectedProduct, setData, setShowEdit }) {
+    const [checked, setChecked] = useState(selectedProduct.GioiTinh);
     const [inputValue, setInputValue] = useState({
-        TenSP: '',
-        Loai: '',
-        DonGia: '',
-        GioiTinh: 1,
-        KhuyenMai: '',
+        TenSP: selectedProduct.TenSP,
+        Loai: selectedProduct.Loai,
+        DonGia: selectedProduct.DonGia,
+        GioiTinh: selectedProduct.GioiTinh,
+        KhuyenMai: selectedProduct.KhuyenMai,
     });
     const gender = [
         {
@@ -56,7 +40,7 @@ function ModalEditProduct(props) {
         let isValid = validateInput();
         if (isValid === true) {
             // console.log(product.id, inputValue);
-            const res = await updateApi('product', product.id, inputValue);
+            const res = await updateApi('product', selectedProduct.id, inputValue);
             const reponse = await res.json();
             if (reponse !== 'OK') {
                 console.log(reponse.message);
@@ -65,8 +49,8 @@ function ModalEditProduct(props) {
                 console.log(reponse);
                 const newData = await getData();
                 console.log('new data', newData);
-                await props.setData(newData);
-                props.setShowEdit(false);
+                await setData(newData);
+                setShowEdit(false);
                 setInputValue({
                     TenSP: '',
                     Loai: '',
@@ -86,7 +70,7 @@ function ModalEditProduct(props) {
                     <FontAwesomeIcon
                         className={style.icon}
                         icon={faClose}
-                        onClick={props.handleToggleShowModalEdit}
+                        onClick={() => setShowEdit(false)}
                     />
                 </div>
                 <div className={style.modalContent}>

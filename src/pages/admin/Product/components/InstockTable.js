@@ -1,43 +1,51 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
-import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useRef, useState } from 'react';
+import { faPenToSquare, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import style from './style.module.scss';
-import ModalEditProduct from './ModalEditProduct';
 import AddInstock from './AddInstock';
+import EditInstock from './EditInstock';
+import { deleteApi } from '~/webService';
+import AlertWarning from '~/components/infoModals/AlertWarning';
 function InstockTable({ data, setData }) {
-    const productsWithInstock = data.filter((item) => item.SoLuong.length > 0);
     const [adding, setAdding] = useState(false);
-    const [showEdit, setShowEdit] = useState(false);
-    const [productEdit, setProductEdit] = useState({});
-    const handleShowModalAdd = () => {
-        setAdding(!adding);
+    const [editting, setEditting] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const selectedProductRef = useRef();
+    const handleDelete = async (idProduct) => {
+        const res = await deleteApi('instock', idProduct);
+        const reponse = await res.json();
+        console.log(reponse);
+        const dataUpdate = data.map((item) => {
+            const newInstock = item.SoLuong.filter((instock) => instock.id !== idProduct);
+            return { ...item, SoLuong: [...newInstock] };
+        });
+        setData(dataUpdate);
     };
-    const handleToggleShowModalEdit = (product) => {
-        setShowEdit(!showEdit);
-        return product;
-    };
-
-    const handleDelete = async (idProduct) => {};
     return (
         <div className={style.wrapperTblPro}>
-            <div className={style.wrapperBtn}>
-                <button className={style.btnAdd} onClick={handleShowModalAdd}>
-                    Thêm sản phẩm
-                </button>
-            </div>
+            {deleting && (
+                <AlertWarning
+                    handleDelete={handleDelete}
+                    setDeleting={setDeleting}
+                    selectedProductId={selectedProductRef.current}
+                />
+            )}
             {adding === true ? (
                 <AddInstock
                     setData={setData}
-                    setShow={setAdding}
-                    handleToggleModalAdd={handleShowModalAdd}
+                    setAdding={setAdding}
+                    selectedProduct={{
+                        id: selectedProductRef.current.id,
+                        TenSP: selectedProductRef.current.TenSP,
+                        SoLuong: selectedProductRef.current.SoLuong,
+                    }}
                 />
             ) : null}
-            {showEdit === true ? (
-                <ModalEditProduct
+            {editting === true ? (
+                <EditInstock
                     setData={setData}
-                    curentProduct={productEdit}
-                    setShowEdit={setShowEdit}
-                    handleToggleShowModalEdit={handleToggleShowModalEdit}
+                    selectedProduct={{ ...selectedProductRef.current }}
+                    setEditting={setEditting}
                 />
             ) : null}
             <table border="1">
@@ -49,11 +57,14 @@ function InstockTable({ data, setData }) {
                         <th colSpan="2">Hành động</th>
                     </tr>
                 </thead>
-                {productsWithInstock.map((item) => {
+                {data.map((item) => {
                     return (
                         <tbody key={item.id}>
                             <tr>
-                                <td rowSpan={item.SoLuong.length + 1}>{item.TenSP}</td>
+                                <td rowSpan={item.SoLuong.length + 2}>{item.TenSP}</td>
+                                {item.SoLuong.length === 0 && (
+                                    <td colSpan="4">Sản phẩm chưa có số lượng</td>
+                                )}
                             </tr>
                             {item.SoLuong.map((instock) => {
                                 return (
@@ -64,8 +75,16 @@ function InstockTable({ data, setData }) {
                                             <button
                                                 className={style.edit}
                                                 onClick={() => {
-                                                    handleToggleShowModalEdit();
-                                                    setProductEdit(item);
+                                                    setEditting(true);
+                                                    selectedProductRef.current = {
+                                                        id: item.id,
+                                                        TenSP: item.TenSP,
+                                                        instock: {
+                                                            id: instock.id,
+                                                            Size: instock.Size,
+                                                            SoLuong: instock.SoLuong,
+                                                        },
+                                                    };
                                                 }}
                                             >
                                                 <FontAwesomeIcon icon={faPenToSquare} /> Sửa
@@ -75,7 +94,8 @@ function InstockTable({ data, setData }) {
                                             <button
                                                 className={style.delete}
                                                 onClick={() => {
-                                                    handleDelete(item.id);
+                                                    setDeleting(true);
+                                                    selectedProductRef.current = instock.id;
                                                 }}
                                             >
                                                 <FontAwesomeIcon icon={faTrash} /> Xóa
@@ -84,6 +104,17 @@ function InstockTable({ data, setData }) {
                                     </tr>
                                 );
                             })}
+                            <tr>
+                                <td
+                                    colSpan={5}
+                                    onClick={() => {
+                                        selectedProductRef.current = item;
+                                        setAdding(true);
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faPlus} />
+                                </td>
+                            </tr>
                         </tbody>
                     );
                 })}

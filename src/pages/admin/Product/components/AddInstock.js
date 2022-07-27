@@ -27,7 +27,7 @@ function AddInstock(props) {
     const handleSubmit = async () => {
         let isValid = validateInput();
         if (isValid === true) {
-            const dataUpdate = { ...inputValue, id_sanpham: props.instockEdit.id };
+            const dataUpdate = { ...inputValue, id_sanpham: props.selectedProduct.id };
             const res = await AddApi('instock', dataUpdate);
             const reponse = await res.json();
             console.log(reponse);
@@ -36,7 +36,7 @@ function AddInstock(props) {
             } else {
                 const newData = await getData();
                 await props.setData(newData);
-                props.setAddInstock(false);
+                props.setAdding(false);
                 setInputValue({
                     Size: '',
                     SoLuong: '',
@@ -55,14 +55,14 @@ function AddInstock(props) {
                         className={style.icon}
                         icon={faClose}
                         onClick={() => {
-                            props.setAddInstock(false);
+                            props.setAdding(false);
                         }}
                     />
                 </div>
                 <div className={style.modalContent}>
                     <div className={style.modalInput}>
                         <label>Tên sản phẩm</label>
-                        <input type="text" value={props.instockEdit?.TenSP} disabled></input>
+                        <input type="text" value={props.selectedProduct?.TenSP} disabled></input>
                     </div>
 
                     <div className={style.modalInput}>

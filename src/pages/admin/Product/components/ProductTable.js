@@ -1,27 +1,27 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { formatMoney } from '~/ultis';
 import style from './style.module.scss';
 import ModalAddProduct from './ModalAddProduct';
 import { deleteApi } from '~/webService';
 import ModalEditProduct from './ModalEditProduct';
+import AlertWarning from '~/components/infoModals/AlertWarning';
 function ProductTable(props) {
+    console.log(props);
+    const [deleting, setDeleting] = useState(false);
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState({});
+    const selectedProductRef = useRef();
     const handleToggleModalAdd = () => {
         setShow(!show);
-    };
-    const handleToggleShowModalEdit = (product) => {
-        setShowEdit(!showEdit);
-        return product;
     };
 
     const handleDelete = async (idProduct) => {
         const copyData = props.data;
         try {
             const res = await deleteApi('product', idProduct);
-            const reponse = await res.json();
+            await res.json();
             const test = copyData.filter((item) => item.id !== idProduct);
             console.log('test data', test);
             props.setData(test);
@@ -36,29 +36,34 @@ function ProductTable(props) {
                     Thêm sản phẩm
                 </button>
             </div>
+            {deleting && (
+                <AlertWarning
+                    setDeleting={setDeleting}
+                    handleDelete={handleDelete}
+                    selectedProductId={selectedProductRef.current.id}
+                />
+            )}
             {show === true ? (
                 <ModalAddProduct
                     setData={props.setData}
                     setShow={setShow}
-                    link={props.link}
                     handleToggleModalAdd={handleToggleModalAdd}
                 />
             ) : null}
             {showEdit === true ? (
                 <ModalEditProduct
                     setData={props.setData}
-                    curentProduct={selectedProduct}
+                    selectedProduct={{ ...selectedProductRef.current }}
                     setShowEdit={setShowEdit}
-                    link={props.link}
-                    handleToggleShowModalEdit={handleToggleShowModalEdit}
                 />
             ) : null}
             <table border="1">
                 <thead>
                     <tr>
                         <th>Tên sản phẩm</th>
+                        <th>Ảnh</th>
                         <th>Loại sản phẩm</th>
-                        <th>Đối tượng khách hàng</th>
+                        <th>Đối tượng </th>
                         <th>Đơn giá</th>
                         <th>Khuyến mãi</th>
                         <th colSpan="3">Hành động</th>
@@ -68,23 +73,29 @@ function ProductTable(props) {
                     {props.data.map((item, index) => {
                         return (
                             <tr key={index}>
-                                <td className={style.ImageWrapper}>
-                                    {item.TenSP}
-                                    <img
-                                        src={`http://localhost:3100/images/${item.TenAnh}`}
-                                        alt="img"
-                                    />
+                                <td>
+                                    <div className={style.nameWrapper}>
+                                        <span>{item.TenSP}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className={style.imgWrapper}>
+                                        <img
+                                            src={`http://localhost:3100/images/${item.TenAnh}`}
+                                            alt="img"
+                                        />
+                                    </div>
                                 </td>
                                 <td>{item.Loai}</td>
                                 <td>{item.GioiTinh === 1 ? 'Nam' : 'Nữ'}</td>
-                                <td>{item.DonGia}</td>
+                                <td>{formatMoney(item.DonGia, ' vnđ')}</td>
                                 <td>{item.KhuyenMai}</td>
                                 <td>
                                     <button
                                         className={style.edit}
                                         onClick={() => {
-                                            handleToggleShowModalEdit();
-                                            setSelectedProduct(item);
+                                            selectedProductRef.current = item;
+                                            setShowEdit(true);
                                         }}
                                     >
                                         <FontAwesomeIcon icon={faPenToSquare} /> Sửa
@@ -94,7 +105,8 @@ function ProductTable(props) {
                                     <button
                                         className={style.delete}
                                         onClick={() => {
-                                            handleDelete(item.id);
+                                            selectedProductRef.current = item;
+                                            setDeleting(true);
                                         }}
                                     >
                                         <FontAwesomeIcon icon={faTrash} /> Xóa
@@ -104,13 +116,12 @@ function ProductTable(props) {
                                     <button
                                         className={style.edit}
                                         onClick={() => {
+                                            props.setFilterValue(item.TenSP);
                                             props.setTable('instock');
-                                            props.setAddInstock(true);
-                                            props.setInstockEdit(item);
                                         }}
                                     >
                                         <FontAwesomeIcon icon={faPlus} />
-                                        Thêm số lượng
+                                        Xem số lượng
                                     </button>
                                 </td>
                             </tr>

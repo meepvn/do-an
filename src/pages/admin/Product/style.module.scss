@@ -61,7 +61,7 @@
         .modalHeader {
             display: flex;
             justify-content: space-between;
-            padding: 1rem;
+            padding: 1rem 2rem;
             color: var(--white);
             background-color: var(--addBtn);
             .icon {
@@ -70,21 +70,39 @@
         }
 
         .modalContent {
+            .gender {
+                input {
+                    margin-right: 1rem;
+                }
+                .genderItem:first-child {
+                    margin-bottom: 0.5rem;
+                }
+            }
             width: 100%;
-            padding: 1rem;
+            padding: 2rem;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             .modalInput {
+                display: flex;
+                vertical-align: middle;
                 width: 48%;
+                margin-bottom: 1rem;
                 label {
+                    min-width: 12rem;
                     display: block;
-                    line-height: 2rem;
-                    margin: 0.5rem 0;
                 }
                 input {
-                    line-height: 2rem;
-                    border: 1px solid;
+                    flex-grow: 1;
+                    padding: 1rem;
+                    font-size: 1.6rem;
+                    border: 1px solid var(--border-color);
+                    &::placeholder {
+                        font-size: 1.6rem;
+                    }
+                    &:focus {
+                        box-shadow: 0 0 1rem var(--border-color);
+                    }
                 }
             }
         }
