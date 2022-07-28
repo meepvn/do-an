@@ -116,12 +116,9 @@ export const LoginRegisterWrapper = styled.div`
         -o-border-radius: 0.5rem;
     }
     .form__content {
-        border: 1px solid var(--border-color);
         padding: 1rem 2.5rem;
         width: 100%;
         height: 100%;
-
-        box-shadow: 0 0 0.5rem var(--border-color);
     }
     .form__login:hover {
         box-shadow: 0 0 2rem var(--border-color);
@@ -213,6 +210,8 @@ export const LoginRegisterWrapper = styled.div`
     }
 
     .wrapper__form {
+        box-shadow: 0 0 0.5rem var(--border-color);
+
         width: 40%;
         border-radius: 1rem;
         -webkit-border-radius: 1rem;

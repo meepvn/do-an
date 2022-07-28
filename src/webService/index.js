@@ -6,6 +6,14 @@ const AddApi = (link, data) => {
     };
     return fetch(`http://localhost:3100/api/${link}`, Option);
 };
+const userApi = (endPoint, data) => {
+    const options = {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+    };
+    return fetch(`http://localhost:3100/api/user/${endPoint}`, options);
+};
 const getData = async () => {
     const res = await fetch(`http://localhost:3100/api/product`);
     const reponse = await res.json();
@@ -33,4 +41,4 @@ const addProduct = (FormData) => {
     return fetch(`http://localhost:3100/api/product`, Option);
 };
 
-export { getData, AddApi, deleteApi, updateApi, addProduct };
+export { getData, AddApi, deleteApi, updateApi, addProduct, userApi };

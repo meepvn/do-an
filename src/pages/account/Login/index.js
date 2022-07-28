@@ -1,7 +1,26 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoginRegisterWrapper } from '../style';
+import { userApi } from '~/webService';
+import { authContext } from '~/contexts/AuthContext';
 const Login = () => {
+    const [inputValue, setInputValue] = useState({
+        TenTaiKhoan: '',
+        MatKhau: '',
+    });
+    const { auth, setAuth } = useContext(authContext);
+    console.log(auth);
+    const navigate = useNavigate();
+    const handleSubmit = async () => {
+        if (!inputValue.TenTaiKhoan || !inputValue.MatKhau) return;
+        const response = await userApi('login', inputValue);
+        const json = await response.json();
+        console.log(json);
+        if (json.status === 'OK') {
+            setAuth({ ...auth, isLogin: true, token: json.token, userInfo: json.info });
+            navigate('/admin/product');
+        }
+    };
     return (
         <LoginRegisterWrapper>
             <div className="wrapper__form">
@@ -16,6 +35,10 @@ const Login = () => {
                             type="text"
                             name="usernameLogin"
                             className="content__form--input"
+                            value={inputValue.TenTaiKhoan}
+                            onChange={(e) =>
+                                setInputValue({ ...inputValue, TenTaiKhoan: e.target.value })
+                            }
                             placeholder="Tên đăng nhập"
                         />
                     </div>
@@ -24,11 +47,15 @@ const Login = () => {
                             type="password"
                             name="passwordLogin"
                             className="content__form--input"
+                            value={inputValue.MatKhau}
+                            onChange={(e) =>
+                                setInputValue({ ...inputValue, MatKhau: e.target.value })
+                            }
                             placeholder="Mật khẩu"
                         />
                     </div>
                     <div className="content__form--group " id="btn">
-                        <button className="btn" id="btn-submit">
+                        <button className="btn" id="btn-submit" onClick={handleSubmit}>
                             Đăng nhập
                         </button>
                     </div>

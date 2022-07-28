@@ -127,6 +127,17 @@ function ModalAddProduct(props) {
                             }}
                             placeholder="Nhập loại sản phẩm ..."
                         ></input>
+                        {/* <select
+                            onChange={(e) => {
+                                console.log(e.target.value);
+                            }}
+                        >
+                            {props.productTypes.map((type) => (
+                                <option key={type} value={type}>
+                                    {type}
+                                </option>
+                            ))}
+                        </select> */}
                     </div>
                     <div className={style.modalInput}>
                         <label>Đối tượng:</label>

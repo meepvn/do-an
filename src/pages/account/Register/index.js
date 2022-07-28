@@ -1,6 +1,34 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoginRegisterWrapper } from '../style';
+import { useState } from 'react';
+import { userApi } from '~/webService';
 function Register() {
+    const [inputValue, setInputValue] = useState({
+        HoTen: '',
+        SDT: '',
+        DiaChi: '',
+        Email: '',
+        TenTaiKhoan: '',
+        MatKhau: '',
+        NhapLaiMatKhau: '',
+    });
+    const navigate = useNavigate();
+    const handleSubmit = async () => {
+        if (
+            (!inputValue.HoTen,
+            !inputValue.SDT,
+            !inputValue.DiaChi,
+            !inputValue.Email,
+            !inputValue.MatKhau,
+            !inputValue.NhapLaiMatKhau)
+        )
+            return;
+        const { NhapLaiMatKhau, ...data } = inputValue;
+        const response = await userApi('register', data);
+        const resJson = await response.json();
+        console.log(resJson);
+        navigate('/account/login');
+    };
     return (
         <LoginRegisterWrapper>
             <div className="wrapper__form">
@@ -14,7 +42,11 @@ function Register() {
                             type="text"
                             name="name"
                             className="content__form--input"
-                            placeholder="Họ và tên ..."
+                            placeholder="Họ tên ..."
+                            value={inputValue.HoTen}
+                            onChange={(e) =>
+                                setInputValue({ ...inputValue, HoTen: e.target.value })
+                            }
                         />
                     </div>
                     <div className="content__form--group">
@@ -22,7 +54,21 @@ function Register() {
                             type="text"
                             name="phone"
                             className="content__form--input"
+                            value={inputValue.SDT}
                             placeholder="Số điện thoại ..."
+                            onChange={(e) => setInputValue({ ...inputValue, SDT: e.target.value })}
+                        />
+                    </div>
+                    <div className="content__form--group">
+                        <input
+                            type="text"
+                            name="phone"
+                            className="content__form--input"
+                            value={inputValue.DiaChi}
+                            placeholder="Dia chi ..."
+                            onChange={(e) =>
+                                setInputValue({ ...inputValue, DiaChi: e.target.value })
+                            }
                         />
                     </div>
                     <div className="content__form--group">
@@ -30,7 +76,11 @@ function Register() {
                             type="email"
                             name="phone"
                             className="content__form--input"
+                            value={inputValue.Email}
                             placeholder="Email ..."
+                            onChange={(e) =>
+                                setInputValue({ ...inputValue, Email: e.target.value })
+                            }
                         />
                     </div>
                     <div className="content__form--group ">
@@ -38,7 +88,11 @@ function Register() {
                             type="text"
                             name="username"
                             className="content__form--input"
+                            value={inputValue.TenTaiKhoan}
                             placeholder="Tên đăng nhập ..."
+                            onChange={(e) =>
+                                setInputValue({ ...inputValue, TenTaiKhoan: e.target.value })
+                            }
                         />
                     </div>
                     <div className="content__form--group">
@@ -46,7 +100,11 @@ function Register() {
                             type="password"
                             name="password"
                             className="content__form--input"
+                            value={inputValue.MatKhau}
                             placeholder="Mật khẩu ..."
+                            onChange={(e) =>
+                                setInputValue({ ...inputValue, MatKhau: e.target.value })
+                            }
                         />
                     </div>
                     <div className="content__form--group">
@@ -54,11 +112,15 @@ function Register() {
                             type="password"
                             name="repassword"
                             className="content__form--input"
+                            value={inputValue.NhapLaiMatKhau}
                             placeholder="Nhập lại mật khẩu ..."
+                            onChange={(e) =>
+                                setInputValue({ ...inputValue, NhapLaiMatKhau: e.target.value })
+                            }
                         />
                     </div>
                     <div className="content__form--group " id="btn">
-                        <button className="btn " id="btn-submit">
+                        <button className="btn " id="btn-submit" onClick={handleSubmit}>
                             Đăng ký
                         </button>
                     </div>

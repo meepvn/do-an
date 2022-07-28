@@ -47,6 +47,7 @@ function ProductTable(props) {
                 <ModalAddProduct
                     setData={props.setData}
                     setShow={setShow}
+                    productTypes={props.productTypes}
                     handleToggleModalAdd={handleToggleModalAdd}
                 />
             ) : null}
