@@ -87,8 +87,9 @@ function AddInstock(props) {
                             placeholder="Nhập Số lượng ..."
                         ></input>
                     </div>
-
-                    <button onClick={handleSubmit}>Submit</button>
+                    <div className={style.modalBtn}>
+                        <button onClick={handleSubmit}>Thêm</button>
+                    </div>
                 </div>
             </div>
         </div>

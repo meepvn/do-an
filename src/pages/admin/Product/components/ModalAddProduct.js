@@ -2,13 +2,15 @@ import style from '../style.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import { addProduct, getData } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { faClose, faImage, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { validator } from '~/ultis';
+import { types } from 'sass';
 function ModalAddProduct(props) {
     const inputRef = useRef();
-    const [preview, setPreview] = useState();
+    const [previewIMG, setPreviewIMG] = useState();
     const [selectedFile, setSelectedFile] = useState(null);
     const [checked, setChecked] = useState(1);
+    console.log(props.types);
     const [inputValue, setInputValue] = useState({
         TenSP: '',
         Loai: '',
@@ -28,14 +30,17 @@ function ModalAddProduct(props) {
         },
     ];
     useEffect(() => {
-        if (selectedFile) {
-            const render = new FileReader();
-            render.onloadend = () => {
-                setPreview(render.result);
-            };
-            render.readAsDataURL(selectedFile);
-        } else setPreview(null);
-    }, [selectedFile]);
+        return () => {
+            previewIMG && URL.revokeObjectURL(previewIMG.preview);
+        };
+    }, [previewIMG]);
+    const handlePreviewIMG = (e) => {
+        const file = e.target.files[0];
+        file.preview = URL.createObjectURL(file);
+        console.log(file);
+        setPreviewIMG(file);
+    };
+
     const validateInput = () => {
         let isValid = true;
         const arr = ['TenSP', 'Loai', 'DonGia', 'KhuyenMai'];
@@ -62,7 +67,6 @@ function ModalAddProduct(props) {
         console.log('data', inputValue);
         let isValid = validateInput();
         console.log(isValid);
-        return;
         if (isValid === true) {
             const myForm = new FormData();
             myForm.append('TenSP', inputValue.TenSP);
@@ -127,6 +131,13 @@ function ModalAddProduct(props) {
                             }}
                             placeholder="Nhập loại sản phẩm ..."
                         ></input>
+                        <select>
+                            {/* {types.map((type) => (
+                                <option key={type} value={type}>
+                                    {type}
+                                </option>
+                            ))} */}
+                        </select>
                     </div>
                     <div className={style.modalInput}>
                         <label>Đối tượng:</label>
@@ -178,6 +189,7 @@ function ModalAddProduct(props) {
                             onChange={(event) => {
                                 setSelectedFile(event.target.files[0]);
                                 setInputValue({ ...inputValue, Anh: event.target.files[0] });
+                                handlePreviewIMG(event);
                             }}
                         ></input>
                         <button
@@ -185,10 +197,17 @@ function ModalAddProduct(props) {
                                 inputRef.current.click();
                             }}
                         >
-                            Chọn ảnh
+                            <FontAwesomeIcon icon={faUpload} /> Chọn ảnh
                         </button>
+                        <div className={style.previewIMG}>
+                            {previewIMG ? (
+                                <img src={previewIMG.preview} alt="img" />
+                            ) : (
+                                <FontAwesomeIcon icon={faImage} className={style.noIMG} />
+                            )}
+                        </div>
                     </div>
-                    <div className={style.btn}>
+                    <div className={style.modalBtn}>
                         <button onClick={handleSubmit}>Thêm</button>
                     </div>
                 </div>

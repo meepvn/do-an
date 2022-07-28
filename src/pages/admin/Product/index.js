@@ -10,19 +10,23 @@ function Product() {
     const [filterValue, setFilterValue] = useState('');
     const [data, setData] = useState([]);
     const [table, setTable] = useState('product');
-
+    const { products = [], types: productTypes = [] } = data;
     useEffect(() => {
         getData().then(setData).catch(console.log);
     }, []);
     const filterdData = useMemo(() => {
-        return data.filter((item) =>
+        return products.filter((item) =>
             removeAccents(item.TenSP).includes(removeAccents(filterValue)),
         );
-    }, [filterValue, data]);
+    }, [filterValue, products]);
 
     return (
         <div className={style.wrapper}>
-            <AdminSearchBar setFilterValue={setFilterValue} data={data} filterValue={filterValue} />
+            <AdminSearchBar
+                setFilterValue={setFilterValue}
+                data={products}
+                filterValue={filterValue}
+            />
             <div className={style.content}>
                 <div className={style.nav}>
                     <div>
@@ -51,6 +55,7 @@ function Product() {
                     <ProductTable
                         setFilterValue={setFilterValue}
                         data={filterdData}
+                        productTypes={productTypes}
                         setData={setData}
                         setTable={setTable}
                     />

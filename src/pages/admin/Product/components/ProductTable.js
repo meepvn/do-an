@@ -48,6 +48,7 @@ function ProductTable(props) {
                     setData={props.setData}
                     setShow={setShow}
                     handleToggleModalAdd={handleToggleModalAdd}
+                    productTypes={props.productTypes}
                 />
             ) : null}
             {showEdit === true ? (
@@ -75,7 +76,8 @@ function ProductTable(props) {
                             <tr key={index}>
                                 <td>
                                     <div className={style.nameWrapper}>
-                                        <span>{item.TenSP}</span>
+                                        <span className={style.name}>{item.TenSP}</span>
+                                        <span className={style.fullName}>{item.TenSP}</span>
                                     </div>
                                 </td>
                                 <td>
@@ -89,7 +91,7 @@ function ProductTable(props) {
                                 <td>{item.Loai}</td>
                                 <td>{item.GioiTinh === 1 ? 'Nam' : 'Nữ'}</td>
                                 <td>{formatMoney(item.DonGia, ' vnđ')}</td>
-                                <td>{item.KhuyenMai}</td>
+                                <td>{item.KhuyenMai}%</td>
                                 <td>
                                     <button
                                         className={style.edit}

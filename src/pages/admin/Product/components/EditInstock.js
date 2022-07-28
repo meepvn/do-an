@@ -73,7 +73,9 @@ function EditInstock({ selectedProduct, setEditting, setData }) {
                         ></input>
                     </div>
 
-                    <button onClick={handleSubmit}>Submit</button>
+                    <div className={style.modalBtn}>
+                        <button onClick={handleSubmit}>Hoàn tất</button>
+                    </div>
                 </div>
             </div>
         </div>

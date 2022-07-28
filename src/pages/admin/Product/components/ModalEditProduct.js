@@ -136,7 +136,9 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit }) {
                             placeholder="Nhập khuyến mãi ..."
                         ></input>
                     </div>
-                    <button onClick={handleUpdate}>Submit</button>
+                    <div className={style.modalBtn}>
+                        <button onClick={handleUpdate}>Hoàn tất</button>
+                    </div>
                 </div>
             </div>
         </div>
