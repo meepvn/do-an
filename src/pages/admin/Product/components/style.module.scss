@@ -15,28 +15,57 @@
         border-collapse: collapse;
         text-align: center;
         border-radius: 1rem;
+        border-spacing: 1px;
         font-size: 1.6rem;
-        line-height: 2.5rem;
         .nameWrapper {
-            display: block;
-            max-width: 15rem;
-            flex-wrap: wrap;
-            overflow: hidden;
+            // max-width: 15rem;
+            // flex-wrap: wrap;
+            // overflow: hidden;
+            display: flex;
+            justify-content: center;
             height: 100%;
+            position: relative;
+
             span {
+                transition: width 1s he;
+                cursor: help;
+            }
+
+            .name {
+                width: 90%;
                 display: block;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                width: 95%;
                 border: none;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                max-width: 18rem;
+                &:hover ~ .fullName {
+                    opacity: 0.7;
+                    transition-delay: 0.5s;
+                }
+            }
+            .fullName {
+                max-width: 50rem;
+                position: absolute;
+                top: 1.8rem;
+                white-space: nowrap;
+                transition: 0.1s linear;
+                padding: 0.5rem;
+                background-color: black;
+                color: white;
+                opacity: 0;
+                border-radius: 3px;
+                transition-timing-function: linear;
             }
         }
         .imgWrapper {
             overflow: hidden;
             object-fit: cover;
-            max-height: 10rem;
-            max-width: 20rem;
+
+            display: flex;
+            margin-left: 15px;
+            max-height: 5rem;
+            max-width: 10rem;
         }
         img {
             display: block;
@@ -59,6 +88,24 @@
         }
         .edit {
             background-color: var(--warning);
+        }
+        .iconPlus {
+            font-weight: 900;
+        }
+        .addInstock {
+            width: 100%;
+            background-color: gray;
+            &:hover {
+                animation: changeColor;
+            }
+        }
+    }
+    @keyframes changeColor {
+        from {
+            background-color: gray;
+        }
+        to {
+            background-color: aquamarine;
         }
     }
 }

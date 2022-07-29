@@ -27,6 +27,7 @@ function Register() {
         const response = await userApi('register', data);
         const resJson = await response.json();
         console.log(resJson);
+
         navigate('/account/login');
     };
     return (

@@ -1,15 +1,15 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoginRegisterWrapper } from '../style';
 import { userApi } from '~/webService';
-import { authContext } from '~/contexts/AuthContext';
+import useAuth from '~/hooks/useAuth';
+
 const Login = () => {
     const [inputValue, setInputValue] = useState({
         TenTaiKhoan: '',
         MatKhau: '',
     });
-    const { auth, setAuth } = useContext(authContext);
-    console.log(auth);
+    const auth = useAuth();
     const navigate = useNavigate();
     const handleSubmit = async () => {
         if (!inputValue.TenTaiKhoan || !inputValue.MatKhau) return;
@@ -17,7 +17,7 @@ const Login = () => {
         const json = await response.json();
         console.log(json);
         if (json.status === 'OK') {
-            setAuth({ ...auth, isLogin: true, token: json.token, userInfo: json.info });
+            auth.setState(true, json.token, json.info);
             navigate('/admin/product');
         }
     };

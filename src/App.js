@@ -5,19 +5,19 @@ import Register from './pages/account/Register';
 import AccountLayout from './layouts/AccountLayout';
 import AdminLayout from './layouts/AdminLayout';
 import Product from './pages/admin/Product';
-
+import ProtectedRoutes from './components/ProtectedRoutes';
+import CustomerLayout from './layouts/CustomerLayout';
 function App() {
     return (
         <Router>
             <AuthContentProvider>
                 <Routes>
-                    <Route path="/admin" element={<AdminLayout />}>
-                        <Route path="product" element={<Product />} />
-                        {/* <Route path="customer" element={<Customer />} /> */}
+                    <Route path="/" element={<CustomerLayout />} />
+                    <Route path="/admin" element={<ProtectedRoutes allowedRoles={[1, 2]} />}>
+                        <Route element={<AdminLayout />}>
+                            <Route path="product" element={<Product />} />
+                        </Route>
                     </Route>
-                    {/* <Route path="/customer" element={<Customer />} /> */}
-                    {/* <Route path="/" element={<Home />} /> */}
-                    {/* <Route path="/product" element={<Product />} /> */}
                     <Route path="/account" element={<AccountLayout />}>
                         <Route path="register" element={<Register />} />
                         <Route path="login" element={<Login />} />

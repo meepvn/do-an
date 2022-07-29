@@ -61,7 +61,12 @@ function InstockTable({ data, setData }) {
                     return (
                         <tbody key={item.id}>
                             <tr>
-                                <td rowSpan={item.SoLuong.length + 2}>{item.TenSP}</td>
+                                <td rowSpan={item.SoLuong.length + 2}>
+                                    <div className={style.nameWrapper}>
+                                        <span className={style.name}>{item.TenSP}</span>
+                                        <span className={style.fullName}>{item.TenSP}</span>
+                                    </div>
+                                </td>
                                 {item.SoLuong.length === 0 && (
                                     <td colSpan="4">Sản phẩm chưa có số lượng</td>
                                 )}
@@ -106,13 +111,14 @@ function InstockTable({ data, setData }) {
                             })}
                             <tr>
                                 <td
+                                    className={style.addInstock}
                                     colSpan={5}
                                     onClick={() => {
                                         selectedProductRef.current = item;
                                         setAdding(true);
                                     }}
                                 >
-                                    <FontAwesomeIcon icon={faPlus} />
+                                    <FontAwesomeIcon icon={faPlus} className={style.iconPlus} />
                                 </td>
                             </tr>
                         </tbody>

@@ -2,12 +2,14 @@ import style from '../style.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import { addProduct, getData } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { faClose, faImage, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { validator } from '~/ultis';
 function ModalAddProduct(props) {
     const inputRef = useRef();
+    const [previewIMG, setPreviewIMG] = useState();
     const [preview, setPreview] = useState();
     const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedType, setSelectedType] = useState('');
     const [checked, setChecked] = useState(1);
     const [inputValue, setInputValue] = useState({
         TenSP: '',
@@ -27,35 +29,47 @@ function ModalAddProduct(props) {
             name: 'Nữ',
         },
     ];
+    const handlePreviewIMG = (e) => {
+        const file = e.target.files[0];
+        file.preview = URL.createObjectURL(file);
+        console.log(file);
+        setPreviewIMG(file);
+    };
     useEffect(() => {
-        if (selectedFile) {
-            const render = new FileReader();
-            render.onloadend = () => {
-                setPreview(render.result);
-            };
-            render.readAsDataURL(selectedFile);
-        } else setPreview(null);
-    }, [selectedFile]);
+        return () => {
+            previewIMG && URL.revokeObjectURL(previewIMG.preview);
+        };
+    }, [previewIMG]);
+    const handleTypeChange = (e) => {
+        if (e.target.value === 'Thêm loại') {
+            setInputValue({ ...inputValue, Loai: '' });
+            setSelectedType(e.target.value);
+        } else {
+            setInputValue({ ...inputValue, Loai: e.target.value });
+            setSelectedType(e.target.value);
+        }
+    };
     const validateInput = () => {
-        let isValid = true;
-        const arr = ['TenSP', 'Loai', 'DonGia', 'KhuyenMai'];
-        for (let i = 0; i < arr.length; i++) {
-            // console.log(inputValue[arr[i]]);
-            if (!inputValue[arr[i]]) {
-                isValid = false;
-                alert('Không được để trống ' + arr[i]);
-                break;
-            }
-        }
-        if (!validator.positive(inputValue.DonGia)) {
-            console.log('Don gia sai roi');
-            return false;
-        }
-        if (!validator.percent(inputValue.KhuyenMai)) {
-            console.log('KM sai roi');
-            return false;
-        }
-        return isValid;
+        // let isValid = true;
+        // const arr = ['TenSP', 'Loai', 'DonGia', 'KhuyenMai'];
+        // for (let i = 0; i < arr.length; i++) {
+        //     // console.log(inputValue[arr[i]]);
+        //     if (!inputValue[arr[i]]) {
+        //         isValid = false;
+        //         alert('Không được để trống ' + arr[i]);
+        //         break;
+        //     }
+        // }
+        // if (!validator.positive(inputValue.DonGia)) {
+        //     console.log('Don gia sai roi');
+        //     return false;
+        // }
+        // if (!validator.percent(inputValue.KhuyenMai)) {
+        //     console.log('KM sai roi');
+        //     return false;
+        // }
+        // return isValid;
+        return true;
     };
 
     const handleSubmit = async () => {
@@ -117,28 +131,7 @@ function ModalAddProduct(props) {
                             placeholder="Nhập tên sản phẩm ..."
                         ></input>
                     </div>
-                    <div className={style.modalInput}>
-                        <label>Loại sản phẩm:</label>
-                        <input
-                            type="text"
-                            value={inputValue.Loai}
-                            onChange={(event) => {
-                                setInputValue({ ...inputValue, Loai: event.target.value });
-                            }}
-                            placeholder="Nhập loại sản phẩm ..."
-                        ></input>
-                        {/* <select
-                            onChange={(e) => {
-                                console.log(e.target.value);
-                            }}
-                        >
-                            {props.productTypes.map((type) => (
-                                <option key={type} value={type}>
-                                    {type}
-                                </option>
-                            ))}
-                        </select> */}
-                    </div>
+
                     <div className={style.modalInput}>
                         <label>Đối tượng:</label>
                         <div className={style.gender}>
@@ -170,6 +163,7 @@ function ModalAddProduct(props) {
                             placeholder="Nhập đơn giá ..."
                         ></input>
                     </div>
+
                     <div className={style.modalInput}>
                         <label>Khuyến mãi:</label>
                         <input
@@ -181,12 +175,38 @@ function ModalAddProduct(props) {
                             placeholder="Nhập khuyến mãi ..."
                         ></input>
                     </div>
+
+                    <div className={style.modalInput} id={style.select}>
+                        <label>Loại sản phẩm:</label>
+                        <select onChange={handleTypeChange} className={style.selectTypes}>
+                            <option>Chọn loại sản phẩm</option>
+                            {props.productTypes.map((type) => (
+                                <option key={type} value={type}>
+                                    {type}
+                                </option>
+                            ))}
+                            <option value="Thêm loại">Thêm loại</option>
+                        </select>
+                    </div>
+                    {selectedType === 'Thêm loại' && (
+                        <div className={style.modalInput}>
+                            <input
+                                type="text"
+                                value={inputValue.Loai}
+                                onChange={(event) => {
+                                    setInputValue({ ...inputValue, Loai: event.target.value });
+                                }}
+                                placeholder="Nhập loại sản phẩm ..."
+                            ></input>
+                        </div>
+                    )}
                     <div className={style.addImg}>
                         <input
                             ref={inputRef}
                             type="file"
                             style={{ display: 'none' }}
                             onChange={(event) => {
+                                handlePreviewIMG(event);
                                 setSelectedFile(event.target.files[0]);
                                 setInputValue({ ...inputValue, Anh: event.target.files[0] });
                             }}
@@ -196,10 +216,17 @@ function ModalAddProduct(props) {
                                 inputRef.current.click();
                             }}
                         >
-                            Chọn ảnh
+                            <FontAwesomeIcon icon={faUpload} /> Chọn ảnh
                         </button>
+                        <div className={style.previewIMG}>
+                            {previewIMG ? (
+                                <img src={previewIMG.preview} alt="img" />
+                            ) : (
+                                <FontAwesomeIcon icon={faImage} className={style.noIMG} />
+                            )}
+                        </div>
                     </div>
-                    <div className={style.btn}>
+                    <div className={style.modalBtn}>
                         <button onClick={handleSubmit}>Thêm</button>
                     </div>
                 </div>
