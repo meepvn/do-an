@@ -4,11 +4,10 @@ import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icon
 import { formatMoney } from '~/ultis';
 import style from './style.module.scss';
 import ModalAddProduct from './ModalAddProduct';
-import { deleteApi } from '~/webService';
+import { deleteApi, getData } from '~/webService';
 import ModalEditProduct from './ModalEditProduct';
 import AlertWarning from '~/components/infoModals/AlertWarning';
 function ProductTable(props) {
-    console.log(props);
     const [deleting, setDeleting] = useState(false);
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
@@ -18,13 +17,11 @@ function ProductTable(props) {
     };
 
     const handleDelete = async (idProduct) => {
-        const copyData = props.data;
         try {
             const res = await deleteApi('product', idProduct);
             await res.json();
-            const test = copyData.filter((item) => item.id !== idProduct);
-            console.log('test data', test);
-            props.setData(test);
+            const newData = await getData();
+            props.setData(newData);
         } catch (e) {
             console.log(e);
         }

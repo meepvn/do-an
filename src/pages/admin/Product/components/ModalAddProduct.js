@@ -3,12 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 import { addProduct, getData } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faImage, faUpload } from '@fortawesome/free-solid-svg-icons';
-import { validator } from '~/ultis';
+import { validator, removeAccents } from '~/ultis';
 function ModalAddProduct(props) {
     const inputRef = useRef();
     const [previewIMG, setPreviewIMG] = useState();
-    const [preview, setPreview] = useState();
-    const [selectedFile, setSelectedFile] = useState(null);
     const [selectedType, setSelectedType] = useState('');
     const [checked, setChecked] = useState(1);
     const [inputValue, setInputValue] = useState({
@@ -50,37 +48,49 @@ function ModalAddProduct(props) {
         }
     };
     const validateInput = () => {
-        // let isValid = true;
-        // const arr = ['TenSP', 'Loai', 'DonGia', 'KhuyenMai'];
-        // for (let i = 0; i < arr.length; i++) {
-        //     // console.log(inputValue[arr[i]]);
-        //     if (!inputValue[arr[i]]) {
-        //         isValid = false;
-        //         alert('Không được để trống ' + arr[i]);
-        //         break;
-        //     }
-        // }
-        // if (!validator.positive(inputValue.DonGia)) {
-        //     console.log('Don gia sai roi');
-        //     return false;
-        // }
-        // if (!validator.percent(inputValue.KhuyenMai)) {
-        //     console.log('KM sai roi');
-        //     return false;
-        // }
-        // return isValid;
+        const arr = ['TenSP', 'Loai', 'DonGia', 'KhuyenMai'];
+        for (let i = 0; i < arr.length; i++) {
+            // console.log(inputValue[arr[i]]);
+            if (!inputValue[arr[i]]) {
+                alert('Không được để trống thông tin');
+                return false;
+            }
+        }
+        if (!inputValue.Anh) {
+            alert('Vui lòng thêm ảnh.');
+            return false;
+        }
+        if (!validator.noSpecialCharacters(inputValue.TenSP)) {
+            alert('Tên sản phẩm không hợp lệ');
+            return false;
+        }
+        const typeValue = removeAccents(inputValue.Loai.trim().toLowerCase());
+        if (typeValue.includes('chon loai') || typeValue.includes('them loai')) {
+            alert('Loại không hợp lệ');
+            return false;
+        }
+        if (!validator.positive(inputValue.DonGia)) {
+            alert('Đơn giá phải > 1000');
+            return false;
+        }
+        if (!validator.percent(inputValue.KhuyenMai)) {
+            alert('Khuyến mãi nằm trong [0,100]');
+            return false;
+        }
         return true;
     };
-
+    const normalizeName = (name) => {
+        let newName = name.trim();
+        newName = newName.replace(newName[0], newName[0].toUpperCase());
+        return newName;
+    };
     const handleSubmit = async () => {
         console.log('data', inputValue);
         let isValid = validateInput();
-        console.log(isValid);
-        return;
         if (isValid === true) {
             const myForm = new FormData();
-            myForm.append('TenSP', inputValue.TenSP);
-            myForm.append('Loai', inputValue.Loai);
+            myForm.append('TenSP', normalizeName(inputValue.TenSP));
+            myForm.append('Loai', normalizeName(inputValue.Loai));
             myForm.append('DonGia', inputValue.DonGia);
             myForm.append('GioiTinh', inputValue.GioiTinh);
             myForm.append('KhuyenMai', inputValue.KhuyenMai);
@@ -89,20 +99,12 @@ function ModalAddProduct(props) {
             const reponse = await res.json();
             console.log('reponse', reponse);
             if (reponse.status !== 'OK') {
-                console.log(reponse);
+                alert(reponse.result);
                 return;
             } else {
                 const newData = await getData();
                 await props.setData(newData);
                 props.setShow(false);
-                setInputValue({
-                    TenSP: '',
-                    Loai: '',
-                    DonGia: '',
-                    GioiTinh: 1,
-                    KhuyenMai: '',
-                    Anh: '',
-                });
             }
         }
     };
@@ -179,7 +181,7 @@ function ModalAddProduct(props) {
                     <div className={style.modalInput} id={style.select}>
                         <label>Loại sản phẩm:</label>
                         <select onChange={handleTypeChange} className={style.selectTypes}>
-                            <option>Chọn loại sản phẩm</option>
+                            <option value="">Chọn loại sản phẩm</option>
                             {props.productTypes.map((type) => (
                                 <option key={type} value={type}>
                                     {type}
@@ -207,7 +209,6 @@ function ModalAddProduct(props) {
                             style={{ display: 'none' }}
                             onChange={(event) => {
                                 handlePreviewIMG(event);
-                                setSelectedFile(event.target.files[0]);
                                 setInputValue({ ...inputValue, Anh: event.target.files[0] });
                             }}
                         ></input>

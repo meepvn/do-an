@@ -43,7 +43,7 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit }) {
             const res = await updateApi('product', selectedProduct.id, inputValue);
             const reponse = await res.json();
             if (reponse !== 'OK') {
-                console.log(reponse.message);
+                alert(reponse);
                 return;
             } else {
                 console.log(reponse);

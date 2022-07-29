@@ -4,7 +4,6 @@ import { AddApi, getData } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 function AddInstock(props) {
-    console.log(props);
     const [inputValue, setInputValue] = useState({
         Size: '',
         SoLuong: '',
@@ -32,6 +31,7 @@ function AddInstock(props) {
             const reponse = await res.json();
             console.log(reponse);
             if (reponse !== 'OK') {
+                alert(reponse);
                 return;
             } else {
                 const newData = await getData();
@@ -68,7 +68,7 @@ function AddInstock(props) {
                     <div className={style.modalInput}>
                         <label>Size</label>
                         <input
-                            type="number"
+                            type="text"
                             value={inputValue.Size}
                             onChange={(event) => {
                                 setInputValue({ ...inputValue, Size: event.target.value });

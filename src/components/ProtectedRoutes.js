@@ -8,6 +8,6 @@ export default function ProtectedRoutes({ allowedRoles }) {
         return allowedRoles.includes(auth.userInfo?.Quyen) ? (
             <Outlet />
         ) : (
-            <Navigate to="/account/register" replace />
+            <Navigate to="/" replace />
         );
 }

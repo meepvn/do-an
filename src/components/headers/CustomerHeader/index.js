@@ -4,7 +4,9 @@ import images from '~/assets/images';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBagShopping, faHeart, faUserLarge } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 function CustomerHeader() {
+    const navigate = useNavigate();
     return (
         <div className={style.headerHome}>
             <div className={style.headerRight}>
@@ -27,7 +29,10 @@ function CustomerHeader() {
                     <h1>Search bar</h1>
                 </div>
                 <div className={style.icons}>
-                    <FontAwesomeIcon icon={faUserLarge} />
+                    <FontAwesomeIcon
+                        icon={faUserLarge}
+                        onClick={() => navigate('/account/login')}
+                    />
                     <FontAwesomeIcon icon={faHeart} />
                     <FontAwesomeIcon icon={faBagShopping} />
                 </div>

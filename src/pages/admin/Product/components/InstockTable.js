@@ -4,7 +4,7 @@ import { faPenToSquare, faPlus, faTrash } from '@fortawesome/free-solid-svg-icon
 import style from './style.module.scss';
 import AddInstock from './AddInstock';
 import EditInstock from './EditInstock';
-import { deleteApi } from '~/webService';
+import { deleteApi, getData } from '~/webService';
 import AlertWarning from '~/components/infoModals/AlertWarning';
 function InstockTable({ data, setData }) {
     const [adding, setAdding] = useState(false);
@@ -14,12 +14,13 @@ function InstockTable({ data, setData }) {
     const handleDelete = async (idProduct) => {
         const res = await deleteApi('instock', idProduct);
         const reponse = await res.json();
-        console.log(reponse);
-        const dataUpdate = data.map((item) => {
-            const newInstock = item.SoLuong.filter((instock) => instock.id !== idProduct);
-            return { ...item, SoLuong: [...newInstock] };
-        });
-        setData(dataUpdate);
+        if (reponse !== 'OK') {
+            console.log('error');
+            alert(reponse);
+        } else {
+            const newData = await getData();
+            setData(newData);
+        }
     };
     return (
         <div className={style.wrapperTblPro}>

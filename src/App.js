@@ -7,12 +7,16 @@ import AdminLayout from './layouts/AdminLayout';
 import Product from './pages/admin/Product';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import CustomerLayout from './layouts/CustomerLayout';
+import Home from './pages/customer/Home';
+
 function App() {
     return (
         <Router>
             <AuthContentProvider>
                 <Routes>
-                    <Route path="/" element={<CustomerLayout />} />
+                    <Route path="/" element={<CustomerLayout />}>
+                        <Route index element={<Home />} />
+                    </Route>
                     <Route path="/admin" element={<ProtectedRoutes allowedRoles={[1, 2]} />}>
                         <Route element={<AdminLayout />}>
                             <Route path="product" element={<Product />} />

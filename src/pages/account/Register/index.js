@@ -2,6 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LoginRegisterWrapper } from '../style';
 import { useState } from 'react';
 import { userApi } from '~/webService';
+import validate from './validate';
+
 function Register() {
     const [inputValue, setInputValue] = useState({
         HoTen: '',
@@ -14,15 +16,7 @@ function Register() {
     });
     const navigate = useNavigate();
     const handleSubmit = async () => {
-        if (
-            (!inputValue.HoTen,
-            !inputValue.SDT,
-            !inputValue.DiaChi,
-            !inputValue.Email,
-            !inputValue.MatKhau,
-            !inputValue.NhapLaiMatKhau)
-        )
-            return;
+        if (!validate(inputValue)) return;
         const { NhapLaiMatKhau, ...data } = inputValue;
         const response = await userApi('register', data);
         const resJson = await response.json();
