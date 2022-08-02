@@ -6,7 +6,7 @@ import AddInstock from './AddInstock';
 import EditInstock from './EditInstock';
 import { deleteApi, getData } from '~/webService';
 import AlertWarning from '~/components/infoModals/AlertWarning';
-function InstockTable({ data, setData }) {
+function InstockTable({ data, setData, setAlert }) {
     const [adding, setAdding] = useState(false);
     const [editting, setEditting] = useState(false);
     const [deleting, setDeleting] = useState(false);
@@ -14,12 +14,16 @@ function InstockTable({ data, setData }) {
     const handleDelete = async (idProduct) => {
         const res = await deleteApi('instock', idProduct);
         const reponse = await res.json();
-        if (reponse !== 'OK') {
-            console.log('error');
-            alert(reponse);
+        if (reponse.status !== 'OK') {
+            return;
         } else {
             const newData = await getData();
             setData(newData);
+            setAlert({
+                show: true,
+                type: 'success',
+                message: 'Xóa thành công',
+            });
         }
     };
     return (
@@ -33,6 +37,7 @@ function InstockTable({ data, setData }) {
             )}
             {adding === true ? (
                 <AddInstock
+                    setAlert={setAlert}
                     setData={setData}
                     setAdding={setAdding}
                     selectedProduct={{
@@ -44,6 +49,7 @@ function InstockTable({ data, setData }) {
             ) : null}
             {editting === true ? (
                 <EditInstock
+                    setAlert={setAlert}
                     setData={setData}
                     selectedProduct={{ ...selectedProductRef.current }}
                     setEditting={setEditting}

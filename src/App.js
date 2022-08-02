@@ -8,6 +8,7 @@ import Product from './pages/admin/Product';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import CustomerLayout from './layouts/CustomerLayout';
 import Home from './pages/customer/Home';
+import Men from './pages/customer/Men';
 
 function App() {
     return (
@@ -15,7 +16,8 @@ function App() {
             <AuthContentProvider>
                 <Routes>
                     <Route path="/" element={<CustomerLayout />}>
-                        <Route index element={<Home />} />
+                        <Route index element={<Home />}></Route>
+                        <Route path="men" element={<Men />}></Route>
                     </Route>
                     <Route path="/admin" element={<ProtectedRoutes allowedRoles={[1, 2]} />}>
                         <Route element={<AdminLayout />}>

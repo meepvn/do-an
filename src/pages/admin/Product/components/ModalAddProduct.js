@@ -6,6 +6,7 @@ import { faClose, faImage, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { validator, removeAccents } from '~/ultis';
 function ModalAddProduct(props) {
     const inputRef = useRef();
+    const { setAlert } = props;
     const [previewIMG, setPreviewIMG] = useState();
     const [selectedType, setSelectedType] = useState('');
     const [checked, setChecked] = useState(1);
@@ -14,7 +15,7 @@ function ModalAddProduct(props) {
         Loai: '',
         DonGia: '',
         GioiTinh: 1,
-        KhuyenMai: '',
+        KhuyenMai: 0,
         Anh: '',
     });
     const gender = [
@@ -25,6 +26,10 @@ function ModalAddProduct(props) {
         {
             id: 2,
             name: 'Nữ',
+        },
+        {
+            id: 3,
+            name: 'Unisex',
         },
     ];
     const handlePreviewIMG = (e) => {
@@ -51,33 +56,47 @@ function ModalAddProduct(props) {
         const arr = ['TenSP', 'Loai', 'DonGia', 'KhuyenMai'];
         for (let i = 0; i < arr.length; i++) {
             // console.log(inputValue[arr[i]]);
-            if (!inputValue[arr[i]]) {
-                alert('Không được để trống thông tin');
-                return false;
+            if (inputValue[arr[i]] === '') {
+                return {
+                    result: false,
+                    message: 'Không được để trống thông tin',
+                };
             }
         }
         if (!inputValue.Anh) {
-            alert('Vui lòng thêm ảnh.');
-            return false;
+            return {
+                result: false,
+                message: 'Vui lòng thêm ảnh',
+            };
         }
         if (!validator.noSpecialCharacters(inputValue.TenSP)) {
-            alert('Tên sản phẩm không hợp lệ');
-            return false;
+            return {
+                result: false,
+                message: 'Tên sản phẩm không hợp lệ',
+            };
         }
         const typeValue = removeAccents(inputValue.Loai.trim().toLowerCase());
         if (typeValue.includes('chon loai') || typeValue.includes('them loai')) {
-            alert('Loại không hợp lệ');
-            return false;
+            return {
+                result: false,
+                message: 'Tên loại không hợp lệ',
+            };
         }
         if (!validator.positive(inputValue.DonGia)) {
-            alert('Đơn giá phải > 1000');
-            return false;
+            return {
+                result: false,
+                message: 'Đơn giá phải > 1000',
+            };
         }
         if (!validator.percent(inputValue.KhuyenMai)) {
-            alert('Khuyến mãi nằm trong [0,100]');
-            return false;
+            return {
+                result: false,
+                message: 'Khuyến mãi [0,100]',
+            };
         }
-        return true;
+        return {
+            result: true,
+        };
     };
     const normalizeName = (name) => {
         let newName = name.trim();
@@ -86,8 +105,8 @@ function ModalAddProduct(props) {
     };
     const handleSubmit = async () => {
         console.log('data', inputValue);
-        let isValid = validateInput();
-        if (isValid === true) {
+        let { result, message } = validateInput();
+        if (result) {
             const myForm = new FormData();
             myForm.append('TenSP', normalizeName(inputValue.TenSP));
             myForm.append('Loai', normalizeName(inputValue.Loai));
@@ -97,15 +116,30 @@ function ModalAddProduct(props) {
             myForm.append('product', inputValue.Anh);
             const res = await addProduct(myForm);
             const reponse = await res.json();
-            console.log('reponse', reponse);
+            // console.log('reponse', reponse);
             if (reponse.status !== 'OK') {
-                alert(reponse.result);
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    message: reponse?.message,
+                });
                 return;
             } else {
                 const newData = await getData();
                 await props.setData(newData);
                 props.setShow(false);
+                setAlert({
+                    show: true,
+                    type: 'success',
+                    message: 'Thêm thành công',
+                });
             }
+        } else {
+            setAlert({
+                show: true,
+                type: 'error',
+                message,
+            });
         }
     };
 
@@ -167,7 +201,7 @@ function ModalAddProduct(props) {
                     </div>
 
                     <div className={style.modalInput}>
-                        <label>Khuyến mãi:</label>
+                        <label>Khuyến mãi (%):</label>
                         <input
                             type="number"
                             value={inputValue.KhuyenMai}
@@ -183,7 +217,7 @@ function ModalAddProduct(props) {
                         <select onChange={handleTypeChange} className={style.selectTypes}>
                             <option value="">Chọn loại sản phẩm</option>
                             {props.productTypes.map((type) => (
-                                <option key={type} value={type}>
+                                <option key={type} value={type} className={style.option}>
                                     {type}
                                 </option>
                             ))}

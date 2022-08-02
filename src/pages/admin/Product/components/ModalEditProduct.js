@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { getData, updateApi } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-function ModalEditProduct({ selectedProduct, setData, setShowEdit }) {
+import { validator, removeAccents } from '~/ultis';
+function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
     const [checked, setChecked] = useState(selectedProduct.GioiTinh);
     const [inputValue, setInputValue] = useState({
         TenSP: selectedProduct.TenSP,
@@ -21,44 +22,89 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit }) {
             id: 2,
             name: 'Nữ',
         },
+        {
+            id: 3,
+            name: 'Unisex',
+        },
     ];
 
     const validateInput = () => {
-        let isValid = true;
         const arr = ['TenSP', 'Loai', 'DonGia', 'KhuyenMai'];
         for (let i = 0; i < arr.length; i++) {
-            if (!inputValue[arr[i]]) {
-                isValid = false;
-                alert('Không được để trống ' + arr[i]);
-                break;
+            // console.log(inputValue[arr[i]]);
+            if (inputValue[arr[i]] === '') {
+                return {
+                    result: false,
+                    message: 'Không được để trống thông tin',
+                };
             }
         }
-        return isValid;
+        // if (!inputValue.Anh) {
+        //     return {
+        //         result: false,
+        //         message: 'Vui lòng thêm ảnh',
+        //     };
+        // }
+        if (!validator.noSpecialCharacters(inputValue.TenSP)) {
+            return {
+                result: false,
+                message: 'Tên sản phẩm không hợp lệ',
+            };
+        }
+        const typeValue = removeAccents(inputValue.Loai.trim().toLowerCase());
+        if (typeValue.includes('chon loai') || typeValue.includes('them loai')) {
+            return {
+                result: false,
+                message: 'Tên loại không hợp lệ',
+            };
+        }
+        if (!validator.positive(inputValue.DonGia)) {
+            return {
+                result: false,
+                message: 'Đơn giá phải > 1000',
+            };
+        }
+        if (!validator.percent(inputValue.KhuyenMai)) {
+            return {
+                result: false,
+                message: 'Khuyến mãi [0,100]',
+            };
+        }
+        return {
+            result: true,
+        };
     };
 
     const handleUpdate = async () => {
-        let isValid = validateInput();
-        if (isValid === true) {
-            // console.log(product.id, inputValue);
+        let { result, message } = validateInput();
+        console.log(result, message);
+        if (result) {
             const res = await updateApi('product', selectedProduct.id, inputValue);
             const reponse = await res.json();
-            if (reponse !== 'OK') {
-                alert(reponse);
+            if (reponse?.status !== 'OK') {
+                setAlert({
+                    type: 'error',
+                    message: reponse?.message,
+                    show: true,
+                });
                 return;
             } else {
-                console.log(reponse);
                 const newData = await getData();
                 console.log('new data', newData);
                 await setData(newData);
                 setShowEdit(false);
-                setInputValue({
-                    TenSP: '',
-                    Loai: '',
-                    DonGia: '',
-                    GioiTinh: 1,
-                    KhuyenMai: '',
+                setAlert({
+                    type: 'success',
+                    message: 'Sửa thành công',
+                    show: true,
                 });
             }
+        } else {
+            setAlert({
+                type: 'error',
+                message,
+                show: true,
+            });
         }
     };
     return (
@@ -126,7 +172,7 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit }) {
                         ></input>
                     </div>
                     <div className={style.modalInput}>
-                        <label>Khuyến mãi</label>
+                        <label>Khuyến mãi (%)</label>
                         <input
                             type="number"
                             value={inputValue.KhuyenMai}

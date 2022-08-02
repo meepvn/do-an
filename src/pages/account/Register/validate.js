@@ -1,5 +1,4 @@
 import { validator } from '~/ultis';
-
 export default function validate(inputValue) {
     if (
         !inputValue.HoTen ||
@@ -10,28 +9,42 @@ export default function validate(inputValue) {
         !inputValue.MatKhau ||
         !inputValue.NhapLaiMatKhau
     ) {
-        alert('Không để trống');
-        return false;
+        return {
+            result: false,
+            message: 'Không được để trống thông tin',
+        };
     }
     if (!validator.name(inputValue.HoTen)) {
-        alert('Họ tên không hợp lệ');
-        return false;
+        return {
+            result: false,
+            message: 'Họ tên không chứa kí tự đặc biệt ',
+        };
     }
     if (!validator.phone(inputValue.SDT)) {
-        alert('SDT khong hop le');
-        return false;
+        return {
+            result: false,
+            message: 'Số điện thoại không hợp lệ',
+        };
     }
     if (!validator.email(inputValue.Email)) {
-        alert('Email khong hop le');
-        return false;
+        return {
+            result: false,
+            message: 'Email không hợp lệ',
+        };
     }
     if (!validator.username(inputValue.TenTaiKhoan)) {
-        alert('Tai khoan khong hop le');
-        return false;
+        return {
+            result: false,
+            message: 'Tên tài khoản không hợp lệ ',
+        };
     }
     if (inputValue.MatKhau !== inputValue.NhapLaiMatKhau) {
-        alert('Nhap lai mat khau khong trung');
-        return false;
+        return {
+            result: false,
+            message: 'Mật khẩu không trùng khớp',
+        };
     }
-    return true;
+    return {
+        result: true,
+    };
 }

@@ -3,8 +3,14 @@ import { LoginRegisterWrapper } from '../style';
 import { useState } from 'react';
 import { userApi } from '~/webService';
 import validate from './validate';
+import Alert from '~/components/infoModals/Alert';
 
 function Register() {
+    const [alert, setAlert] = useState({
+        type: '',
+        show: false,
+        message: '',
+    });
     const [inputValue, setInputValue] = useState({
         HoTen: '',
         SDT: '',
@@ -16,16 +22,39 @@ function Register() {
     });
     const navigate = useNavigate();
     const handleSubmit = async () => {
-        if (!validate(inputValue)) return;
+        const { result, message } = validate(inputValue);
+        if (!result) {
+            setAlert({
+                type: 'error',
+                show: true,
+                message,
+            });
+            return;
+        }
+
         const { NhapLaiMatKhau, ...data } = inputValue;
         const response = await userApi('register', data);
-        const resJson = await response.json();
-        console.log(resJson);
-
-        navigate('/account/login');
+        const json = await response.json();
+        if (json.status === 'Error') {
+            setAlert({
+                show: true,
+                message: json.message,
+                type: 'error',
+            });
+            return;
+        }
+        setAlert({
+            type: 'success',
+            show: true,
+            message: 'Đăng ký thành công',
+        });
+        setTimeout(() => {
+            navigate('/account/login');
+        }, 1500);
     };
     return (
         <LoginRegisterWrapper>
+            {alert.show && <Alert alert={alert} setAlert={setAlert} />}
             <div className="wrapper__form">
                 <div className="head__form">
                     <span> Đăng ký</span>
@@ -57,10 +86,9 @@ function Register() {
                     <div className="content__form--group">
                         <input
                             type="text"
-                            name="phone"
                             className="content__form--input"
                             value={inputValue.DiaChi}
-                            placeholder="Dia chi ..."
+                            placeholder="Địa chỉ ..."
                             onChange={(e) =>
                                 setInputValue({ ...inputValue, DiaChi: e.target.value })
                             }

@@ -4,44 +4,64 @@ import { AddApi, getData } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 function AddInstock(props) {
+    const { setAlert } = props;
     const [inputValue, setInputValue] = useState({
         Size: '',
         SoLuong: '',
     });
 
     const validateInput = () => {
-        let isValid = true;
         const arr = ['Size', 'SoLuong'];
         for (let i = 0; i < arr.length; i++) {
             // console.log(inputValue[arr[i]]);
             if (!inputValue[arr[i]]) {
-                isValid = false;
-                alert('Không được để trống ' + arr[i]);
-                break;
+                return {
+                    result: false,
+                    message: 'Không được để trống thông tin ',
+                };
+            }
+            if (inputValue.SoLuong < 0) {
+                return {
+                    result: false,
+                    message: 'Số lượng sản phẩm lớn hơn 0',
+                };
             }
         }
-        return isValid;
+        return {
+            result: true,
+        };
     };
 
     const handleSubmit = async () => {
-        let isValid = validateInput();
-        if (isValid === true) {
+        let { message, result } = validateInput();
+        if (result) {
             const dataUpdate = { ...inputValue, id_sanpham: props.selectedProduct.id };
             const res = await AddApi('instock', dataUpdate);
             const reponse = await res.json();
             console.log(reponse);
-            if (reponse !== 'OK') {
-                alert(reponse);
+            if (reponse.status !== 'OK') {
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    message: reponse.message,
+                });
                 return;
             } else {
                 const newData = await getData();
                 await props.setData(newData);
                 props.setAdding(false);
-                setInputValue({
-                    Size: '',
-                    SoLuong: '',
+                setAlert({
+                    show: true,
+                    type: 'success',
+                    message: 'Thêm thành công',
                 });
             }
+        } else {
+            setAlert({
+                show: true,
+                type: 'warning',
+                message,
+            });
         }
     };
 

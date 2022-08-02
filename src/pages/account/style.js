@@ -46,11 +46,7 @@ export const LoginRegisterWrapper = styled.div`
     .eye {
         cursor: pointer;
     }
-    .input__container small {
-        position: absolute;
-        bottom: -10px;
-        left: 0;
-    }
+
     .wrapper__form {
         width: 40%;
         height: auto;
@@ -140,16 +136,13 @@ export const LoginRegisterWrapper = styled.div`
     .content__form--group {
         width: 100%;
         height: 40px;
-        margin-top: 2.5rem;
+        margin-top: 1.5rem;
         font-size: 1.4rem;
         border: 0.6rem;
         /* display: flex;
         justify-content: center; */
     }
-    .content__form--group label {
-        font-size: 1.5rem;
-        margin: 1rem 0;
-    }
+
     .content__form--group .btn {
         height: 100%;
         color: var(--white-color);

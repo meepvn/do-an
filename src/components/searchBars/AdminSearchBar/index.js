@@ -1,15 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import style from './style.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faFilterCircleXmark, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { removeAccents } from '~/ultis';
-function AdminSearchBar({ setFilterValue, data, filterValue }) {
+function AdminSearchBar({ setFilterValue, data, filterValue = '' }) {
     const [inputValue, setInputValue] = useState('');
     const [showSuggest, setShowSuggest] = useState(false);
-    const suggestData = data.filter((item) =>
-        removeAccents(item.TenSP).toLowerCase().includes(removeAccents(inputValue).toLowerCase()),
-    );
-
+    const suggestData = data.filter((item) => {
+        const itemName = removeAccents(item.TenSP).toLowerCase();
+        const findName = removeAccents(inputValue).toLowerCase();
+        const typeName = removeAccents(item.Loai).toLowerCase();
+        return itemName.includes(findName) || typeName.includes(findName);
+    });
+    useEffect(() => {
+        setInputValue(filterValue);
+    }, [filterValue]);
     return (
         <div className={style.wrapperSearchBar}>
             {filterValue && (

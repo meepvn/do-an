@@ -5,23 +5,33 @@ import { removeAccents } from '~/ultis';
 import { getData } from '~/webService';
 import { useState, useEffect, useMemo } from 'react';
 import InstockTable from './components/InstockTable';
+import Alert from '~/components/infoModals/Alert';
+
 function Product() {
-    console.log('Re-render component');
     const [filterValue, setFilterValue] = useState('');
     const [data, setData] = useState([]);
     const [table, setTable] = useState('product');
+    const [alert, setAlert] = useState({
+        show: false,
+        message: '',
+        type: '',
+    });
     const { products = [], types: productTypes = [] } = data;
     useEffect(() => {
         getData().then(setData).catch(console.log);
     }, []);
     const filterdData = useMemo(() => {
-        return products.filter((item) =>
-            removeAccents(item.TenSP).includes(removeAccents(filterValue)),
-        );
+        return products.filter((item) => {
+            const itemName = removeAccents(item.TenSP).toLowerCase();
+            const findName = removeAccents(filterValue).toLowerCase();
+            const typeName = removeAccents(item.Loai).toLowerCase();
+            return itemName.includes(findName) || typeName.includes(findName);
+        });
     }, [filterValue, products]);
 
     return (
         <div className={style.wrapper}>
+            {alert.show && <Alert alert={alert} setAlert={setAlert} />}
             <AdminSearchBar
                 setFilterValue={setFilterValue}
                 data={products}
@@ -37,7 +47,7 @@ function Product() {
                             }}
                             className={table === 'product' ? style.active : null}
                         >
-                            Sản phẩm
+                            Thông tin sản phẩm
                         </button>
                         <button
                             onClick={() => {
@@ -46,13 +56,16 @@ function Product() {
                             }}
                             className={table === 'instock' ? style.active : null}
                         >
-                            Thông tin sản phẩm{' '}
+                            Số lượng sản phẩm{' '}
                         </button>
                     </div>
                 </div>
-                {table === 'instock' && <InstockTable data={filterdData} setData={setData} />}
+                {table === 'instock' && (
+                    <InstockTable data={filterdData} setData={setData} setAlert={setAlert} />
+                )}
                 {table === 'product' && (
                     <ProductTable
+                        setAlert={setAlert}
                         setFilterValue={setFilterValue}
                         data={filterdData}
                         productTypes={productTypes}

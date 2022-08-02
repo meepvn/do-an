@@ -1,59 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@1,900&family=Roboto:ital,wght@0,400;0,900;1,300;1,500;1,700;1,900&display=swap');
-.wrapperPreview {
-    padding: 0 4.8rem;
-    height: auto;
+.wrapperViewAll {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 1rem 0;
-    .title {
-        cursor: pointer;
-        text-transform: uppercase;
-        font-size: 2.5rem;
-        margin: 0 auto;
-        font-family: 'Roboto', sans-serif;
-        font-style: italic;
-        font-weight: 900;
-        text-align: center;
-        max-width: 70rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .titleHeader {
-            font-style: normal;
-            background-color: gray;
-            padding: 0.8rem 8rem;
-            border-radius: 4rem;
-            margin: 2rem 0;
-            color: white;
-        }
-        .titleContent {
-            display: flex;
-            font-family: 'Kanit', sans-serif;
-            font-weight: 900;
-            justify-content: center;
-            flex-wrap: wrap;
-            span {
-                line-height: 6rem;
-            }
-        }
+    padding: 0 3.2rem;
+    .navSort {
+        width: 25%;
+        height: auto;
+        border: 1px solid;
+        margin-right: 1rem;
     }
     .content {
         margin: 2rem 0;
         width: 100%;
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
 
         .itemContent {
+            box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: 0.5);
+
             display: flex;
             flex-direction: column;
-            width: calc((100% - 30rem) / 4);
+            width: calc((100% - 30rem) / 3);
+            margin-bottom: 2rem;
             height: 32rem;
             .img {
                 cursor: pointer;
                 width: 100%;
                 height: 78%;
                 overflow: hidden;
+                padding: 0.5rem;
                 border-bottom: 1px solid;
                 position: relative;
                 .discount {
@@ -89,6 +63,7 @@
             .name {
                 cursor: pointer;
                 font-size: 1.4rem;
+                margin-top: 0.5rem;
                 text-transform: uppercase;
                 &:hover {
                     color: red;
@@ -109,20 +84,6 @@
                     font-weight: 600;
                 }
             }
-        }
-    }
-    .btnView {
-        border: 2px solid;
-        font-weight: 600;
-        padding: 1rem;
-        font-size: 1.6rem;
-        transition-delay: 0.3s;
-        transition: 0.5s;
-        background-color: white;
-        &:hover {
-            background-color: black;
-            transition: 0.5s;
-            color: white;
         }
     }
 }

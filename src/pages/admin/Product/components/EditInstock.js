@@ -3,32 +3,58 @@ import { useState } from 'react';
 import { getData, updateApi } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-function EditInstock({ selectedProduct, setEditting, setData }) {
+function EditInstock({ selectedProduct, setEditting, setData, setAlert }) {
     const [inputValue, setInputValue] = useState(selectedProduct.instock.SoLuong);
     console.log(selectedProduct);
     const validateInput = () => {
         if (!inputValue) {
-            return false;
+            return {
+                result: false,
+                message: 'Không để trống số lượng',
+            };
+        }
+        if (inputValue < 0) {
+            return {
+                result: false,
+                message: 'Số lượng lớn hơn 0',
+            };
         }
 
-        return true;
+        return {
+            result: true,
+        };
     };
 
     const handleSubmit = async () => {
-        let isValid = validateInput();
-        if (isValid === true) {
+        let { result, message } = validateInput();
+        if (result) {
             const dataUpdate = { SoLuong: inputValue };
             console.log(dataUpdate);
             const res = await updateApi('instock', selectedProduct.instock.id, dataUpdate);
             const reponse = await res.json();
             console.log(reponse);
-            if (reponse !== 'OK') {
-                return;
+            if (reponse?.status !== 'OK') {
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    message: reponse.message,
+                });
             } else {
                 const newData = await getData();
                 setData(newData);
                 setEditting(false);
+                setAlert({
+                    show: true,
+                    type: 'success',
+                    message: 'Sửa thành công',
+                });
             }
+        } else {
+            setAlert({
+                show: true,
+                type: 'error',
+                message,
+            });
         }
     };
 

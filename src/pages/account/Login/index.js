@@ -3,8 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LoginRegisterWrapper } from '../style';
 import { userApi } from '~/webService';
 import useAuth from '~/hooks/useAuth';
+import Alert from '~/components/infoModals/Alert';
 
 const Login = () => {
+    const [alert, setAlert] = useState({
+        show: false,
+        type: '',
+        message: '',
+    });
     const [inputValue, setInputValue] = useState({
         TenTaiKhoan: '',
         MatKhau: '',
@@ -12,17 +18,32 @@ const Login = () => {
     const auth = useAuth();
     const navigate = useNavigate();
     const handleSubmit = async () => {
-        if (!inputValue.TenTaiKhoan || !inputValue.MatKhau) return;
+        if (!inputValue.TenTaiKhoan || !inputValue.MatKhau) {
+            setAlert({
+                type: 'error',
+                show: true,
+                message: 'Tài khoản, mật khẩu không được trống',
+            });
+
+            return;
+        }
         const response = await userApi('login', inputValue);
         const json = await response.json();
         console.log(json);
         if (json.status === 'OK') {
             auth.setState(true, json.token, json.info);
             navigate('/admin/product');
+        } else {
+            setAlert({
+                type: 'error',
+                show: true,
+                message: json.message,
+            });
         }
     };
     return (
         <LoginRegisterWrapper>
+            {alert.show && <Alert alert={alert} setAlert={setAlert} />}
             <div className="wrapper__form">
                 <div className="head__form">
                     {/* <div className="img__logo"><img alt="1"></div> */}

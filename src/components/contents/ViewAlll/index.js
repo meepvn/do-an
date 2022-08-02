@@ -1,8 +1,9 @@
 import style from './style.module.scss';
 import images from '~/assets/images';
 import { formatMoney } from '~/ultis';
-const Preview = ({ title, data }) => {
+const ViewAll = (data) => {
     const { dataTest } = images;
+
     data = [
         {
             id: 1,
@@ -15,19 +16,13 @@ const Preview = ({ title, data }) => {
         { id: 3, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quan3 },
         { id: 4, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quanJean1 },
         { id: 5, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quanJean1 },
+        { id: 6, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quan3 },
+        { id: 7, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quanJean1 },
+        { id: 8, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quanJean1 },
     ];
-
-    const content = 'sale lên đến 80% xả hàng lần cuối!';
-
     return (
-        <div className={style.wrapperPreview}>
-            <div className={style.title}>
-                <div className={style.titleHeader}>{title}</div>
-                <h1 className={style.titleContent}>
-                    <span>{content}</span>
-                </h1>
-            </div>
-
+        <div className={style.wrapperViewAll}>
+            <div className={style.navSort}></div>
             <div className={style.content}>
                 {data.map((item) => {
                     return (
@@ -52,9 +47,8 @@ const Preview = ({ title, data }) => {
                     );
                 })}
             </div>
-            <button className={style.btnView}>Xem tất cả sản phẩm</button>
         </div>
     );
 };
 
-export default Preview;
+export default ViewAll;

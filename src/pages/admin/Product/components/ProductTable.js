@@ -8,6 +8,7 @@ import { deleteApi, getData } from '~/webService';
 import ModalEditProduct from './ModalEditProduct';
 import AlertWarning from '~/components/infoModals/AlertWarning';
 function ProductTable(props) {
+    const { setAlert } = props;
     const [deleting, setDeleting] = useState(false);
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
@@ -22,6 +23,11 @@ function ProductTable(props) {
             await res.json();
             const newData = await getData();
             props.setData(newData);
+            setAlert({
+                show: true,
+                message: 'Xóa thành công',
+                type: 'success',
+            });
         } catch (e) {
             console.log(e);
         }
@@ -43,6 +49,7 @@ function ProductTable(props) {
             {show === true ? (
                 <ModalAddProduct
                     setData={props.setData}
+                    setAlert={setAlert}
                     setShow={setShow}
                     productTypes={props.productTypes}
                     handleToggleModalAdd={handleToggleModalAdd}
@@ -50,6 +57,7 @@ function ProductTable(props) {
             ) : null}
             {showEdit === true ? (
                 <ModalEditProduct
+                    setAlert={setAlert}
                     setData={props.setData}
                     selectedProduct={{ ...selectedProductRef.current }}
                     setShowEdit={setShowEdit}
@@ -86,7 +94,13 @@ function ProductTable(props) {
                                     </div>
                                 </td>
                                 <td>{item.Loai}</td>
-                                <td>{item.GioiTinh === 1 ? 'Nam' : 'Nữ'}</td>
+                                <td>
+                                    {item.GioiTinh === 1
+                                        ? 'Nam'
+                                        : item.GioiTinh === 2
+                                        ? 'Nữ'
+                                        : 'Unisex'}
+                                </td>
                                 <td>{formatMoney(item.DonGia, ' vnđ')}</td>
                                 <td>{item.KhuyenMai}%</td>
                                 <td>
