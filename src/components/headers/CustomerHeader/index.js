@@ -3,10 +3,9 @@ import images from '~/assets/images';
 // import SearchBar from '~/components/searchBars/AdminSearchBar';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBagShopping, faHeart, faUserLarge } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
+import { faBagShopping, faHeart } from '@fortawesome/free-solid-svg-icons';
+import UserMenu from '~/components/contents/UserMenu';
 function CustomerHeader() {
-    const navigate = useNavigate();
     return (
         <div className={style.headerHome}>
             <div className={style.headerRight}>
@@ -29,10 +28,7 @@ function CustomerHeader() {
                     <h1>Search bar</h1>
                 </div>
                 <div className={style.icons}>
-                    <FontAwesomeIcon
-                        icon={faUserLarge}
-                        onClick={() => navigate('/account/login')}
-                    />
+                    <UserMenu />
                     <FontAwesomeIcon icon={faHeart} />
                     <FontAwesomeIcon icon={faBagShopping} />
                 </div>

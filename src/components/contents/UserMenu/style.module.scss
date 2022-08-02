@@ -1,0 +1,18 @@
+.wrapperUserMenu {
+    position: relative;
+    .icon:hover ~ .list {
+        display: block;
+        transition: 0.5s;
+    }
+    .list {
+        min-width: 200px;
+        display: none;
+        background-color: white;
+        color: black;
+        position: absolute;
+        left: -50%;
+        transform: translateX(-50%);
+        border: 1px solid;
+        z-index: 9999;
+    }
+}

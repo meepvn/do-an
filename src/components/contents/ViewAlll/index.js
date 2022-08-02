@@ -1,43 +1,59 @@
 import style from './style.module.scss';
-import images from '~/assets/images';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { formatMoney } from '~/ultis';
-const ViewAll = (data) => {
-    const { dataTest } = images;
-
-    data = [
-        {
-            id: 1,
-            TenSP: 'QUẦN JEANS NAM PHONG CÁCH ĐƯỜNG PHỐ MẠNH MẼ',
-            Gia: 500000,
-            KhuyenMai: 20,
-            Anh: dataTest.quan1,
-        },
-        { id: 2, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 2, Anh: dataTest.quan2 },
-        { id: 3, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quan3 },
-        { id: 4, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quanJean1 },
-        { id: 5, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quanJean1 },
-        { id: 6, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quan3 },
-        { id: 7, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quanJean1 },
-        { id: 8, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quanJean1 },
-    ];
+import Filter from '../Filter';
+import { useState, useMemo } from 'react';
+const ViewAll = () => {
+    const navigate = useNavigate();
+    const [{ products, types: productTypes }] = useOutletContext();
+    const [filterOptions, setFilterOptions] = useState(() => {
+        return {
+            gender: JSON.parse(localStorage.getItem('gender')) ?? 1,
+            type: sessionStorage.getItem('type') ?? '',
+        };
+    });
+    const filteredData = useMemo(() => {
+        let result = products?.filter(
+            (item) => item.GioiTinh === filterOptions.gender || item.GioiTinh === 3,
+        );
+        if (filterOptions.type) result = result?.filter((item) => item.Loai === filterOptions.type);
+        if (filterOptions.price)
+            result = result.filter((item) => item.DonGia <= filterOptions.price);
+        return result;
+    }, [products, filterOptions.gender, filterOptions.type, filterOptions.price]);
     return (
         <div className={style.wrapperViewAll}>
-            <div className={style.navSort}></div>
+            <div></div>
+            <Filter
+                data={productTypes}
+                setFilterOptions={setFilterOptions}
+                filterOptions={filterOptions}
+            />
             <div className={style.content}>
-                {data.map((item) => {
+                {filteredData?.map((item) => {
                     return (
                         <div className={style.itemContent} key={item.id}>
-                            <div className={style.img}>
-                                <img src={item.Anh} alt="aa" />
+                            <div
+                                className={style.img}
+                                onClick={() => navigate(`/detail/${item.id}`)}
+                            >
+                                <img src={`http://localhost:3100/images/${item.TenAnh}`} alt="aa" />
                                 <span className={style.discount}>-{item.KhuyenMai}%</span>
                             </div>
                             <div className={style.itemInfo}>
-                                <span className={style.name}>{item.TenSP}</span>
+                                <span
+                                    className={style.name}
+                                    onClick={() => {
+                                        navigate(`/detail/${item.id}`);
+                                    }}
+                                >
+                                    {item.TenSP}
+                                </span>
                                 <p className={style.price}>
-                                    <span>{formatMoney(item.Gia, ' ')} </span>
+                                    <span>{formatMoney(item.DonGia, ' ')} </span>
                                     <span>
                                         {formatMoney(
-                                            item.Gia - (item.Gia * item.KhuyenMai) / 100,
+                                            item.DonGia - (item.DonGia * item.KhuyenMai) / 100,
                                             'đ',
                                         )}
                                     </span>

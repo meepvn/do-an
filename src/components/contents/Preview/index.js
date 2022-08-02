@@ -1,24 +1,29 @@
 import style from './style.module.scss';
-import images from '~/assets/images';
 import { formatMoney } from '~/ultis';
-const Preview = ({ title, data }) => {
-    const { dataTest } = images;
-    data = [
-        {
-            id: 1,
-            TenSP: 'QUẦN JEANS NAM PHONG CÁCH ĐƯỜNG PHỐ MẠNH MẼ',
-            Gia: 500000,
-            KhuyenMai: 20,
-            Anh: dataTest.quan1,
-        },
-        { id: 2, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 2, Anh: dataTest.quan2 },
-        { id: 3, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quan3 },
-        { id: 4, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quanJean1 },
-        { id: 5, TenSP: 'quan jean', Gia: 500000, KhuyenMai: 20, Anh: dataTest.quanJean1 },
-    ];
-
-    const content = 'sale lên đến 80% xả hàng lần cuối!';
-
+import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
+const Preview = ({ title, data, content = 'sale lên đến 80% xả hàng lần cuối!' }) => {
+    const itemsPerPage = 4;
+    const numberOfPages = Math.ceil(data.length / itemsPerPage);
+    const [currentPage, setCurrentPage] = useState(0);
+    const navigate = useNavigate();
+    const firstIndex = currentPage * itemsPerPage;
+    const lastIndex = firstIndex + itemsPerPage;
+    const pageItems = data.slice(firstIndex, lastIndex);
+    const goToNextPage = () => {
+        if (currentPage >= numberOfPages - 1) setCurrentPage(0);
+        else setCurrentPage(currentPage + 1);
+    };
+    const goToPreviousPage = () => {
+        if (currentPage <= 0) setCurrentPage(numberOfPages - 1);
+        else setCurrentPage(currentPage - 1);
+    };
+    const goToViewAllPage = () => {
+        sessionStorage.setItem('type', data[0].Loai);
+        navigate('/products');
+    };
     return (
         <div className={style.wrapperPreview}>
             <div className={style.title}>
@@ -29,20 +34,34 @@ const Preview = ({ title, data }) => {
             </div>
 
             <div className={style.content}>
-                {data.map((item) => {
+                <span className={style.btnPage} id={style.btnPre} onClick={goToPreviousPage}>
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </span>
+                <span className={style.btnPage} id={style.btnNext} onClick={goToNextPage}>
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </span>
+                {pageItems.map((item) => {
                     return (
                         <div className={style.itemContent} key={item.id}>
-                            <div className={style.img}>
-                                <img src={item.Anh} alt="aa" />
+                            <div
+                                className={style.img}
+                                onClick={() => navigate(`/detail/${item.id}`)}
+                            >
+                                <img src={`http://localhost:3100/images/${item.TenAnh}`} alt="aa" />
                                 <span className={style.discount}>-{item.KhuyenMai}%</span>
                             </div>
                             <div className={style.itemInfo}>
-                                <span className={style.name}>{item.TenSP}</span>
+                                <span
+                                    className={style.name}
+                                    onClick={() => navigate(`/detail/${item.id}`)}
+                                >
+                                    {item.TenSP}
+                                </span>
                                 <p className={style.price}>
-                                    <span>{formatMoney(item.Gia, ' ')} </span>
+                                    <span>{formatMoney(item.DonGia, ' ')} </span>
                                     <span>
                                         {formatMoney(
-                                            item.Gia - (item.Gia * item.KhuyenMai) / 100,
+                                            item.DonGia - (item.DonGia * item.KhuyenMai) / 100,
                                             'đ',
                                         )}
                                     </span>
@@ -52,7 +71,9 @@ const Preview = ({ title, data }) => {
                     );
                 })}
             </div>
-            <button className={style.btnView}>Xem tất cả sản phẩm</button>
+            <button className={style.btnView} onClick={goToViewAllPage}>
+                Xem tất cả sản phẩm
+            </button>
         </div>
     );
 };

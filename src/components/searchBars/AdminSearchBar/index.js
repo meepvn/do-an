@@ -40,7 +40,7 @@ function AdminSearchBar({ setFilterValue, data, filterValue = '' }) {
                         setShowSuggest(false);
                     }}
                     value={inputValue}
-                    placeholder="Nhập tên sản phẩm ..."
+                    placeholder="Nhập tên/loại sản phẩm ..."
                 />
                 {inputValue && (
                     <button

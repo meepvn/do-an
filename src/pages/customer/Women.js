@@ -4,9 +4,9 @@ import React from 'react';
 import Preview from '~/components/contents/Preview';
 // import ViewAll from '~/components/contents/ViewAlll';
 import { useOutletContext } from 'react-router-dom';
-const Men = () => {
+const Women = () => {
     const [data] = useOutletContext();
-    localStorage.setItem('gender', 1);
+    localStorage.setItem('gender', 2);
     const { products, types: productTypes } = data;
 
     return (
@@ -14,19 +14,21 @@ const Men = () => {
             {productTypes?.map((type) => {
                 const dataPreview = products.filter(
                     (product) =>
-                        product.Loai === type && (product.GioiTinh === 1 || product.GioiTinh === 3),
+                        product.Loai === type && (product.GioiTinh === 2 || product.GioiTinh === 3),
                 );
                 return (
-                    <Preview
-                        title={type}
-                        data={dataPreview.slice(0, 10)}
-                        key={type}
-                        content={`${type} giá tốt`}
-                    />
+                    dataPreview?.length && (
+                        <Preview
+                            title={type}
+                            data={dataPreview.slice(0, 10)}
+                            key={type}
+                            content={`${type} giá tốt`}
+                        />
+                    )
                 );
             })}
         </div>
     );
 };
 
-export default Men;
+export default Women;
