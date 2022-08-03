@@ -30,6 +30,50 @@
                 margin-right: 1rem;
             }
         }
+        select {
+            width: 25rem;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            outline: none;
+            border-radius: 4px;
+        }
+        select[multiple] {
+            padding-right: 1rem;
+            height: 6rem;
+        }
+        option {
+            padding: 1rem 1.5rem;
+        }
+        .count {
+            display: flex;
+            align-items: center;
+
+            span {
+                color: var(--text-color);
+            }
+            input {
+                text-align: center;
+                font-size: 2rem;
+                max-width: 5rem;
+                border-bottom: 1px solid var(--border-color);
+                border-top: 1px solid var(--border-color);
+            }
+            .btnCount {
+                display: flex;
+                margin-left: 1rem;
+            }
+            button {
+                padding: 0 1.2rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 2.4rem;
+                text-align: center;
+                border-radius: 3px;
+                background-color: white;
+                border: 1px solid var(--border-color);
+            }
+        }
         .name {
             font-size: 2.5rem;
             line-height: 3rem;

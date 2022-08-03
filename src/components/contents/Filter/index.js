@@ -20,12 +20,6 @@ const Filter = ({ data, setFilterOptions, filterOptions }) => {
                     onChange={(e) => setFilterOptions({ ...filterOptions, gender: 2 })}
                 />
                 Nữ
-                <input
-                    type="checkbox"
-                    checked={3 === filterOptions.gender}
-                    onChange={(e) => setFilterOptions({ ...filterOptions, gender: 3 })}
-                />
-                Unisex
             </div>
             <div>
                 <h5>Loại sản phẩm</h5>

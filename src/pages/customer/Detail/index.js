@@ -1,16 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './style.module.scss';
 import { formatMoney } from '~/ultis';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faTruckFast } from '@fortawesome/free-solid-svg-icons';
-import { useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import Alert from '~/components/infoModals/Alert';
+import RequireLogin from '~/components/infoModals/AlertWarning';
+import useLocalStorage from '~/hooks/useLocalStorage';
 const Detail = () => {
+    const navigate = useNavigate();
+    const [cartProducts, setCartProducts] = useLocalStorage('cart', []);
+    const [alert, setAlert] = useState({
+        show: false,
+        type: '',
+        message: '',
+    });
     const [{ products }] = useOutletContext();
     const { id } = useParams();
+    const [dataCart, setDataCart] = useState({
+        idProduct: id,
+        SoLuong: 1,
+        idSize: '',
+    });
+    const [loginWarning, setLoginWarning] = useState(false);
     const foundProduct = products?.find((item) => item.id === parseInt(id));
+    const addToCart = (buyNow = false) => {
+        if (!dataCart.idSize) {
+            setAlert({
+                show: true,
+                type: 'warning',
+                message: 'Vui lòng chọn size',
+            });
+            return;
+        }
+        console.log(dataCart);
+
+        if (buyNow) navigate('/cart');
+    };
     if (foundProduct)
         return (
             <div className={style.wrapperDetail}>
+                {loginWarning && <RequireLogin setShow={setLoginWarning} />}
+                {alert.show && <Alert alert={alert} setAlert={setAlert} />}
                 <div className={style.Image}>
                     <img src={`http://localhost:3100/images/${foundProduct.TenAnh}`} alt="img" />
                 </div>
@@ -28,12 +59,24 @@ const Detail = () => {
                         </span>
                         <span>Giảm {foundProduct.KhuyenMai}%</span>
                     </p>
-                    <p className={style.color}>
+                    {/* <p className={style.color}>
                         <span>Màu sắc:</span>
-                    </p>
+                    </p> */}
                     <p className={style.size}>
                         <span>Size:</span>
-                        <span>{foundProduct.size}</span>
+
+                        <select
+                            onChange={(e) => setDataCart({ ...dataCart, idSize: e.target.value })}
+                        >
+                            <option value="">Chọn size sản phẩm</option>
+                            {foundProduct.SoLuong?.map((item) => {
+                                return (
+                                    <option key={item.Size} value={item.id}>
+                                        {item.Size}
+                                    </option>
+                                );
+                            })}
+                        </select>
                     </p>
                     <p className={style.ship}>
                         <span>Vận chuyển: </span>
@@ -43,15 +86,37 @@ const Detail = () => {
                             quốc
                         </span>
                     </p>
-                    <p className={style.size}>
+                    <div className={style.count}>
                         <span>Số lượng:</span>
-                        <span>123</span>
-                    </p>
+                        <div className={style.btnCount}>
+                            <button
+                                className={style.prev}
+                                disabled={dataCart.SoLuong === 1}
+                                onClick={() => {
+                                    setDataCart({ ...dataCart, SoLuong: dataCart.SoLuong - 1 });
+                                }}
+                            >
+                                -
+                            </button>
+                            <span>{dataCart.SoLuong}</span>
+                            <button
+                                onClick={() =>
+                                    setDataCart({ ...dataCart, SoLuong: dataCart.SoLuong + 1 })
+                                }
+                            >
+                                +
+                            </button>
+                        </div>
+                    </div>
                     <div className={style.btnContent}>
-                        <div className={style.btn} id={style.addBtn}>
+                        <div className={style.btn} id={style.addBtn} onClick={() => addToCart()}>
                             <FontAwesomeIcon icon={faCartPlus} /> Thêm Vào Giỏ Hàng
                         </div>
-                        <div className={style.btn} id={style.buyBtn}>
+                        <div
+                            className={style.btn}
+                            id={style.buyBtn}
+                            onClick={() => addToCart(true)}
+                        >
                             Mua Ngay
                         </div>
                     </div>
@@ -96,6 +161,6 @@ const Detail = () => {
                 </div>
             </div>
         );
-    else return <h1>404 not found</h1>;
+    else return <h1>Không tìm thấy sản phẩm</h1>;
 };
 export default Detail;

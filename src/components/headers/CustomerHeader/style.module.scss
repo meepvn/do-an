@@ -6,7 +6,9 @@
     height: 6rem;
     background-color: #2d2d2d;
     color: white;
-
+    position: relative;
+    position: relative;
+    z-index: 999;
     .headerRight {
         display: flex;
         width: 25%;
@@ -49,6 +51,7 @@
     .headerLeft {
         flex-grow: 1;
         display: flex;
+        position: relative;
         .headerSearch {
             flex-grow: 1;
             .searchBar {

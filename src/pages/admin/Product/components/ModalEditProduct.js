@@ -24,7 +24,7 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
         },
         {
             id: 3,
-            name: 'Unisex',
+            name: 'Cả hai',
         },
     ];
 
@@ -144,21 +144,23 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
                     </div>
                     <div className={style.modalInput}>
                         <label>Đối tượng</label>
-                        {gender.map((item) => {
-                            return (
-                                <div key={item.id}>
-                                    <input
-                                        type="radio"
-                                        onChange={() => {
-                                            setChecked(item.id);
-                                            setInputValue({ ...inputValue, GioiTinh: item.id });
-                                        }}
-                                        checked={checked === item.id}
-                                    />
-                                    {item.name}
-                                </div>
-                            );
-                        })}
+                        <div className={style.gender}>
+                            {gender.map((item) => {
+                                return (
+                                    <div key={item.id} className={style.genderItem}>
+                                        <input
+                                            type="radio"
+                                            onChange={() => {
+                                                setChecked(item.id);
+                                                setInputValue({ ...inputValue, GioiTinh: item.id });
+                                            }}
+                                            checked={checked === item.id}
+                                        />
+                                        {item.name}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                     <div className={style.modalInput}>
                         <label>Đơn giá</label>

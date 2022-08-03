@@ -1,17 +1,14 @@
 import style from './style.module.scss';
 import images from '~/assets/images';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserLarge } from '@fortawesome/free-solid-svg-icons';
-import useAuth from '~/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import UserMenu from '~/components/contents/UserMenu';
 
 function AdminHeader() {
-    const auth = useAuth();
+    const navigate = useNavigate();
     return (
         <div className={style.header}>
-            <img src={images.logo} alt="logo" />
-            <div className={style.account} onClick={() => auth.logout()}>
-                <FontAwesomeIcon icon={faUserLarge} />
+            <img src={images.logo} alt="logo" onClick={() => navigate('/')} />
+            <div className={style.account}>
                 <UserMenu />
             </div>
         </div>

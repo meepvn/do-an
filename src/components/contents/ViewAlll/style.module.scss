@@ -1,14 +1,13 @@
 .wrapperViewAll {
     display: flex;
     padding: 0 3.2rem;
-
+    position: relative;
     .content {
         margin: 2rem 0;
         width: 100%;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-
         .itemContent {
             box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: 0.5);
 

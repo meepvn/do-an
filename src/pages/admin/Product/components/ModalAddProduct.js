@@ -29,7 +29,7 @@ function ModalAddProduct(props) {
         },
         {
             id: 3,
-            name: 'Unisex',
+            name: 'Cả hai',
         },
     ];
     const handlePreviewIMG = (e) => {

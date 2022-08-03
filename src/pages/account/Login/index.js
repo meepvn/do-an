@@ -32,7 +32,7 @@ const Login = () => {
         console.log(json);
         if (json.status === 'OK') {
             auth.setState(true, json.token, json.info);
-            navigate('/admin/product');
+            navigate(-1);
         } else {
             setAlert({
                 type: 'error',

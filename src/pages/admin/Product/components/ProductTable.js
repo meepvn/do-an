@@ -99,7 +99,7 @@ function ProductTable(props) {
                                         ? 'Nam'
                                         : item.GioiTinh === 2
                                         ? 'Nữ'
-                                        : 'Unisex'}
+                                        : 'Cả hai'}
                                 </td>
                                 <td>{formatMoney(item.DonGia, ' vnđ')}</td>
                                 <td>{item.KhuyenMai}%</td>

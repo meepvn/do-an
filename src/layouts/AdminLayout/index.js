@@ -6,7 +6,9 @@ import { Outlet } from 'react-router-dom';
 function AdminLayout() {
     return (
         <div className={style.wrapper}>
-            <AdminHeader />
+            <div className={style.header}>
+                <AdminHeader />
+            </div>
             <div className={style.content}>
                 <AdminSidebar />
                 <Outlet />
