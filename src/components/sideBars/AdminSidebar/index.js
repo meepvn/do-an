@@ -20,10 +20,12 @@ function AdminSidebar() {
                         phẩm
                     </li>
                 </NavLink>
-
-                <li className={style.list}>
-                    <FontAwesomeIcon className={style.icon} icon={faNoteSticky} /> Quản lí đơn hàng
-                </li>
+                <NavLink to="/admin/order">
+                    <li className={style.list}>
+                        <FontAwesomeIcon className={style.icon} icon={faNoteSticky} /> Quản lí đơn
+                        hàng
+                    </li>
+                </NavLink>
             </ul>
         </div>
     );

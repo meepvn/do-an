@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 const Preview = ({ title, data, content = 'sale lên đến 80% xả hàng lần cuối!' }) => {
+    const navigate = useNavigate();
+    const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 4;
     const numberOfPages = Math.ceil(data.length / itemsPerPage);
-    const [currentPage, setCurrentPage] = useState(0);
-    const navigate = useNavigate();
     const firstIndex = currentPage * itemsPerPage;
     const lastIndex = firstIndex + itemsPerPage;
     const pageItems = data.slice(firstIndex, lastIndex);
@@ -20,6 +20,7 @@ const Preview = ({ title, data, content = 'sale lên đến 80% xả hàng lần
         if (currentPage <= 0) setCurrentPage(numberOfPages - 1);
         else setCurrentPage(currentPage - 1);
     };
+
     const goToViewAllPage = () => {
         sessionStorage.setItem('type', data[0].Loai);
         navigate('/products');
@@ -28,9 +29,9 @@ const Preview = ({ title, data, content = 'sale lên đến 80% xả hàng lần
         <div className={style.wrapperPreview}>
             <div className={style.title}>
                 <div className={style.titleHeader}>{title}</div>
-                <h1 className={style.titleContent}>
+                <h2 className={style.titleContent}>
                     <span>{content}</span>
-                </h1>
+                </h2>
             </div>
 
             <div className={style.content}>
@@ -48,7 +49,9 @@ const Preview = ({ title, data, content = 'sale lên đến 80% xả hàng lần
                                 onClick={() => navigate(`/detail/${item.id}`)}
                             >
                                 <img src={`http://localhost:3100/images/${item.TenAnh}`} alt="aa" />
-                                <span className={style.discount}>-{item.KhuyenMai}%</span>
+                                {item.KhuyenMai && (
+                                    <span className={style.discount}>-{item.KhuyenMai}%</span>
+                                )}
                             </div>
                             <div className={style.itemInfo}>
                                 <span
@@ -58,11 +61,15 @@ const Preview = ({ title, data, content = 'sale lên đến 80% xả hàng lần
                                     {item.TenSP}
                                 </span>
                                 <p className={style.price}>
-                                    <span>{formatMoney(item.DonGia, ' ')} </span>
+                                    {item.KhuyenMai > 0 && (
+                                        <span className={style.priceMain}>
+                                            {formatMoney(item.DonGia, ' ')}{' '}
+                                        </span>
+                                    )}
                                     <span>
                                         {formatMoney(
                                             item.DonGia - (item.DonGia * item.KhuyenMai) / 100,
-                                            'đ',
+                                            ' ₫',
                                         )}
                                     </span>
                                 </p>

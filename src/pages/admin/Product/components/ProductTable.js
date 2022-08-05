@@ -72,7 +72,7 @@ function ProductTable(props) {
                         <th>Đối tượng </th>
                         <th>Đơn giá</th>
                         <th>Khuyến mãi</th>
-                        <th colSpan="3">Hành động</th>
+                        <th colSpan="3">Thao Tác</th>
                     </tr>
                 </thead>
                 <tbody>

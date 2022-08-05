@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { getData, updateApi } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-function EditInstock({ selectedProduct, setEditting, setData, setAlert }) {
+function EditInstock({ selectedProduct, setEditting, setData, setAlert, setShow }) {
     const [inputValue, setInputValue] = useState(selectedProduct.instock.SoLuong);
     console.log(selectedProduct);
     const validateInput = () => {
@@ -43,6 +43,7 @@ function EditInstock({ selectedProduct, setEditting, setData, setAlert }) {
                 const newData = await getData();
                 setData(newData);
                 setEditting(false);
+                setShow(false);
                 setAlert({
                     show: true,
                     type: 'success',
@@ -69,6 +70,7 @@ function EditInstock({ selectedProduct, setEditting, setData, setAlert }) {
                         icon={faClose}
                         onClick={() => {
                             setEditting(false);
+                            setShow(false);
                         }}
                     />
                 </div>

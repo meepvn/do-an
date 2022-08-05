@@ -6,6 +6,13 @@ import { useState, useMemo } from 'react';
 const ViewAll = () => {
     const navigate = useNavigate();
     const [{ products, types: productTypes }] = useOutletContext();
+    const newPrice = products?.map((item) => {
+        return {
+            ...item,
+            DonGia: item.DonGia - (item.DonGia * item.KhuyenMai) / 100,
+            cost: item.DonGia,
+        };
+    });
     const [filterOptions, setFilterOptions] = useState(() => {
         return {
             gender: JSON.parse(localStorage.getItem('gender')) ?? 1,
@@ -13,12 +20,22 @@ const ViewAll = () => {
         };
     });
     const filteredData = useMemo(() => {
-        let result = products?.filter(
+        let result = newPrice?.filter(
             (item) => item.GioiTinh === filterOptions.gender || item.GioiTinh === 3,
         );
+
         if (filterOptions.type) result = result?.filter((item) => item.Loai === filterOptions.type);
-        if (filterOptions.price)
+
+        if (filterOptions.price) {
+            if (filterOptions.price === 'increase') {
+                result = result?.sort((a, b) => parseFloat(a.DonGia) - parseFloat(b.DonGia));
+                return result;
+            } else if (filterOptions.price === 'reduce') {
+                result = result?.sort((a, b) => parseFloat(b.DonGia) - parseFloat(a.DonGia));
+                return result;
+            }
             result = result.filter((item) => item.DonGia <= filterOptions.price);
+        }
         return result;
     }, [products, filterOptions.gender, filterOptions.type, filterOptions.price]);
     return (
@@ -38,7 +55,9 @@ const ViewAll = () => {
                                 onClick={() => navigate(`/detail/${item.id}`)}
                             >
                                 <img src={`http://localhost:3100/images/${item.TenAnh}`} alt="aa" />
-                                <span className={style.discount}>-{item.KhuyenMai}%</span>
+                                {item.KhuyenMai && (
+                                    <span className={style.discount}>-{item.KhuyenMai}%</span>
+                                )}
                             </div>
                             <div className={style.itemInfo}>
                                 <span
@@ -50,12 +69,13 @@ const ViewAll = () => {
                                     {item.TenSP}
                                 </span>
                                 <p className={style.price}>
-                                    <span>{formatMoney(item.DonGia, ' ')} </span>
-                                    <span>
-                                        {formatMoney(
-                                            item.DonGia - (item.DonGia * item.KhuyenMai) / 100,
-                                            'đ',
-                                        )}
+                                    {item.KhuyenMai > 0 && (
+                                        <span className={style.priceMain}>
+                                            {formatMoney(item.cost, ' ')}{' '}
+                                        </span>
+                                    )}
+                                    <span className={style.monney}>
+                                        {formatMoney(item.DonGia, ' ₫')}
                                     </span>
                                 </p>
                             </div>

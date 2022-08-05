@@ -15,6 +15,8 @@ import Women from './pages/customer/Women';
 import NotFound from './pages/customer/NotFound';
 import Cart from './pages/customer/Cart';
 import Search from './pages/customer/Search';
+import Invoice from './pages/admin/Invoice';
+import Customer from './pages/admin/Customer';
 
 function App() {
     return (
@@ -33,6 +35,8 @@ function App() {
                 <Route path="/admin" element={<ProtectedRoutes allowedRoles={[1, 2]} />}>
                     <Route element={<AdminLayout />}>
                         <Route path="product" element={<Product />} />
+                        <Route path="order" element={<Invoice />} />
+                        <Route path="customer" element={<Customer />} />
                     </Route>
                 </Route>
                 <Route path="/account" element={<AccountLayout />}>

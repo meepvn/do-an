@@ -67,12 +67,13 @@
                 display: flex;
                 justify-content: flex-end;
                 align-items: flex-end;
-                span:first-child {
+                .priceMain {
                     font-size: 1.4rem;
                     color: var(--text-color);
                     margin-right: 1rem;
                     text-decoration: line-through;
                 }
+
                 span:last-child {
                     color: red;
                     font-weight: 600;

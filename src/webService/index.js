@@ -40,5 +40,32 @@ const addProduct = (FormData) => {
     };
     return fetch(`http://localhost:3100/api/product`, Option);
 };
-
-export { getData, AddApi, deleteApi, updateApi, addProduct, userApi };
+const addOrder = (data) => {
+    const options = {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+    };
+    return fetch('http://localhost:3100/api/order', options);
+};
+const getInvoice = async () => {
+    const res = await fetch(`http://localhost:3100/api/order`);
+    const reponse = await res.json();
+    return reponse;
+};
+const getUsers = async () => {
+    const res = await fetch(`http://localhost:3100/api/user`);
+    const reponse = await res.json();
+    return reponse.result;
+};
+export {
+    getData,
+    AddApi,
+    deleteApi,
+    updateApi,
+    addProduct,
+    userApi,
+    addOrder,
+    getInvoice,
+    getUsers,
+};

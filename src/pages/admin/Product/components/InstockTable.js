@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { faPenToSquare, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import style from './style.module.scss';
 import AddInstock from './AddInstock';
@@ -11,6 +11,17 @@ function InstockTable({ data, setData, setAlert }) {
     const [editting, setEditting] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const selectedProductRef = useRef();
+    const [show, setShow] = useState(false);
+    useEffect(() => {
+        if (show) document.body.style.overflow = 'hidden';
+        else document.body.style.overflow = 'unset';
+    }, [show]);
+
+    const handleUpdate = () => {
+        setShow(true);
+        setEditting(true);
+    };
+
     const handleDelete = async (idProduct) => {
         const res = await deleteApi('instock', idProduct);
         const reponse = await res.json();
@@ -18,6 +29,7 @@ function InstockTable({ data, setData, setAlert }) {
             return;
         } else {
             const newData = await getData();
+            setShow(false);
             setData(newData);
             setAlert({
                 show: true,
@@ -30,6 +42,7 @@ function InstockTable({ data, setData, setAlert }) {
         <div className={style.wrapperTblPro}>
             {deleting && (
                 <AlertWarning
+                    setShow={setShow}
                     handleDelete={handleDelete}
                     setDeleting={setDeleting}
                     selectedProductId={selectedProductRef.current}
@@ -37,6 +50,7 @@ function InstockTable({ data, setData, setAlert }) {
             )}
             {adding === true ? (
                 <AddInstock
+                    setShow={setShow}
                     setAlert={setAlert}
                     setData={setData}
                     setAdding={setAdding}
@@ -49,6 +63,7 @@ function InstockTable({ data, setData, setAlert }) {
             ) : null}
             {editting === true ? (
                 <EditInstock
+                    setShow={setShow}
                     setAlert={setAlert}
                     setData={setData}
                     selectedProduct={{ ...selectedProductRef.current }}
@@ -61,7 +76,7 @@ function InstockTable({ data, setData, setAlert }) {
                         <th>Tên sản phẩm</th>
                         <th>Size</th>
                         <th>Số lượng</th>
-                        <th colSpan="2">Hành động</th>
+                        <th colSpan="2">Thao Tác</th>
                     </tr>
                 </thead>
                 {data.map((item) => {
@@ -87,7 +102,7 @@ function InstockTable({ data, setData, setAlert }) {
                                             <button
                                                 className={style.edit}
                                                 onClick={() => {
-                                                    setEditting(true);
+                                                    handleUpdate();
                                                     selectedProductRef.current = {
                                                         id: item.id,
                                                         TenSP: item.TenSP,
@@ -106,6 +121,7 @@ function InstockTable({ data, setData, setAlert }) {
                                             <button
                                                 className={style.delete}
                                                 onClick={() => {
+                                                    setShow(true);
                                                     setDeleting(true);
                                                     selectedProductRef.current = instock.id;
                                                 }}
@@ -121,6 +137,7 @@ function InstockTable({ data, setData, setAlert }) {
                                     className={style.addInstock}
                                     colSpan={5}
                                     onClick={() => {
+                                        setShow(true);
                                         selectedProductRef.current = item;
                                         setAdding(true);
                                     }}

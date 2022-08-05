@@ -4,7 +4,7 @@ import { AddApi, getData } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 function AddInstock(props) {
-    const { setAlert } = props;
+    const { setAlert, setShow } = props;
     const [inputValue, setInputValue] = useState({
         Size: '',
         SoLuong: '',
@@ -50,6 +50,7 @@ function AddInstock(props) {
                 const newData = await getData();
                 await props.setData(newData);
                 props.setAdding(false);
+                setShow(false);
                 setAlert({
                     show: true,
                     type: 'success',
@@ -75,6 +76,7 @@ function AddInstock(props) {
                         className={style.icon}
                         icon={faClose}
                         onClick={() => {
+                            setShow(false);
                             props.setAdding(false);
                         }}
                     />

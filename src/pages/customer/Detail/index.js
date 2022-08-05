@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import style from './style.module.scss';
 import { formatMoney } from '~/ultis';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,23 +9,35 @@ import RequireLogin from '~/components/infoModals/AlertWarning';
 import useLocalStorage from '~/hooks/useLocalStorage';
 const Detail = () => {
     const navigate = useNavigate();
-    const [cartProducts, setCartProducts] = useLocalStorage('cart', []);
+    const [{ products }] = useOutletContext();
+    const [itemsInCart, setItemsInCart] = useLocalStorage('cart', []);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        if (products) setLoading(false);
+    }, [products]);
     const [alert, setAlert] = useState({
         show: false,
         type: '',
         message: '',
     });
-    const [{ products }] = useOutletContext();
     const { id } = useParams();
-    const [dataCart, setDataCart] = useState({
-        idProduct: id,
+    const [newItem, setNewItem] = useState({
+        id: id,
         SoLuong: 1,
-        idSize: '',
+        id_soluong: '',
     });
     const [loginWarning, setLoginWarning] = useState(false);
+    if (loading) return <h1>Loading ...</h1>;
     const foundProduct = products?.find((item) => item.id === parseInt(id));
+    const isProductExistInCard = (product) => {
+        let result = false;
+        itemsInCart?.forEach((item) => {
+            if (item.id === product.id && item.id_soluong === product.id_soluong) result = true;
+        });
+        return result;
+    };
     const addToCart = (buyNow = false) => {
-        if (!dataCart.idSize) {
+        if (!newItem.id_soluong) {
             setAlert({
                 show: true,
                 type: 'warning',
@@ -33,11 +45,25 @@ const Detail = () => {
             });
             return;
         }
-        console.log(dataCart);
 
+        if (isProductExistInCard(newItem)) {
+            setAlert({
+                show: true,
+                type: 'warning',
+                message: 'Sản phẩm đã tồn tại trong giỏ hàng',
+            });
+            return;
+        } else {
+            setAlert({
+                show: true,
+                type: 'success',
+                message: 'Sản phẩm đã được thêm vào giỏ',
+            });
+        }
+        setItemsInCart([...itemsInCart, newItem]);
         if (buyNow) navigate('/cart');
     };
-    if (foundProduct)
+    if (foundProduct) {
         return (
             <div className={style.wrapperDetail}>
                 {loginWarning && <RequireLogin setShow={setLoginWarning} />}
@@ -59,14 +85,17 @@ const Detail = () => {
                         </span>
                         <span>Giảm {foundProduct.KhuyenMai}%</span>
                     </p>
-                    {/* <p className={style.color}>
-                        <span>Màu sắc:</span>
-                    </p> */}
+
                     <p className={style.size}>
                         <span>Size:</span>
 
                         <select
-                            onChange={(e) => setDataCart({ ...dataCart, idSize: e.target.value })}
+                            onChange={(e) =>
+                                setNewItem({
+                                    ...newItem,
+                                    id_soluong: e.target.value,
+                                })
+                            }
                         >
                             <option value="">Chọn size sản phẩm</option>
                             {foundProduct.SoLuong?.map((item) => {
@@ -91,17 +120,17 @@ const Detail = () => {
                         <div className={style.btnCount}>
                             <button
                                 className={style.prev}
-                                disabled={dataCart.SoLuong === 1}
+                                disabled={newItem.SoLuong === 1}
                                 onClick={() => {
-                                    setDataCart({ ...dataCart, SoLuong: dataCart.SoLuong - 1 });
+                                    setNewItem({ ...newItem, SoLuong: newItem.SoLuong - 1 });
                                 }}
                             >
                                 -
                             </button>
-                            <span>{dataCart.SoLuong}</span>
+                            <span>{newItem.SoLuong}</span>
                             <button
                                 onClick={() =>
-                                    setDataCart({ ...dataCart, SoLuong: dataCart.SoLuong + 1 })
+                                    setNewItem({ ...newItem, SoLuong: newItem.SoLuong + 1 })
                                 }
                             >
                                 +
@@ -161,6 +190,6 @@ const Detail = () => {
                 </div>
             </div>
         );
-    else return <h1>Không tìm thấy sản phẩm</h1>;
+    } else return <h1>Không tìm thấy sản phẩm</h1>;
 };
 export default Detail;

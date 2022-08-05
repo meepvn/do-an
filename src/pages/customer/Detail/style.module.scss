@@ -3,7 +3,7 @@
     justify-content: space-between;
     padding: 5rem;
     .Image {
-        width: calc((100% - 40rem) / 3);
+        width: calc((100% - 20rem) / 3);
         border: 1px solid gray;
         border-radius: 3px;
         max-height: 45rem;
@@ -14,7 +14,6 @@
 
         img {
             width: 100%;
-            object-fit: cover;
         }
     }
     .content {
@@ -61,6 +60,15 @@
             .btnCount {
                 display: flex;
                 margin-left: 1rem;
+                span {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 1.8rem;
+                    padding: 0 2rem;
+                    border-top: 1px solid var(--border-color);
+                    border-bottom: 1px solid var(--border-color);
+                }
             }
             button {
                 padding: 0 1.2rem;

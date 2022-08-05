@@ -20,7 +20,7 @@ const UserMenu = () => {
             <FontAwesomeIcon className={style.icon} icon={faUserLarge} />
             {alert.show && <Alert alert={alert} setAlert={setAlert} />}
             {displayMenu && (
-                <ul className={style.list}>
+                <ul className={style.list} id={style.slideIn}>
                     {!auth.isLogin ? (
                         <li className={style.listItem}>
                             <p>
@@ -46,27 +46,28 @@ const UserMenu = () => {
                         </li>
                     ) : (
                         <li className={style.listItem} id={style.login}>
-                            <p>
+                            <div className={style.title}>
+                                <p>
+                                    <span>
+                                        Hi <span className={style.userName}>{userInfo.HoTen}</span>
+                                    </span>
+                                    <span
+                                        onClick={() => {
+                                            setAlert({
+                                                show: true,
+                                                type: 'success',
+                                                message: 'Bạn vừa đăng xuất khỏi hệ thống',
+                                            });
+                                            auth.logout();
+                                        }}
+                                    >
+                                        Đăng xuất
+                                    </span>
+                                </p>
                                 <span>
-                                    Hi{' '}
-                                    <span className={style.userName}>{userInfo.TenTaiKhoan}</span>
+                                    <FontAwesomeIcon icon={faClose} className={style.icon} />
                                 </span>
-                                <span
-                                    onClick={() => {
-                                        setAlert({
-                                            show: true,
-                                            type: 'success',
-                                            message: 'Bạn vừa đăng xuất khỏi hệ thống',
-                                        });
-                                        auth.logout();
-                                    }}
-                                >
-                                    Đăng xuất
-                                </span>
-                            </p>
-                            <span>
-                                <FontAwesomeIcon icon={faClose} className={style.icon} />
-                            </span>
+                            </div>
                         </li>
                     )}
                     <li className={style.listItem}>
