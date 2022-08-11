@@ -11,7 +11,8 @@ const Alert = ({ alert, setAlert }) => {
     const { type = '', message = '' } = alert;
     setTimeout(() => {
         setAlert({ ...alert, show: false });
-    }, 5000);
+        console.log(123);
+    }, 1500);
     return (
         <div
             className={style.wrapperAlert}

@@ -71,8 +71,7 @@ function InvoiceTable({ setAlert, data }) {
                                 <td>{item.id}</td>
                                 <td>
                                     <div className={style.nameWrapper}>
-                                        <span className={style.name}>{item.HoTen}</span>
-                                        <span className={style.fullName}>{item.HoTen}</span>
+                                        <span>{item.HoTen}</span>
                                     </div>
                                 </td>
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import style from '../style.module.scss';
-function AlertWarning({ setDeleting, selectedProductId, handleDelete, setShow }) {
+function AlertWarning({ setDeleting, selectedProductId, handleDelete }) {
     console.log(selectedProductId);
     return (
         <div className={style.comfirmWrapper}>
@@ -13,7 +13,6 @@ function AlertWarning({ setDeleting, selectedProductId, handleDelete, setShow })
                     <FontAwesomeIcon
                         icon={faClose}
                         onClick={() => {
-                            setShow(false);
                             setDeleting(false);
                         }}
                     />
@@ -24,7 +23,7 @@ function AlertWarning({ setDeleting, selectedProductId, handleDelete, setShow })
                 <div className={style.comfirmBtn}>
                     <button
                         onClick={() => {
-                            setShow(false);
+                            // setShow(false);
                             setDeleting(false);
                         }}
                     >

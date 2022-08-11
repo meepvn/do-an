@@ -39,19 +39,23 @@
                 overflow: hidden;
                 max-width: 18rem;
                 &:hover ~ .fullName {
-                    opacity: 0.7;
+                    display: block;
+                    transition: 0.5s;
                     transition-delay: 0.5s;
+                    animation: show 0.5s linear forwards;
                 }
             }
             .fullName {
-                max-width: 50rem;
+                z-index: 2;
+                max-width: 30rem;
                 position: absolute;
                 top: 1.8rem;
-                white-space: nowrap;
-                transition: 0.1s linear;
+                white-space: wrap;
+                transition: 0.5s linear;
                 padding: 0.5rem;
                 background-color: black;
                 color: white;
+                display: none;
                 opacity: 0;
                 border-radius: 3px;
                 transition-timing-function: linear;
@@ -115,12 +119,12 @@
             }
         }
     }
-    @keyframes changeColor {
+    @keyframes show {
         from {
-            background-color: gray;
+            opacity: 0;
         }
         to {
-            background-color: aquamarine;
+            opacity: 0.9;
         }
     }
 }

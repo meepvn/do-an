@@ -2,13 +2,22 @@ import style from './style.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import AdminSearchBar from '~/components/searchBars/AdminSearchBar';
-// import { removeAccents } from '~/ultis';
-import { useState, useEffect, useMemo } from 'react';
+import { removeAccents } from '~/ultis';
+import AlertWarning from '~/components/infoModals/AlertWarning';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Alert from '~/components/infoModals/Alert';
-import { getUsers } from '~/webService';
+import { getUsers, deleteApi } from '~/webService';
+import AddCustomer from './components/AddCustomer';
+import EditCustomer from './components/EditCustomer';
+import SearchCustomer from './components/SearchCustomer';
 
 function Customer() {
+    const [adding, setAdding] = useState(false);
+    const [editing, setEditing] = useState(false);
     const [data, setData] = useState([]);
+    const [deleting, setDeleting] = useState(false);
+    const customer = useRef();
+    const [filterValue, setFilterValue] = useState('');
     const [alert, setAlert] = useState({
         show: false,
         message: '',
@@ -17,40 +26,52 @@ function Customer() {
     useEffect(() => {
         getUsers().then(setData).catch(console.log);
     }, []);
-    console.log(data);
-    // const filterdData = useMemo(() => {
-    //     return products.filter((item) => {
-    //         const itemName = removeAccents(item.TenSP).toLowerCase();
-    //         const findName = removeAccents(filterValue).toLowerCase();
-    //         const typeName = removeAccents(item.Loai).toLowerCase();
-    //         return itemName.includes(findName) || typeName.includes(findName);
-    //     });
-    // }, [filterValue, products]);
+    const handleDelete = async (id) => {
+        const reponse = await deleteApi('user', id);
+        const json = await reponse.json();
+        const res = await getUsers();
+        setData(res);
+    };
+    const filterdData = useMemo(() => {
+        return data.filter((item) => {
+            const itemName = removeAccents(item.HoTen).toLowerCase();
+            const findName = removeAccents(filterValue).toLowerCase();
+
+            return itemName.includes(findName);
+        });
+    }, [filterValue, data]);
+    const handleEdit = () => {
+        setEditing(true);
+    };
     return (
         <div className={style.wrapper}>
+            <SearchCustomer data={data} setFilterValue={setFilterValue} filterValue={filterValue} />
             {alert.show && <Alert alert={alert} setAlert={setAlert} />}
 
             <div className={style.content}>
                 <div className={style.wrapperTblPro}>
                     <div className={style.wrapperBtn}>
-                        <button className={style.btnAdd}>Thêm khách hàng</button>
+                        <button onClick={() => setAdding(true)} className={style.btnAdd}>
+                            Thêm khách hàng
+                        </button>
                     </div>
-                    {/* {deleting && (
-                <AlertWarning
-                    setDeleting={setDeleting}
-                    handleDelete={handleDelete}
-                    selectedProductId={selectedProductRef.current.id}
-                />
-            )} */}
-                    {/* {show === true ? (
-                <ModalAddProduct
-                    setData={props.setData}
-                    setAlert={setAlert}
-                    setShow={setShow}
-                    productTypes={props.productTypes}
-                    handleToggleModalAdd={handleToggleModalAdd}
-                />
-            ) : null}
+                    {deleting && (
+                        <AlertWarning
+                            setDeleting={setDeleting}
+                            handleDelete={handleDelete}
+                            selectedProductId={customer.current.id}
+                        />
+                    )}
+                    {adding && <AddCustomer setAdding={setAdding} setData={setData} />}
+                    {editing && (
+                        <EditCustomer
+                            setEditing={setEditing}
+                            setData={setData}
+                            selectedCustomer={{ ...customer.current }}
+                            setAlert={setAlert}
+                        />
+                    )}
+                    {/* 
             {showEdit === true ? (
                 <ModalEditProduct
                     setAlert={setAlert}
@@ -72,14 +93,13 @@ function Customer() {
                             </tr>
                         </thead>
                         <tbody>
-                            {data?.map((item, index) => {
+                            {filterdData?.map((item, index) => {
                                 return (
                                     <tr key={index}>
                                         <td>{item.id}</td>
                                         <td>
                                             <div className={style.nameWrapper}>
-                                                <span className={style.name}>{item.HoTen}</span>
-                                                <span className={style.fullName}>{item.HoTen}</span>
+                                                <span>{item.HoTen}</span>
                                             </div>
                                         </td>
 
@@ -90,12 +110,31 @@ function Customer() {
                                         <td>{item.Email}</td>
                                         <td>{item.TenTaiKhoan}</td>
                                         <td>
-                                            <button className={style.edit}>
+                                            <button
+                                                className={style.edit}
+                                                onClick={() => {
+                                                    customer.current = {
+                                                        id: item.id,
+                                                        HoTen: item.HoTen,
+                                                        SDT: item.SDT,
+                                                        DiaChi: item.DiaChi,
+                                                        Email: item.Email,
+                                                        TenTaiKhoan: item.TenTaiKhoan,
+                                                    };
+                                                    handleEdit(item.id);
+                                                }}
+                                            >
                                                 <FontAwesomeIcon icon={faPenToSquare} /> Sửa
                                             </button>
                                         </td>
                                         <td>
-                                            <button className={style.delete}>
+                                            <button
+                                                className={style.delete}
+                                                onClick={() => {
+                                                    customer.current.id = item.id;
+                                                    setDeleting(true);
+                                                }}
+                                            >
                                                 <FontAwesomeIcon icon={faTrash} /> Xóa
                                             </button>
                                         </td>

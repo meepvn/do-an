@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 export default function CustomerLayout() {
     const [data, setData] = useState([]);
+    const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart'))?.length ?? 0);
     useEffect(() => {
         (async () => {
             const resData = await getData();
@@ -15,9 +16,9 @@ export default function CustomerLayout() {
     }, [setData]);
     return (
         <div>
-            <CustomerHeader />
+            <CustomerHeader cart={cart} data={data.types} />
             <News />
-            <Outlet context={[data, setData]} />
+            <Outlet context={[data, setCart, cart]} />
             <CustomerFooter />
         </div>
     );

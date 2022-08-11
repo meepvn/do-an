@@ -1,36 +1,32 @@
-import { useEffect, useRef, useState } from 'react';
 import style from './style.module.scss';
 import { formatMoney } from '~/ultis';
-import useLocalStorage from '~/hooks/useLocalStorage';
 
-export default function CartItem({ data, handleUpdateCart, deleteCartItem }) {
-    const [count, setCount] = useState(data.SoLuong);
-    const [itemsInCart, setItemInCart] = useLocalStorage('cart', []);
-    console.log(itemsInCart);
-    useEffect(() => {
-        handleUpdateCart(count, data.id_soluong);
-    }, [count]);
-    const handleIncrease = () => {
-        // const newCart = itemsInCart.map((item) => {
-        //     if (item.id === data.id && item.id_soluong === data.id_soluong)
-        //         return { ...item, SoLuong: item.SoLuong + 1 };
-        //     else return item;
-        // });
-        // console.log('increase', newCart);
-        // itemsInCart = newCart;
-        // localStorage.setItem('cart', JSON.stringify(newCart));
-        setCount(count + 1);
-    };
-    const handleDecrease = () => {
-        // if (data.SoLuong <= 1) return;
-        // const newCart = itemsInCart?.map((item) => {
-        //     if (item.id === data.id && item.id_soluong === data.id_soluong)
-        //         return { ...item, SoLuong: item.SoLuong - 1 };
-        //     else return item;
-        // });
-        // console.log('reduce', newCart);
-        // localStorage.setItem('cart', JSON.stringify(newCart));
-        setCount(count - 1);
+export default function CartItem({
+    data,
+    setItemsInCart,
+    itemsInCart,
+    hanledalTotalPrice,
+    setCart,
+}) {
+    console.log('data', data);
+    console.log('item', itemsInCart.length);
+    hanledalTotalPrice(data.GiaKM * data.SoLuong);
+    const handleQuantityChange = (value) => {
+        if (value === '+') {
+            const newCart = itemsInCart?.map((item) => {
+                if (item.id_chitiet === data.id_chitiet)
+                    return { ...item, SoLuong: item.SoLuong + 1 };
+                else return item;
+            });
+            setItemsInCart(newCart);
+        } else if (value === '-') {
+            const newCart = itemsInCart?.map((item) => {
+                if (item.id_chitiet === data.id_chitiet)
+                    return { ...item, SoLuong: item.SoLuong - 1 };
+                else return item;
+            });
+            setItemsInCart(newCart);
+        } else return;
     };
     return (
         <div className={style.wrappperCartItem}>
@@ -41,21 +37,32 @@ export default function CartItem({ data, handleUpdateCart, deleteCartItem }) {
                 <p className={style.name}>{data.TenSP}</p>
                 <p>Size: {data.Size}</p>
                 <p className={style.price}>
-                    {/* <span>{formatMoney(data.GiaGoc, '₫')}</span>
-                    Giá:<span>{formatMoney(data.GiaKM, '₫')}</span> */}
+                    <span>{formatMoney(data.GiaGoc, '₫')}</span>
+                    Giá: <span>{formatMoney(data.GiaKM, '₫')}</span>
                 </p>
 
                 <div className={style.btnCount}>
-                    <button className={style.prev} onClick={handleDecrease}>
+                    <button
+                        disabled={data.SoLuong <= 1}
+                        className={style.prev}
+                        onClick={() => handleQuantityChange('-')}
+                    >
                         -
                     </button>
-                    <span>{count}</span>
-                    <button onClick={handleIncrease}>+</button>
+                    <span>{data.SoLuong}</span>
+                    <button onClick={() => handleQuantityChange('+')}>+</button>
                 </div>
-                <p>Thành tiền:{formatMoney(data.GiaKM * count, '₫')}</p>
+                <p className={style.totalPrice}>
+                    Thành tiền: {formatMoney(data.GiaKM * data.SoLuong, '₫')}
+                </p>
                 <button
+                    className={style.deleteCart}
                     onClick={() => {
-                        deleteCartItem(data.id_soluong);
+                        setCart((pre) => pre - 1);
+                        const newCart = itemsInCart?.filter(
+                            (cartItem) => cartItem.id_chitiet !== data.id_chitiet,
+                        );
+                        setItemsInCart(newCart);
                     }}
                 >
                     Xóa

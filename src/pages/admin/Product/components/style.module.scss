@@ -44,10 +44,10 @@
                 }
             }
             .fullName {
-                max-width: 50rem;
+                width: 30rem;
                 position: absolute;
                 top: 1.8rem;
-                white-space: nowrap;
+                white-space: wrap;
                 transition: 0.1s linear;
                 padding: 0.5rem;
                 background-color: black;

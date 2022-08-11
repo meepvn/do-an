@@ -10,19 +10,19 @@ function AdminSidebar() {
                 <NavLink to="/admin/customer">
                     <li className={style.list}>
                         <FontAwesomeIcon className={style.icon} icon={faUserGroup} />
-                        Quản lí người dùng
+                        Quản lý khách hàng
                     </li>
                 </NavLink>
 
                 <NavLink to="/admin/product">
                     <li className={style.list}>
-                        <FontAwesomeIcon className={style.icon} icon={faBarsProgress} /> Quản lí sản
+                        <FontAwesomeIcon className={style.icon} icon={faBarsProgress} /> Quản lý sản
                         phẩm
                     </li>
                 </NavLink>
                 <NavLink to="/admin/order">
                     <li className={style.list}>
-                        <FontAwesomeIcon className={style.icon} icon={faNoteSticky} /> Quản lí đơn
+                        <FontAwesomeIcon className={style.icon} icon={faNoteSticky} /> Quản lý đơn
                         hàng
                     </li>
                 </NavLink>

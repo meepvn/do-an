@@ -58,6 +58,7 @@ const getUsers = async () => {
     const reponse = await res.json();
     return reponse.result;
 };
+
 export {
     getData,
     AddApi,

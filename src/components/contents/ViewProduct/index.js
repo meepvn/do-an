@@ -1,53 +1,14 @@
 import style from './style.module.scss';
-import { useOutletContext, useNavigate } from 'react-router-dom';
 import { formatMoney } from '~/ultis';
-import Filter from '../Filter';
+import { useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
-const ViewAll = () => {
+const ViewProduct = ({ data }) => {
     const navigate = useNavigate();
-    const [{ products, types: productTypes }] = useOutletContext();
-    const newPrice = products?.map((item) => {
-        return {
-            ...item,
-            DonGia: item.DonGia - (item.DonGia * item.KhuyenMai) / 100,
-            cost: item.DonGia,
-        };
-    });
-    const [filterOptions, setFilterOptions] = useState(() => {
-        return {
-            gender: JSON.parse(localStorage.getItem('gender')) ?? 1,
-            type: sessionStorage.getItem('type') ?? '',
-        };
-    });
-    const filteredData = useMemo(() => {
-        let result = newPrice?.filter(
-            (item) => item.GioiTinh === filterOptions.gender || item.GioiTinh === 3,
-        );
 
-        if (filterOptions.type) result = result?.filter((item) => item.Loai === filterOptions.type);
-
-        if (filterOptions.price) {
-            if (filterOptions.price === 'increase') {
-                result = result?.sort((a, b) => parseFloat(a.DonGia) - parseFloat(b.DonGia));
-                return result;
-            } else if (filterOptions.price === 'reduce') {
-                result = result?.sort((a, b) => parseFloat(b.DonGia) - parseFloat(a.DonGia));
-                return result;
-            }
-            result = result.filter((item) => item.DonGia <= filterOptions.price);
-        }
-        return result;
-    }, [products, filterOptions.gender, filterOptions.type, filterOptions.price]);
     return (
         <div className={style.wrapperViewAll}>
-            <div></div>
-            <Filter
-                data={productTypes}
-                setFilterOptions={setFilterOptions}
-                filterOptions={filterOptions}
-            />
             <div className={style.content}>
-                {filteredData?.map((item) => {
+                {data?.map((item) => {
                     return (
                         <div className={style.itemContent} key={item.id}>
                             <div
@@ -73,14 +34,14 @@ const ViewAll = () => {
                                 </div>
 
                                 <p className={style.price}>
-                                    {item.KhuyenMai > 0 && (
+                                    {/* {item.KhuyenMai > 0 && (
                                         <span className={style.priceMain}>
                                             {formatMoney(item.cost, ' ')}{' '}
                                         </span>
                                     )}
                                     <span className={style.monney}>
                                         {formatMoney(item.DonGia, ' ₫')}
-                                    </span>
+                                    </span> */}
                                 </p>
                             </div>
                         </div>
@@ -91,4 +52,4 @@ const ViewAll = () => {
     );
 };
 
-export default ViewAll;
+export default ViewProduct;

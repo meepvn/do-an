@@ -83,17 +83,17 @@ function InstockTable({ data, setData, setAlert }) {
                     return (
                         <tbody key={item.id}>
                             <tr>
-                                <td rowSpan={item.SoLuong.length + 2}>
+                                <td rowSpan={item.ChiTiet.length + 2}>
                                     <div className={style.nameWrapper}>
                                         <span className={style.name}>{item.TenSP}</span>
                                         <span className={style.fullName}>{item.TenSP}</span>
                                     </div>
                                 </td>
-                                {item.SoLuong.length === 0 && (
+                                {item.ChiTiet.length === 0 && (
                                     <td colSpan="4">Sản phẩm chưa có số lượng</td>
                                 )}
                             </tr>
-                            {item.SoLuong.map((instock) => {
+                            {item.ChiTiet.map((instock) => {
                                 return (
                                     <tr key={instock.id}>
                                         <td>{instock.Size}</td>

@@ -1,6 +1,6 @@
 .wrappperCartItem {
     display: flex;
-    padding: 0 3.2rem;
+    padding: 1rem 2rem;
     background-color: white;
     position: relative;
     justify-content: s;
@@ -17,6 +17,7 @@
     .content {
         padding: 1.5rem 2rem;
         display: flex;
+        align-items: center;
         flex-grow: 1;
         justify-content: space-between;
         .name {
@@ -44,6 +45,7 @@
     .btnCount {
         display: flex;
         margin-left: 1rem;
+        max-height: 2.5rem;
         span {
             display: flex;
             justify-content: center;
@@ -53,5 +55,12 @@
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
         }
+    }
+    .deleteCart {
+        max-height: 2.5rem;
+        font-size: 1.8rem;
+    }
+    .totalPrice {
+        color: #ee4d2d;
     }
 }

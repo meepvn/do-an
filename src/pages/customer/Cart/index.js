@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import images from '~/assets/images';
 import style from './style.module.scss';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -11,9 +11,10 @@ import Alert from '~/components/infoModals/Alert';
 
 const Cart = () => {
     const auth = useAuth();
+    const totalRef = useRef(0);
     const { cartIMG } = images;
     const [loading, setLoading] = useState(true);
-    const [{ products }] = useOutletContext();
+    const [{ products }, setCart] = useOutletContext();
     const [itemsInCart, setItemsInCart] = useLocalStorage('cart', []);
     const { userInfo } = auth;
     const [loginWarning, setLoginWarning] = useState(false);
@@ -23,16 +24,19 @@ const Cart = () => {
         type: '',
         message: '',
     });
+    const hanledalTotalPrice = (price) => console.log('123', price);
+
     useEffect(() => {
         if (products) setLoading(false);
-        if (itemsInCart) setLoading(false);
-    }, [products, itemsInCart]);
+    }, [products]);
     if (loading) return <h1>Loading ...</h1>;
     const cartItems = itemsInCart?.map((item) => {
         const foundProduct = products?.find((product) => product.id.toString() === item.id);
-        const size = foundProduct?.SoLuong.find(
-            (instock) => instock.id.toString() === item.id_soluong,
+        const size = foundProduct?.ChiTiet.find(
+            (instock) => instock.id.toString() === item.id_chitiet,
         );
+        // console.log('size', size);
+        // console.log('found', foundProduct);
 
         return {
             TenSP: foundProduct?.TenSP,
@@ -40,25 +44,10 @@ const Cart = () => {
             GiaGoc: foundProduct?.DonGia,
             TenAnh: foundProduct?.TenAnh,
             SoLuong: item?.SoLuong,
-            id: item?.id,
-            id_soluong: item?.id_soluong,
+            id_chitiet: item?.id_chitiet,
             Size: size?.Size,
         };
     });
-
-    const updateItemCart = (count, id) => {
-        const newCart = itemsInCart.map((item) => {
-            if (item.id_soluong === id) return { ...item, SoLuong: count };
-            else return item;
-        });
-        console.log(newCart);
-        setItemsInCart(newCart);
-    };
-
-    const deleteCartItem = (id_delete) => {
-        console.log(id_delete);
-        setItemsInCart(itemsInCart?.filter((cartItem) => cartItem.id_soluong !== id_delete));
-    };
 
     const createOrder = async () => {
         if (!auth.isLogin) {
@@ -71,7 +60,6 @@ const Cart = () => {
         };
         const res = await addOrder(data);
         const reponse = await res.json();
-        console.log(reponse);
         setItemsInCart([]);
         setAlert({
             show: true,
@@ -98,21 +86,27 @@ const Cart = () => {
                     </button>
                 </div>
             )}
-            <div className={style.haveProduct}>
-                {cartItems?.map((item, index) => {
-                    return (
-                        <>
+            {itemsInCart.length > 0 && (
+                <div className={style.haveProduct}>
+                    {cartItems?.map((item, index) => {
+                        return (
                             <CartItem
+                                setCart={setCart}
+                                hanledalTotalPrice={hanledalTotalPrice}
                                 key={index}
                                 data={item}
-                                handleUpdateCart={updateItemCart}
-                                deleteCartItem={deleteCartItem}
+                                setItemsInCart={setItemsInCart}
+                                itemsInCart={itemsInCart}
                             />
-                        </>
-                    );
-                })}
-            </div>
-            <button onClick={createOrder}>Thanh toán</button>
+                        );
+                    })}
+                    <div className={style.btnPay}>
+                        <span>Tổng thanh toán ({cartItems.length} sản phẩm ): </span>
+                        <span className={style.price}>123.000 đ</span>
+                        <button onClick={createOrder}>Thanh toán</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

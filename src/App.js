@@ -28,7 +28,7 @@ function App() {
                     <Route path="women" element={<Women />} />
                     <Route path="products" element={<ViewAll />} />
                     <Route path="detail/:id" element={<Detail />} />
-                    <Route path="search" element={<Search />} />
+                    <Route path="search/:q" element={<Search />} />
                     <Route path="cart" element={<Cart />} />
                     <Route path="*" element={<NotFound />} />
                 </Route>

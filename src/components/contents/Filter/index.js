@@ -2,12 +2,9 @@ import style from './style.module.scss';
 const Filter = ({ data, setFilterOptions, filterOptions }) => {
     return (
         <div className={style.wrapperFilter}>
-            <div className={style.title}>
-                <h3>Lọc sản phẩm</h3>
-            </div>
             <div className={style.content}>
                 <div>
-                    <h4>Đối tượng</h4>
+                    <h4>Giới tính</h4>
                     <div className={style.itemFilter}>
                         <input
                             type="checkbox"

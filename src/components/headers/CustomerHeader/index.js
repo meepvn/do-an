@@ -5,7 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBagShopping, faHeart } from '@fortawesome/free-solid-svg-icons';
 import UserMenu from '~/components/contents/UserMenu';
-function CustomerHeader() {
+import useLocalStorage from '~/hooks/useLocalStorage';
+import CustomerSearchBar from '~/components/searchBars/CustomerSearchBar';
+function CustomerHeader({ cart, data }) {
     const navigate = useNavigate();
     return (
         <div className={style.headerHome}>
@@ -26,12 +28,15 @@ function CustomerHeader() {
             </div>
             <div className={style.headerLeft}>
                 <div className={style.headerSearch}>
-                    <h1>Search bar</h1>
+                    <CustomerSearchBar data={data} />
                 </div>
                 <div className={style.icons}>
                     <UserMenu />
                     <FontAwesomeIcon icon={faHeart} />
-                    <FontAwesomeIcon icon={faBagShopping} onClick={() => navigate('/cart')} />
+                    <span className={style.cart} onClick={() => navigate('/cart')}>
+                        <FontAwesomeIcon icon={faBagShopping}></FontAwesomeIcon>
+                        <span className={style.count}>{cart}</span>
+                    </span>
                 </div>
             </div>
         </div>

@@ -8,8 +8,9 @@ import Alert from '~/components/infoModals/Alert';
 import RequireLogin from '~/components/infoModals/AlertWarning';
 import useLocalStorage from '~/hooks/useLocalStorage';
 const Detail = () => {
+    const [btnCart, setBtnCart] = useState(false);
     const navigate = useNavigate();
-    const [{ products }] = useOutletContext();
+    const [{ products }, setCart] = useOutletContext();
     const [itemsInCart, setItemsInCart] = useLocalStorage('cart', []);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -24,20 +25,21 @@ const Detail = () => {
     const [newItem, setNewItem] = useState({
         id: id,
         SoLuong: 1,
-        id_soluong: '',
+        id_chitiet: '',
     });
+
     const [loginWarning, setLoginWarning] = useState(false);
     if (loading) return <h1>Loading ...</h1>;
     const foundProduct = products?.find((item) => item.id === parseInt(id));
     const isProductExistInCard = (product) => {
         let result = false;
         itemsInCart?.forEach((item) => {
-            if (item.id === product.id && item.id_soluong === product.id_soluong) result = true;
+            if (item.id === product.id && item.id_chitiet === product.id_chitiet) result = true;
         });
         return result;
     };
     const addToCart = (buyNow = false) => {
-        if (!newItem.id_soluong) {
+        if (!newItem.id_chitiet) {
             setAlert({
                 show: true,
                 type: 'warning',
@@ -47,18 +49,28 @@ const Detail = () => {
         }
 
         if (isProductExistInCard(newItem)) {
+            const itemsInCart = JSON.parse(localStorage.getItem('cart'));
+            const newCart = itemsInCart.map((item) => {
+                if (item.id_chitiet === newItem.id_chitiet)
+                    return { ...item, SoLuong: newItem.SoLuong + item.SoLuong };
+                else return item;
+            });
+            setItemsInCart(newCart);
+
             setAlert({
                 show: true,
-                type: 'warning',
-                message: 'Sản phẩm đã tồn tại trong giỏ hàng',
+                type: 'sucess',
+                message: 'Sản phẩm đã được thêm vào giỏ',
             });
             return;
         } else {
+            setCart((prev) => prev + 1);
             setAlert({
                 show: true,
                 type: 'success',
                 message: 'Sản phẩm đã được thêm vào giỏ',
             });
+            setBtnCart(true);
         }
         setItemsInCart([...itemsInCart, newItem]);
         if (buyNow) navigate('/cart');
@@ -93,12 +105,12 @@ const Detail = () => {
                             onChange={(e) =>
                                 setNewItem({
                                     ...newItem,
-                                    id_soluong: e.target.value,
+                                    id_chitiet: e.target.value,
                                 })
                             }
                         >
                             <option value="">Chọn size sản phẩm</option>
-                            {foundProduct.SoLuong?.map((item) => {
+                            {foundProduct.ChiTiet?.map((item) => {
                                 return (
                                     <option key={item.Size} value={item.id}>
                                         {item.Size}
@@ -148,6 +160,11 @@ const Detail = () => {
                         >
                             Mua Ngay
                         </div>
+                        {btnCart && (
+                            <div className={style.btn} onClick={() => addToCart()}>
+                                <FontAwesomeIcon icon={faCartPlus} /> Xem giỏ hàng
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className={style.suport}>

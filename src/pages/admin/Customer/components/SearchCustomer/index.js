@@ -3,19 +3,30 @@ import style from './style.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faFilterCircleXmark, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { removeAccents } from '~/ultis';
-import { useNavigate } from 'react-router-dom';
-function CustomerSearchBar({ data }) {
+function SearchCustomer({ setFilterValue, data, filterValue = '' }) {
     const [inputValue, setInputValue] = useState('');
-    const navigate = useNavigate();
     const [showSuggest, setShowSuggest] = useState(false);
-    const suggestData = data?.filter((item) => {
+    const suggestData = data.filter((item) => {
+        const itemName = removeAccents(item.HoTen).toLowerCase();
         const findName = removeAccents(inputValue).toLowerCase();
-        const typeName = removeAccents(item).toLowerCase();
-        return typeName.includes(findName);
+        return itemName.includes(findName);
     });
-
+    useEffect(() => {
+        setInputValue(filterValue);
+    }, [filterValue]);
     return (
         <div className={style.wrapperSearchBar}>
+            {filterValue && (
+                <button
+                    onClick={() => {
+                        setInputValue('');
+                        setFilterValue('');
+                    }}
+                    className={style.back}
+                >
+                    <FontAwesomeIcon icon={faFilterCircleXmark} /> Bỏ tìm kiếm
+                </button>
+            )}
             <div className={style.searchBar}>
                 <input
                     onChange={(e) => {
@@ -23,13 +34,12 @@ function CustomerSearchBar({ data }) {
                         setInputValue(e.target.value);
                     }}
                     onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            setShowSuggest(false);
-                            navigate(`/search/${removeAccents(inputValue.replaceAll(' ', '-'))}`);
-                        }
+                        if (e.key === 'Enter' && suggestData.length > 0)
+                            setFilterValue(e.target.value);
+                        setShowSuggest(false);
                     }}
                     value={inputValue}
-                    placeholder="Nhập tên/loại sản phẩm ..."
+                    placeholder="Nhập tên khách hàng..."
                 />
                 {inputValue && (
                     <button
@@ -45,36 +55,34 @@ function CustomerSearchBar({ data }) {
                 <button
                     className={style.findBtn}
                     onClick={() => {
-                        setShowSuggest(false);
-                        navigate(`/search/${removeAccents(inputValue.replaceAll(' ', '-'))}`);
+                        if (suggestData.length > 0) setFilterValue(inputValue);
                     }}
                 >
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </button>
             </div>
-            {showSuggest && suggestData.length > 0 && (
+            {showSuggest && (
                 <div className={style.suggest}>
-                    {suggestData?.map((item) => {
+                    {suggestData.map((item) => {
                         return (
                             <div
                                 className={style.suggestItem}
-                                key={item}
+                                key={item.id}
                                 onClick={() => {
-                                    // setFilterValue(item.TenSP);
-                                    setInputValue('');
-                                    setShowSuggest(false);
-                                    navigate(`/search/${removeAccents(item.replaceAll(' ', '-'))}`);
+                                    setFilterValue(item.HoTen);
+                                    setInputValue(item.HoTen);
+                                    setShowSuggest(!showSuggest);
                                 }}
                             >
-                                <span>{item}</span>
+                                <span>{item.HoTen}</span>
                             </div>
                         );
                     })}
-                    {/* {suggestData.length === 0 && <span>Không tìm thấy kết quả</span>} */}
+                    {suggestData.length === 0 && <span>Không tìm thấy kết quả</span>}
                 </div>
             )}
         </div>
     );
 }
 
-export default CustomerSearchBar;
+export default SearchCustomer;
