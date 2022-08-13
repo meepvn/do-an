@@ -24,7 +24,7 @@
             max-width: 27%;
         }
         .price {
-            & span:first-child {
+            #price {
                 text-decoration: line-through;
                 font-size: 1.4rem;
                 margin-right: 1.5rem;

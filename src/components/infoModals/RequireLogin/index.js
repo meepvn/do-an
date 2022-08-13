@@ -11,7 +11,11 @@ function RequireLogin({ setShow }) {
             <div className={style.confirmContainer}>
                 <div className={style.comfirmHeader}>
                     <h3>Thông báo</h3>
-                    <FontAwesomeIcon icon={faClose} onClick={() => setShow(false)} />
+                    <FontAwesomeIcon
+                        icon={faClose}
+                        id={style.icon}
+                        onClick={() => setShow(false)}
+                    />
                 </div>
                 <div className={style.comfirmContent}>
                     <p>Vui lòng đăng nhập để tiếp tục</p>

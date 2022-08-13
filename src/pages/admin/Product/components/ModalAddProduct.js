@@ -6,8 +6,8 @@ import { faClose, faImage, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { validator, removeAccents } from '~/ultis';
 function ModalAddProduct(props) {
     const inputRef = useRef();
-    const { setAlert } = props;
     const [previewIMG, setPreviewIMG] = useState();
+    const { setAlert } = props;
     const [selectedType, setSelectedType] = useState('');
     const [checked, setChecked] = useState(1);
     const [inputValue, setInputValue] = useState({

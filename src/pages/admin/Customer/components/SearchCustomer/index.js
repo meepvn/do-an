@@ -6,7 +6,7 @@ import { removeAccents } from '~/ultis';
 function SearchCustomer({ setFilterValue, data, filterValue = '' }) {
     const [inputValue, setInputValue] = useState('');
     const [showSuggest, setShowSuggest] = useState(false);
-    const suggestData = data.filter((item) => {
+    const suggestData = data?.filter((item) => {
         const itemName = removeAccents(item.HoTen).toLowerCase();
         const findName = removeAccents(inputValue).toLowerCase();
         return itemName.includes(findName);

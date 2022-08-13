@@ -30,7 +30,10 @@
             justify-content: space-between;
             border-bottom: 1px solid var(--border-color);
             h3 {
-                color: red;
+                color: var(--success);
+            }
+            #icon {
+                font-size: 2.5rem;
             }
         }
 
@@ -51,15 +54,17 @@
                 font-size: 1.4rem;
                 font-weight: 600;
                 &:first-child {
-                    background-color: #c1c1c1;
+                    background-color: var(--success);
                     &:hover {
-                        background-color: #c9c9c9;
+                        opacity: 0.8;
                     }
                 }
                 &:last-child {
-                    background-color: #f15e5e;
+                    background-color: #0084ff;
+                    color: white;
+                    border: solid 1px;
                     &:hover {
-                        background-color: red;
+                        opacity: 0.8;
                     }
                 }
             }

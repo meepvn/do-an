@@ -32,8 +32,9 @@ function Customer() {
         const res = await getUsers();
         setData(res);
     };
+    console.log(data);
     const filterdData = useMemo(() => {
-        return data.filter((item) => {
+        return data?.filter((item) => {
             const itemName = removeAccents(item.HoTen).toLowerCase();
             const findName = removeAccents(filterValue).toLowerCase();
 
@@ -71,15 +72,7 @@ function Customer() {
                             setAlert={setAlert}
                         />
                     )}
-                    {/* 
-            {showEdit === true ? (
-                <ModalEditProduct
-                    setAlert={setAlert}
-                    setData={props.setData}
-                    selectedProduct={{ ...selectedProductRef.current }}
-                    setShowEdit={setShowEdit}
-                />
-            ) : null} */}
+
                     <table border="1">
                         <thead>
                             <tr>

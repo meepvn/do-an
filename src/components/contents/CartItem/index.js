@@ -1,16 +1,9 @@
 import style from './style.module.scss';
 import { formatMoney } from '~/ultis';
 
-export default function CartItem({
-    data,
-    setItemsInCart,
-    itemsInCart,
-    hanledalTotalPrice,
-    setCart,
-}) {
+export default function CartItem({ data, setItemsInCart, itemsInCart, setCart }) {
     console.log('data', data);
     console.log('item', itemsInCart.length);
-    hanledalTotalPrice(data.GiaKM * data.SoLuong);
     const handleQuantityChange = (value) => {
         if (value === '+') {
             const newCart = itemsInCart?.map((item) => {
@@ -37,7 +30,9 @@ export default function CartItem({
                 <p className={style.name}>{data.TenSP}</p>
                 <p>Size: {data.Size}</p>
                 <p className={style.price}>
-                    <span>{formatMoney(data.GiaGoc, '₫')}</span>
+                    {data.GiaGoc !== data.GiaKM && (
+                        <span id={style.price}>{formatMoney(data.GiaGoc, '₫')}</span>
+                    )}
                     Giá: <span>{formatMoney(data.GiaKM, '₫')}</span>
                 </p>
 

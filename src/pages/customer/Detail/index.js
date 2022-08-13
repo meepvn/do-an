@@ -8,7 +8,6 @@ import Alert from '~/components/infoModals/Alert';
 import RequireLogin from '~/components/infoModals/AlertWarning';
 import useLocalStorage from '~/hooks/useLocalStorage';
 const Detail = () => {
-    const [btnCart, setBtnCart] = useState(false);
     const navigate = useNavigate();
     const [{ products }, setCart] = useOutletContext();
     const [itemsInCart, setItemsInCart] = useLocalStorage('cart', []);
@@ -62,6 +61,10 @@ const Detail = () => {
                 type: 'sucess',
                 message: 'Sản phẩm đã được thêm vào giỏ',
             });
+            if (buyNow)
+                setTimeout(() => {
+                    navigate('/cart');
+                }, 1000);
             return;
         } else {
             setCart((prev) => prev + 1);
@@ -70,10 +73,12 @@ const Detail = () => {
                 type: 'success',
                 message: 'Sản phẩm đã được thêm vào giỏ',
             });
-            setBtnCart(true);
         }
         setItemsInCart([...itemsInCart, newItem]);
-        if (buyNow) navigate('/cart');
+        if (buyNow)
+            setTimeout(() => {
+                navigate('/cart');
+            }, 1000);
     };
     if (foundProduct) {
         return (
@@ -160,11 +165,6 @@ const Detail = () => {
                         >
                             Mua Ngay
                         </div>
-                        {btnCart && (
-                            <div className={style.btn} onClick={() => addToCart()}>
-                                <FontAwesomeIcon icon={faCartPlus} /> Xem giỏ hàng
-                            </div>
-                        )}
                     </div>
                 </div>
                 <div className={style.suport}>

@@ -56,7 +56,7 @@ const getInvoice = async () => {
 const getUsers = async () => {
     const res = await fetch(`http://localhost:3100/api/user`);
     const reponse = await res.json();
-    return reponse.result;
+    return reponse;
 };
 
 export {

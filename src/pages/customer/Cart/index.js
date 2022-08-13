@@ -8,7 +8,7 @@ import useAuth from '~/hooks/useAuth';
 import { addOrder } from '~/webService';
 import RequireLogin from '~/components/infoModals/RequireLogin';
 import Alert from '~/components/infoModals/Alert';
-
+import { formatMoney } from '~/ultis/index';
 const Cart = () => {
     const auth = useAuth();
     const totalRef = useRef(0);
@@ -24,7 +24,6 @@ const Cart = () => {
         type: '',
         message: '',
     });
-    const hanledalTotalPrice = (price) => console.log('123', price);
 
     useEffect(() => {
         if (products) setLoading(false);
@@ -48,7 +47,9 @@ const Cart = () => {
             Size: size?.Size,
         };
     });
-
+    const totalPrice = cartItems.reduce((result, current) => {
+        return result + current.GiaKM * current.SoLuong;
+    }, 0);
     const createOrder = async () => {
         if (!auth.isLogin) {
             setLoginWarning(true);
@@ -92,7 +93,6 @@ const Cart = () => {
                         return (
                             <CartItem
                                 setCart={setCart}
-                                hanledalTotalPrice={hanledalTotalPrice}
                                 key={index}
                                 data={item}
                                 setItemsInCart={setItemsInCart}
@@ -102,7 +102,7 @@ const Cart = () => {
                     })}
                     <div className={style.btnPay}>
                         <span>Tổng thanh toán ({cartItems.length} sản phẩm ): </span>
-                        <span className={style.price}>123.000 đ</span>
+                        <span className={style.price}>{formatMoney(totalPrice, 'đ')}</span>
                         <button onClick={createOrder}>Thanh toán</button>
                     </div>
                 </div>

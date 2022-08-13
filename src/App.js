@@ -17,6 +17,10 @@ import Cart from './pages/customer/Cart';
 import Search from './pages/customer/Search';
 import Invoice from './pages/admin/Invoice';
 import Customer from './pages/admin/Customer';
+import MyAccount from './pages/customer/MyAccount';
+import MyDetail from './components/contents/MyDetail';
+import Account from './components/contents/Account';
+import AccountManager from './pages/admin/AccountManager';
 
 function App() {
     return (
@@ -42,6 +46,18 @@ function App() {
                 <Route path="/account" element={<AccountLayout />}>
                     <Route path="register" element={<Register />} />
                     <Route path="login" element={<Login />} />
+                </Route>
+                <Route path="/my-account" element={<ProtectedRoutes allowedRoles={[0, 1, 2]} />}>
+                    <Route element={<MyAccount />}>
+                        <Route index element={<MyDetail />} />
+                        <Route path="my-detail" element={<MyDetail />} />
+                        <Route path="account" element={<Account />} />
+                    </Route>
+                </Route>
+                <Route path="/manager" element={<ProtectedRoutes allowedRoles={[2]} />}>
+                    <Route element={<AdminLayout />}>
+                        <Route path="account" element={<AccountManager />} />
+                    </Route>
                 </Route>
             </Routes>
         </AuthContentProvider>

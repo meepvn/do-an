@@ -1,8 +1,8 @@
 import style from '../style.module.scss';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { getData, updateApi } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { faClose, faUpload, faImage } from '@fortawesome/free-solid-svg-icons';
 import { validator, removeAccents } from '~/ultis';
 function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
     const [checked, setChecked] = useState(selectedProduct.GioiTinh);
@@ -13,6 +13,8 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
         GioiTinh: selectedProduct.GioiTinh,
         KhuyenMai: selectedProduct.KhuyenMai,
     });
+    console.log('Input', inputValue);
+
     const gender = [
         {
             id: 1,
@@ -27,6 +29,14 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
             name: 'Cả hai',
         },
     ];
+    const inputRef = useRef();
+    const [previewIMG, setPreviewIMG] = useState();
+    const handlePreviewIMG = (e) => {
+        const file = e.target.files[0];
+        file.preview = URL.createObjectURL(file);
+        console.log(file);
+        setPreviewIMG(file);
+    };
 
     const validateInput = () => {
         const arr = ['TenSP', 'Loai', 'DonGia', 'KhuyenMai'];
@@ -39,12 +49,7 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
                 };
             }
         }
-        // if (!inputValue.Anh) {
-        //     return {
-        //         result: false,
-        //         message: 'Vui lòng thêm ảnh',
-        //     };
-        // }
+
         if (!validator.noSpecialCharacters(inputValue.TenSP)) {
             return {
                 result: false,
@@ -77,6 +82,7 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
 
     const handleUpdate = async () => {
         let { result, message } = validateInput();
+
         console.log(result, message);
         if (result) {
             const res = await updateApi('product', selectedProduct.id, inputValue);
@@ -89,6 +95,19 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
                 });
                 return;
             } else {
+                if (inputValue.Anh) {
+                    const myForm = new FormData();
+                    myForm.append('product', inputValue.Anh);
+                    const res = await fetch(
+                        `http://localhost:3100/api/product/upload/${selectedProduct.id}`,
+                        {
+                            method: 'POST',
+                            body: myForm,
+                        },
+                    );
+                    const json = await res.json();
+                    console.log('anh....', json);
+                }
                 const newData = await getData();
                 console.log('new data', newData);
                 await setData(newData);
@@ -183,6 +202,34 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
                             }}
                             placeholder="Nhập khuyến mãi ..."
                         ></input>
+                    </div>
+                    <div className={style.addImg}>
+                        <input
+                            ref={inputRef}
+                            type="file"
+                            style={{ display: 'none' }}
+                            onChange={(event) => {
+                                handlePreviewIMG(event);
+                                setInputValue({ ...inputValue, Anh: event.target.files[0] });
+                            }}
+                        ></input>
+                        <button
+                            onClick={(e) => {
+                                inputRef.current.click();
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faUpload} /> Chọn ảnh
+                        </button>
+                        <div className={style.previewIMG}>
+                            {previewIMG ? (
+                                <img src={previewIMG.preview} alt="img" />
+                            ) : (
+                                <img
+                                    src={`http://localhost:3100/images/${selectedProduct.TenAnh}`}
+                                    alt="anh"
+                                />
+                            )}
+                        </div>
                     </div>
                     <div className={style.modalBtn}>
                         <button onClick={handleUpdate}>Hoàn tất</button>

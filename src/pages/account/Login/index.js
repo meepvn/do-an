@@ -42,7 +42,11 @@ const Login = () => {
         }
     };
     return (
-        <LoginRegisterWrapper>
+        <LoginRegisterWrapper
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSubmit();
+            }}
+        >
             {alert.show && <Alert alert={alert} setAlert={setAlert} />}
             <div className="wrapper__form">
                 <div className="head__form">
