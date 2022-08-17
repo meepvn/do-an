@@ -5,8 +5,14 @@ import cartIMG from '~/assets/images/imgCart.png';
 import menIMG from '~/assets/images/formen.webp';
 import womenIMG from '~/assets/images/forwomen.webp';
 import digitalIMG from '~/assets/images/download.png';
+import GiayIMG from '~/assets/images/giay.webp';
+import thoiTrangNamIMG from './thoitrannam.webp';
+import aoTheThao from './aothethao.webp';
 const images = {
     menIMG,
+    aoTheThao,
+    GiayIMG,
+    thoiTrangNamIMG,
     womenIMG,
     cartIMG,
     logo,

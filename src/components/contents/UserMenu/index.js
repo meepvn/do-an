@@ -1,4 +1,4 @@
-import { faBox, faClose, faUserLarge } from '@fortawesome/free-solid-svg-icons';
+import { faBox, faClose, faShopLock, faUserLarge } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -77,15 +77,15 @@ const UserMenu = () => {
                         </span>
                     </li>
                     <li className={style.listItem}>
-                        <span>
+                        <span onClick={() => navigate('/my-account/my-order')}>
                             <FontAwesomeIcon icon={faBox} className={style.icon} /> Đơn hàng của tôi
                         </span>
                     </li>
                     {userInfo?.Quyen > 0 && (
                         <li className={style.listItem} onClick={() => navigate('/admin/product')}>
                             <span>
-                                <FontAwesomeIcon icon={faBox} className={style.icon} /> Trang quản
-                                lý
+                                <FontAwesomeIcon icon={faShopLock} className={style.icon} /> Trang
+                                quản lý
                             </span>
                         </li>
                     )}

@@ -16,5 +16,12 @@ export default function Search() {
         const filterType = removeAccents(item.Loai);
         return filterName.includes(filterValue) || filterType.includes(filterValue);
     });
-    return <ViewProduct data={filteredData} />;
+    return (
+        <div>
+            <h1 style={{ textAlign: 'center', margin: '2rem 0' }}>
+                Kết quả tìm kiếm cho {q.replaceAll('-', ' ')}
+            </h1>
+            <ViewProduct data={filteredData} hasFilter={true} />
+        </div>
+    );
 }

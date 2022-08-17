@@ -133,8 +133,7 @@ function ProductTable(props) {
                                             props.setTable('instock');
                                         }}
                                     >
-                                        <FontAwesomeIcon icon={faPlus} />
-                                        Xem số lượng
+                                        Xem chi tiết
                                     </button>
                                 </td>
                             </tr>

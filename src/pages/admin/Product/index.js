@@ -56,7 +56,7 @@ function Product() {
                             }}
                             className={table === 'instock' ? style.active : null}
                         >
-                            Số lượng sản phẩm{' '}
+                            Chi tiết sản phẩm{' '}
                         </button>
                     </div>
                 </div>

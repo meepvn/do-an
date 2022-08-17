@@ -1,9 +1,9 @@
 .wrapperSearchBar {
     position: relative;
     display: flex;
-    width: 50%;
+    width: 80%;
     border: 1px solid var(--border-color);
-
+    height: 100%;
     .back {
         position: absolute;
         padding: 1rem 2rem;
@@ -66,9 +66,9 @@
         background-color: white;
         z-index: 999;
         min-height: 4.6rem;
-        width: 100.2%;
+        width: 100%;
         height: auto;
-        border: 1px solid var(--border-color);
+        border: 2px solid var(--border-color);
         position: absolute;
         top: 4.5rem;
         & > span {

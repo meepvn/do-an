@@ -20,6 +20,19 @@ const MyDetail = () => {
             setInputValue(json.user);
         })();
     }, [auth.token]);
+
+    const handleUpdate = () => {
+        const Option = {
+            method: 'PUT',
+            body: JSON.stringify(inputValue),
+            headers: { 'Content-Type': 'application/json', token: auth.token },
+        };
+        console.log(inputValue);
+        fetch(`http://localhost:3100/api/user/personal`, Option)
+            .then((res) => res.json())
+            .then((json) => console.log(json));
+    };
+
     return (
         <div className={style.wrapper}>
             <div className={style.header}>
@@ -55,7 +68,7 @@ const MyDetail = () => {
                     />
                 </div>
                 <div className={style.btnSubmit} id={style.change}>
-                    <button>Lưu thay đổi</button>
+                    <button onClick={handleUpdate}>Lưu thay đổi</button>
                 </div>
             </div>
         </div>

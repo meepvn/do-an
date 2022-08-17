@@ -6,7 +6,24 @@ const formatMoney = (n, currency) => {
         }) + currency
     );
 };
-
+const orderStatusToText = (statusCode) => {
+    switch (statusCode) {
+        case 1:
+            return 'Chờ xác nhận';
+        case 2:
+            return 'Đã xác nhận';
+        case 3:
+            return 'Đang giao hàng';
+        case 4:
+            return 'Thành công';
+        case 5:
+            return 'Hủy';
+        case 6:
+            return 'Đơn hoàn';
+        default:
+            return '';
+    }
+};
 function removeAccents(str) {
     var AccentsMap = [
         'aàảãáạăằẳẵắặâầẩẫấậ',
@@ -32,4 +49,4 @@ function removeAccents(str) {
     return str;
 }
 
-export { removeAccents, formatMoney, validator };
+export { removeAccents, formatMoney, orderStatusToText, validator };

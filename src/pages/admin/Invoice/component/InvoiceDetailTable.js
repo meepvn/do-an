@@ -87,7 +87,7 @@ function InvoiceDetailTable({ data, setData, setAlert }) {
                     return (
                         <tbody key={item.id}>
                             <tr>
-                                <td rowSpan={item.ChiTiet.length + 2}>{item.id}</td>
+                                <td rowSpan={item.ChiTiet.length + 3}>{item.id}</td>
                                 {/* {item.SoLuong.length === 0 && (
                                     <td colSpan="4">Sản phẩm chưa có số lượng</td>
                                 )} */}
@@ -107,14 +107,7 @@ function InvoiceDetailTable({ data, setData, setAlert }) {
                                         <td>{formatMoney(element.DonGia, 'đ')}</td>
                                         <td>{element.KhuyenMai}%</td>
                                         <td>{element.SoLuong}</td>
-                                        <td>
-                                            {formatMoney(
-                                                (element.DonGia -
-                                                    element.DonGia * (element.KhuyenMai / 100)) *
-                                                    element.SoLuong,
-                                                'đ',
-                                            )}
-                                        </td>
+                                        <td>{formatMoney(element.ThanhTien, 'đ')}</td>
                                         <td>
                                             <button
                                                 className={style.edit}
@@ -149,6 +142,18 @@ function InvoiceDetailTable({ data, setData, setAlert }) {
                                     </tr>
                                 );
                             })}
+                            {item.ChiTiet.length > 0 ? (
+                                <tr>
+                                    <td colSpan={1} className={style.totalPrice}>
+                                        Tổng tiền
+                                    </td>
+                                    <td colSpan={7}>{formatMoney(item.TongTien, 'đ')}</td>
+                                </tr>
+                            ) : (
+                                <tr>
+                                    <td colSpan={8}>Đơn hàng chưa có sản phẩm</td>
+                                </tr>
+                            )}
                             <tr>
                                 <td
                                     className={style.addInstock}

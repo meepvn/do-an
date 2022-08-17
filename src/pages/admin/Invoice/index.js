@@ -1,13 +1,12 @@
 import style from './style.module.scss';
-import AdminSearchBar from '~/components/searchBars/AdminSearchBar';
 // import { removeAccents } from '~/ultis';
-
 import { getInvoice } from '~/webService';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import Alert from '~/components/infoModals/Alert';
 import InvoiceTable from './component/InvoiceTable';
 import InvoiceDetailTable from './component/InvoiceDetailTable';
 
+export const orderContext = createContext();
 function Invoice() {
     // const [filterValue, setFilterValue] = useState('');
     const [data, setData] = useState([]);
@@ -17,6 +16,7 @@ function Invoice() {
         message: '',
         type: '',
     });
+
     // const { products = [], types: productTypes = [] } = data;
     useEffect(() => {
         getInvoice().then(setData).catch(console.log);
@@ -30,43 +30,49 @@ function Invoice() {
     //     });
     // }, [filterValue, products]);
     return (
-        <div className={style.wrapper}>
-            {alert.show && <Alert alert={alert} setAlert={setAlert} />}
-            {/* <AdminSearchBar
+        <orderContext.Provider
+            value={{
+                setData,
+                setAlert,
+            }}
+        >
+            <div className={style.wrapper}>
+                {alert.show && <Alert alert={alert} setAlert={setAlert} />}
+                {/* <AdminSearchBar
                 setFilterValue={setFilterValue}
                 data={products}
                 filterValue={filterValue}
             /> */}
-            <div className={style.content}>
-                <div className={style.nav}>
-                    <div>
-                        <button
-                            onClick={() => {
-                                setTable('invoice');
-                                // setFilterValue('');
-                            }}
-                            className={table === 'invoice' ? style.active : null}
-                        >
-                            Hóa đơn
-                        </button>
-                        <button
-                            onClick={() => {
-                                setTable('invoiceDetail');
-                                // setFilterValue('');
-                            }}
-                            className={table === 'invoiceDetail' ? style.active : null}
-                        >
-                            Chi tiết hóa đơn{' '}
-                        </button>
+                <div className={style.content}>
+                    <div className={style.nav}>
+                        <div>
+                            <button
+                                onClick={() => {
+                                    setTable('invoice');
+                                    // setFilterValue('');
+                                }}
+                                className={table === 'invoice' ? style.active : null}
+                            >
+                                Đơn hàng
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setTable('invoiceDetail');
+                                    // setFilterValue('');
+                                }}
+                                className={table === 'invoiceDetail' ? style.active : null}
+                            >
+                                Chi tiết đơn hàng{' '}
+                            </button>
+                        </div>
                     </div>
-                </div>
-                {table === 'invoice' && (
-                    <InvoiceTable data={data} setData={setData} setAlert={setAlert} />
-                )}
-                {table === 'invoiceDetail' && (
-                    <InvoiceDetailTable data={data} setData={setData} setAlert={setAlert} />
-                )}
-                {/* {table === 'product' && (
+                    {table === 'invoice' && (
+                        <InvoiceTable data={data} setData={setData} setAlert={setAlert} />
+                    )}
+                    {table === 'invoiceDetail' && (
+                        <InvoiceDetailTable data={data} setData={setData} setAlert={setAlert} />
+                    )}
+                    {/* {table === 'product' && (
                     <ProductTable
                         setAlert={setAlert}
                         setFilterValue={setFilterValue}
@@ -76,8 +82,9 @@ function Invoice() {
                         setTable={setTable}
                     />
                 )} */}
+                </div>
             </div>
-        </div>
+        </orderContext.Provider>
     );
 }
 

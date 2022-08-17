@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import style from './style.module.scss';
 import { formatMoney } from '~/ultis';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +7,7 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import Alert from '~/components/infoModals/Alert';
 import RequireLogin from '~/components/infoModals/AlertWarning';
 import useLocalStorage from '~/hooks/useLocalStorage';
+import Breadcrumb from '~/components/contents/Breadcumb';
 const Detail = () => {
     const navigate = useNavigate();
     const [{ products }, setCart] = useOutletContext();
@@ -26,9 +27,9 @@ const Detail = () => {
         SoLuong: 1,
         id_chitiet: '',
     });
-
+    const instockRef = useRef();
     const [loginWarning, setLoginWarning] = useState(false);
-    if (loading) return <h1>Loading ...</h1>;
+    if (loading) return <h1>Đang tải ...</h1>;
     const foundProduct = products?.find((item) => item.id === parseInt(id));
     const isProductExistInCard = (product) => {
         let result = false;
@@ -37,7 +38,21 @@ const Detail = () => {
         });
         return result;
     };
-    const addToCart = (buyNow = false) => {
+    const links = (() => {
+        const gender = parseInt(sessionStorage.getItem('gender'));
+        return [
+            { location: '/', text: 'Trang chủ' },
+            {
+                location: gender === 2 ? '/women' : '/men',
+                text: gender === 2 ? 'Thời trang nữ' : 'Thời trang nam',
+            },
+            {
+                location: '#',
+                text: `${foundProduct.TenSP}`,
+            },
+        ];
+    })();
+    const addToCart = () => {
         if (!newItem.id_chitiet) {
             setAlert({
                 show: true,
@@ -61,10 +76,7 @@ const Detail = () => {
                 type: 'sucess',
                 message: 'Sản phẩm đã được thêm vào giỏ',
             });
-            if (buyNow)
-                setTimeout(() => {
-                    navigate('/cart');
-                }, 1000);
+
             return;
         } else {
             setCart((prev) => prev + 1);
@@ -75,16 +87,15 @@ const Detail = () => {
             });
         }
         setItemsInCart([...itemsInCart, newItem]);
-        if (buyNow)
-            setTimeout(() => {
-                navigate('/cart');
-            }, 1000);
     };
     if (foundProduct) {
         return (
             <div className={style.wrapperDetail}>
                 {loginWarning && <RequireLogin setShow={setLoginWarning} />}
                 {alert.show && <Alert alert={alert} setAlert={setAlert} />}
+                <div className={style.wrapperNavigate}>
+                    <Breadcrumb links={links} />
+                </div>
                 <div className={style.Image}>
                     <img src={`http://localhost:3100/images/${foundProduct.TenAnh}`} alt="img" />
                 </div>
@@ -92,38 +103,54 @@ const Detail = () => {
                     <p className={style.name}>{foundProduct.TenSP}</p>
                     <p className={style.price}>
                         <span>Đơn giá: </span>
-                        <span>{formatMoney(foundProduct.DonGia, ' ')} </span>
-                        <span>
+                        {foundProduct.KhuyenMai > 0 && (
+                            <span id={style.price}>{formatMoney(foundProduct.DonGia, ' ')} </span>
+                        )}
+                        <span className={style.Tien}>
                             {formatMoney(
                                 foundProduct.DonGia -
                                     (foundProduct.DonGia * foundProduct.KhuyenMai) / 100,
                                 'đ',
                             )}
                         </span>
-                        <span>Giảm {foundProduct.KhuyenMai}%</span>
+                        {foundProduct.KhuyenMai > 0 && (
+                            <span id={style.discount}>Giảm {foundProduct.KhuyenMai}%</span>
+                        )}
                     </p>
 
                     <p className={style.size}>
                         <span>Size:</span>
 
                         <select
-                            onChange={(e) =>
+                            onChange={(e) => {
+                                instockRef.current = foundProduct.ChiTiet.find(
+                                    (instock) => instock.id === parseInt(e.target.value),
+                                ).SoLuong;
                                 setNewItem({
                                     ...newItem,
                                     id_chitiet: e.target.value,
-                                })
-                            }
+                                    SoLuong: 1,
+                                });
+                            }}
                         >
-                            <option value="">Chọn size sản phẩm</option>
+                            <option value="">Chọn size</option>
                             {foundProduct.ChiTiet?.map((item) => {
                                 return (
-                                    <option key={item.Size} value={item.id}>
-                                        {item.Size}
+                                    <option
+                                        key={item.Size}
+                                        value={item.id}
+                                        disabled={item.SoLuong === 0}
+                                    >
+                                        {item.Size} {item.SoLuong === 0 && ' - Hết hàng'}
                                     </option>
                                 );
                             })}
                         </select>
+                        {newItem.id_chitiet && (
+                            <span> Số lượng trong kho:{instockRef.current} </span>
+                        )}
                     </p>
+
                     <p className={style.ship}>
                         <span>Vận chuyển: </span>
                         <span>
@@ -146,6 +173,7 @@ const Detail = () => {
                             </button>
                             <span>{newItem.SoLuong}</span>
                             <button
+                                disabled={instockRef.current <= newItem.SoLuong}
                                 onClick={() =>
                                     setNewItem({ ...newItem, SoLuong: newItem.SoLuong + 1 })
                                 }
@@ -161,9 +189,9 @@ const Detail = () => {
                         <div
                             className={style.btn}
                             id={style.buyBtn}
-                            onClick={() => addToCart(true)}
+                            onClick={() => navigate('/cart')}
                         >
-                            Mua Ngay
+                            Vào giỏ hàng
                         </div>
                     </div>
                 </div>

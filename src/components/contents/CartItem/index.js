@@ -2,8 +2,7 @@ import style from './style.module.scss';
 import { formatMoney } from '~/ultis';
 
 export default function CartItem({ data, setItemsInCart, itemsInCart, setCart }) {
-    console.log('data', data);
-    console.log('item', itemsInCart.length);
+    console.log(data);
     const handleQuantityChange = (value) => {
         if (value === '+') {
             const newCart = itemsInCart?.map((item) => {
@@ -45,7 +44,12 @@ export default function CartItem({ data, setItemsInCart, itemsInCart, setCart })
                         -
                     </button>
                     <span>{data.SoLuong}</span>
-                    <button onClick={() => handleQuantityChange('+')}>+</button>
+                    <button
+                        onClick={() => handleQuantityChange('+')}
+                        disabled={data.SoLuong >= data.SoLuongKho}
+                    >
+                        +
+                    </button>
                 </div>
                 <p className={style.totalPrice}>
                     Thành tiền: {formatMoney(data.GiaKM * data.SoLuong, '₫')}

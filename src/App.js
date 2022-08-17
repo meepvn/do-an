@@ -21,6 +21,7 @@ import MyAccount from './pages/customer/MyAccount';
 import MyDetail from './components/contents/MyDetail';
 import Account from './components/contents/Account';
 import AccountManager from './pages/admin/AccountManager';
+import MyOrder from './pages/customer/MyOrder';
 
 function App() {
     return (
@@ -52,6 +53,7 @@ function App() {
                         <Route index element={<MyDetail />} />
                         <Route path="my-detail" element={<MyDetail />} />
                         <Route path="account" element={<Account />} />
+                        <Route path="my-order" element={<MyOrder />} />
                     </Route>
                 </Route>
                 <Route path="/manager" element={<ProtectedRoutes allowedRoles={[2]} />}>

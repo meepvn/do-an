@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import images from '~/assets/images';
 import style from './style.module.scss';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -9,9 +9,9 @@ import { addOrder } from '~/webService';
 import RequireLogin from '~/components/infoModals/RequireLogin';
 import Alert from '~/components/infoModals/Alert';
 import { formatMoney } from '~/ultis/index';
+import Breadcrumb from '~/components/contents/Breadcumb';
 const Cart = () => {
     const auth = useAuth();
-    const totalRef = useRef(0);
     const { cartIMG } = images;
     const [loading, setLoading] = useState(true);
     const [{ products }, setCart] = useOutletContext();
@@ -31,7 +31,7 @@ const Cart = () => {
     if (loading) return <h1>Loading ...</h1>;
     const cartItems = itemsInCart?.map((item) => {
         const foundProduct = products?.find((product) => product.id.toString() === item.id);
-        const size = foundProduct?.ChiTiet.find(
+        const chiTiet = foundProduct?.ChiTiet.find(
             (instock) => instock.id.toString() === item.id_chitiet,
         );
         // console.log('size', size);
@@ -42,9 +42,10 @@ const Cart = () => {
             GiaKM: foundProduct?.DonGia - (foundProduct?.DonGia * foundProduct?.KhuyenMai) / 100,
             GiaGoc: foundProduct?.DonGia,
             TenAnh: foundProduct?.TenAnh,
+            SoLuongKho: chiTiet?.SoLuong,
             SoLuong: item?.SoLuong,
             id_chitiet: item?.id_chitiet,
-            Size: size?.Size,
+            Size: chiTiet?.Size,
         };
     });
     const totalPrice = cartItems.reduce((result, current) => {
@@ -56,20 +57,31 @@ const Cart = () => {
             return;
         }
         const data = {
-            id_nguoidung: userInfo.id_nguoidung,
+            id_nguoidung: userInfo.MaNguoiDung,
             products: [...itemsInCart],
         };
         const res = await addOrder(data);
-        const reponse = await res.json();
+        const response = await res.json();
+        console.log(response);
         setItemsInCart([]);
+        setCart(0);
         setAlert({
             show: true,
             type: 'sucess',
             message: 'Thanh toán thành công',
         });
     };
+
     return (
         <div className={style.wrapperCart}>
+            <div className={style.wrapperNavigate}>
+                <Breadcrumb
+                    links={[
+                        { location: '/', text: 'Trang chủ' },
+                        { location: '#', text: 'Giỏ hàng' },
+                    ]}
+                />
+            </div>
             {loginWarning && <RequireLogin setShow={setLoginWarning} />}
             {alert.show && <Alert alert={alert} setAlert={setAlert} />}
             {itemsInCart?.length === 0 && (

@@ -31,6 +31,7 @@
             }
 
             .name {
+                z-index: 1;
                 width: 90%;
                 display: block;
                 border: none;
@@ -117,6 +118,11 @@
                     background-color: #cbddf8;
                 }
             }
+        }
+        .totalPrice {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
         }
     }
     @keyframes show {

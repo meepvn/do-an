@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAddressCard,
     faBox,
+    faHome,
     faRightFromBracket,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
@@ -36,15 +37,19 @@ const MyAccount = () => {
                                 Hi,<span>{auth.userInfo.HoTen}</span>
                             </div>
                         </li>
-                        <li className={style.listItem} onClick={() => navigate('account')}>
-                            <FontAwesomeIcon icon={faUser} className={style.icon} />
-                            <span>Tài khoản</span>
+                        <li className={style.listItem} onClick={() => navigate('/')}>
+                            <FontAwesomeIcon icon={faHome} className={style.icon} />
+                            <span>Trang chủ</span>
                         </li>
                         <li className={style.listItem} onClick={() => navigate('my-detail')}>
                             <FontAwesomeIcon icon={faAddressCard} className={style.icon} />
                             <span>Thông tin cá nhân</span>
                         </li>
-                        <li className={style.listItem}>
+                        <li className={style.listItem} onClick={() => navigate('account')}>
+                            <FontAwesomeIcon icon={faUser} className={style.icon} />
+                            <span>Tài khoản</span>
+                        </li>
+                        <li className={style.listItem} onClick={() => navigate('my-order')}>
                             <FontAwesomeIcon icon={faBox} className={style.icon} />
                             <span>Đơn hàng của tôi</span>
                         </li>

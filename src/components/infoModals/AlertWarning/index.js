@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-import style from '../style.module.scss';
+import style from './style.module.scss';
 function AlertWarning({ setDeleting, selectedProductId, handleDelete }) {
     console.log(selectedProductId);
     return (
@@ -12,6 +12,7 @@ function AlertWarning({ setDeleting, selectedProductId, handleDelete }) {
                     <h3>Cảnh báo</h3>
                     <FontAwesomeIcon
                         icon={faClose}
+                        id={style.icon}
                         onClick={() => {
                             setDeleting(false);
                         }}

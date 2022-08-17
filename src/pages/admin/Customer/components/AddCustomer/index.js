@@ -7,12 +7,7 @@ import Alert from '~/components/infoModals/Alert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 
-function AddCustomer({ setAdding, setData }) {
-    const [alert, setAlert] = useState({
-        type: '',
-        show: false,
-        message: '',
-    });
+function AddCustomer({ setAdding, setData, setAlert }) {
     const [inputValue, setInputValue] = useState({
         HoTen: '',
         SDT: '',
@@ -54,7 +49,6 @@ function AddCustomer({ setAdding, setData }) {
     };
     return (
         <LoginRegisterWrapper>
-            {alert.show && <Alert alert={alert} setAlert={setAlert} />}
             <div className="layer-modal"></div>
             <div className="wrapper__form">
                 <div className="head__form">

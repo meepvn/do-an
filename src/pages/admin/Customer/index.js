@@ -63,7 +63,9 @@ function Customer() {
                             selectedProductId={customer.current.id}
                         />
                     )}
-                    {adding && <AddCustomer setAdding={setAdding} setData={setData} />}
+                    {adding && (
+                        <AddCustomer setAdding={setAdding} setData={setData} setAlert={setAlert} />
+                    )}
                     {editing && (
                         <EditCustomer
                             setEditing={setEditing}

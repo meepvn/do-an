@@ -9,6 +9,7 @@ const EditModal = ({ setEditting, setAlert, setData, selectedAccount }) => {
         Quyen: selectedAccount.Quyen,
         Email: selectedAccount.Email,
         TenTaiKhoan: selectedAccount.TenTaiKhoan,
+        TrangThai: selectedAccount.TrangThai,
     });
     const validateInput = () => {
         if (!inputValue.Email || !inputValue.TenTaiKhoan)
@@ -54,6 +55,16 @@ const EditModal = ({ setEditting, setAlert, setData, selectedAccount }) => {
         {
             id: 0,
             title: 'Khách hàng',
+        },
+    ];
+    const status = [
+        {
+            id: 1,
+            title: 'Hoạt động',
+        },
+        {
+            id: 2,
+            title: 'Khóa',
         },
     ];
     return (
@@ -114,7 +125,27 @@ const EditModal = ({ setEditting, setAlert, setData, selectedAccount }) => {
                             );
                         })}
                     </div>
-
+                    <div className={style.modalInput}>
+                        <label>Trạng thái</label>
+                        {status.map((item) => {
+                            return (
+                                <span key={item.id}>
+                                    <input
+                                        type="checkbox"
+                                        value={item.id}
+                                        checked={item.id === inputValue.TrangThai}
+                                        onChange={(e) =>
+                                            setInputValue({
+                                                ...inputValue,
+                                                TrangThai: parseInt(e.target.value),
+                                            })
+                                        }
+                                    />
+                                    {item.title}
+                                </span>
+                            );
+                        })}
+                    </div>
                     <div className={style.modalBtn}>
                         <button onClick={handleSubmit}>Hoàn thành</button>
                     </div>

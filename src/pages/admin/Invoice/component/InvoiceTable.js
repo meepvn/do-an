@@ -1,11 +1,15 @@
 import { useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { orderStatusToText } from '~/ultis';
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
-
+import EditOrderModal from './EditOrderModal';
 import style from './style.module.scss';
+import AddOrderModal from './AddOrderModal';
 
-// import AlertWarning from '~/components/infoModals/AlertWarning';
-function InvoiceTable({ setAlert, data }) {
+import AlertWarning from '~/components/infoModals/AlertWarning';
+import { deleteApi } from '~/webService';
+import { type } from '@testing-library/user-event/dist/type';
+function InvoiceTable({ setAlert, data, setData }) {
     const fomatDate = (init) => {
         var d = new Date(init);
         var date = d.getDate();
@@ -16,42 +20,46 @@ function InvoiceTable({ setAlert, data }) {
     };
     const dateRef = useRef();
     const [deleting, setDeleting] = useState(false);
+    const [adding, setAdding] = useState(false);
     const [show, setShow] = useState(false);
-    const [showEdit, setShowEdit] = useState(false);
-    const selectedProductRef = useRef();
-    // const handleToggleModalAdd = () => {
-    //     setShow(!show);
-    // };
-    let date = 0;
+    const [editing, setEditing] = useState(false);
+    const selectedOrderRef = useRef();
+    const handleDelete = async (id) => {
+        const res = await deleteApi('order', id);
+        const json = await res.json();
+        console.log(json);
+        setAlert({
+            show: true,
+            message: 'Xóa thành công',
+            type: 'success',
+        });
+        setData(data?.filter((item) => item.id !== id));
+    };
+
     return (
         <div className={style.wrapperTblPro}>
             <div className={style.wrapperBtn}>
-                <button className={style.btnAdd}>Tạo hóa đơn</button>
+                <button className={style.btnAdd} onClick={() => setAdding(true)}>
+                    Tạo đơn hàng
+                </button>
             </div>
-            {/* {deleting && (
+            {deleting && (
                 <AlertWarning
                     setDeleting={setDeleting}
                     handleDelete={handleDelete}
-                    selectedProductId={selectedProductRef.current.id}
+                    selectedProductId={selectedOrderRef.current.id}
                 />
-            )} */}
-            {/* {show === true ? (
-                <ModalAddProduct
-                    setData={props.setData}
+            )}
+            {adding && <AddOrderModal setAdding={setAdding} />}
+
+            {editing === true ? (
+                <EditOrderModal
                     setAlert={setAlert}
-                    setShow={setShow}
-                    productTypes={props.productTypes}
-                    handleToggleModalAdd={handleToggleModalAdd}
+                    setData={setData}
+                    selectedOrder={{ ...selectedOrderRef.current }}
+                    setEditing={setEditing}
                 />
             ) : null}
-            {showEdit === true ? (
-                <ModalEditProduct
-                    setAlert={setAlert}
-                    setData={props.setData}
-                    selectedProduct={{ ...selectedProductRef.current }}
-                    setShowEdit={setShowEdit}
-                />
-            ) : null} */}
             <table border="1">
                 <thead>
                     <tr>
@@ -65,7 +73,7 @@ function InvoiceTable({ setAlert, data }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((item, index) => {
+                    {data?.map((item, index) => {
                         return (
                             <tr key={index}>
                                 <td>{item.id}</td>
@@ -79,15 +87,33 @@ function InvoiceTable({ setAlert, data }) {
 
                                 <td>{fomatDate(item.NgayTao)}</td>
 
-                                <td>{item.TinhTrang}</td>
+                                <td>{orderStatusToText(item.TinhTrang)}</td>
                                 <td>{item.GhiChu ? item.GhiChu : 'Không có ghi chú'}</td>
                                 <td>
-                                    <button className={style.edit}>
+                                    <button
+                                        className={style.edit}
+                                        onClick={() => {
+                                            selectedOrderRef.current = {
+                                                id: item.id,
+                                                HoTen: item.HoTen,
+                                                GhiChu: item.GhiChu,
+                                                SDT: item.SDT,
+                                                TinhTrang: item.TinhTrang,
+                                            };
+                                            setEditing(true);
+                                        }}
+                                    >
                                         <FontAwesomeIcon icon={faPenToSquare} /> Sửa
                                     </button>
                                 </td>
                                 <td>
-                                    <button className={style.delete}>
+                                    <button
+                                        className={style.delete}
+                                        onClick={() => {
+                                            selectedOrderRef.current = { id: item.id };
+                                            setDeleting(true);
+                                        }}
+                                    >
                                         <FontAwesomeIcon icon={faTrash} /> Xóa
                                     </button>
                                 </td>

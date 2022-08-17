@@ -2,6 +2,11 @@
     display: flex;
     justify-content: space-between;
     padding: 5rem 7rem;
+    position: relative;
+    .wrapperNavigate {
+        position: absolute;
+        top: 0;
+    }
     .Image {
         width: calc((100% - 20rem) / 3);
         border: 1px solid gray;
@@ -30,8 +35,8 @@
             }
         }
         select {
-            width: 25rem;
-            padding: 10px 15px;
+            width: 15rem;
+            padding: 10px;
             border: 1px solid var(--border-color);
             outline: none;
             border-radius: 4px;
@@ -87,17 +92,17 @@
             line-height: 3rem;
         }
         .price {
-            span:nth-child(2) {
+            #price {
                 font-size: 1.6rem;
                 text-decoration: line-through;
                 color: var(--text-color);
             }
-            span:nth-child(3) {
+            .Tien {
                 font-size: 2.2rem;
                 color: red;
                 margin-left: 1rem;
             }
-            span:last-child {
+            #discount {
                 border: 1px solid;
                 font-size: 1.4rem;
                 padding: 0.2rem 0.4rem;

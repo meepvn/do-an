@@ -71,6 +71,7 @@ const AccountManager = () => {
                                 <th>Tên tài khoản </th>
                                 <th>Email </th>
                                 <th>Vai trò</th>
+                                <th>Trạng thái tài khoản</th>
                                 <th colSpan="2">Thao Tác</th>
                             </tr>
                         </thead>
@@ -90,6 +91,9 @@ const AccountManager = () => {
                                             <td>{item.Email}</td>
                                             <td>{item.Quyen === 0 ? 'Khách Hàng' : 'Nhân Viên'}</td>
                                             <td>
+                                                {item.TrangThai === 1 ? 'Hoạt động' : 'Đã khóa'}
+                                            </td>
+                                            <td>
                                                 <button
                                                     className={style.edit}
                                                     onClick={() => {
@@ -98,6 +102,7 @@ const AccountManager = () => {
                                                             Quyen: item.Quyen,
                                                             Email: item.Email,
                                                             TenTaiKhoan: item.TenTaiKhoan,
+                                                            TrangThai: item.TrangThai,
                                                         };
                                                         handleEdit(item.id);
                                                     }}

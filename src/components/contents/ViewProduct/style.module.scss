@@ -1,20 +1,38 @@
 .wrapperViewAll {
     display: flex;
-    padding: 0 7rem;
+    flex-grow: 1;
     position: relative;
+
     .content {
-        margin: 2rem 0;
         width: 100%;
+        margin: 2rem 0;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        column-count: 4;
+        column-gap: 26px;
         .itemContent {
             box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: 0.5);
             display: flex;
+            // margin-right: 20px;
             flex-direction: column;
-            width: calc((100% - 30rem) / 4);
+            width: calc((100% - 30rem) / 3);
             margin-bottom: 2rem;
             height: 32rem;
+            position: relative;
+            .noInstock {
+                border: 1px solid;
+                width: 100%;
+                height: 100%;
+                z-index: 9;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                background-color: rgba($color: #000000, $alpha: 0.3);
+                color: white;
+                font-size: 2.5rem;
+                font-weight: 600;
+            }
             .img {
                 cursor: pointer;
                 width: 100%;
@@ -46,6 +64,7 @@
                 }
             }
         }
+
         .itemInfo {
             flex-grow: 1;
             width: 100%;
@@ -125,6 +144,14 @@
                     font-weight: 600;
                 }
             }
+        }
+    }
+
+    #noFilter {
+        padding: 0 7rem;
+
+        .itemContent {
+            width: calc((100% - 8rem) / 4);
         }
     }
 }
