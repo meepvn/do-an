@@ -34,8 +34,7 @@
         .listItem {
             display: flex;
             align-items: center;
-            height: 4.8rem;
-            padding: 1rem 1.5rem;
+            padding: 1.2rem 1.8rem;
             font-size: 1.6rem;
             position: relative;
             cursor: pointer;
@@ -76,11 +75,18 @@
             .title {
                 width: 100%;
                 display: flex;
+
                 justify-content: space-between;
+                align-items: center;
                 & > span {
                     padding: 0;
                     margin: unset;
                     text-align: right;
+                }
+                & p span:nth-child(2) {
+                    min-width: 30%;
+                    display: flex;
+                    align-items: center;
                 }
             }
         }

@@ -1,11 +1,14 @@
 import style from '../style.module.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getData, updateApi } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-function EditInstock({ selectedProduct, setEditting, setData, setAlert, setShow }) {
+function EditInstock({ selectedProduct, setEditting, setData, setAlert }) {
     const [inputValue, setInputValue] = useState(selectedProduct.instock.SoLuong);
-    console.log(selectedProduct);
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => (document.body.style.overflow = 'unset');
+    }, []);
     const validateInput = () => {
         if (!inputValue) {
             return {
@@ -43,7 +46,6 @@ function EditInstock({ selectedProduct, setEditting, setData, setAlert, setShow 
                 const newData = await getData();
                 setData(newData);
                 setEditting(false);
-                setShow(false);
                 setAlert({
                     show: true,
                     type: 'success',
@@ -70,7 +72,6 @@ function EditInstock({ selectedProduct, setEditting, setData, setAlert, setShow 
                         icon={faClose}
                         onClick={() => {
                             setEditting(false);
-                            setShow(false);
                         }}
                     />
                 </div>

@@ -43,6 +43,12 @@ function ModalAddProduct(props) {
             previewIMG && URL.revokeObjectURL(previewIMG.preview);
         };
     }, [previewIMG]);
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => (document.body.style.overflow = 'unset');
+    }, []);
+
     const handleTypeChange = (e) => {
         if (e.target.value === 'Thêm loại') {
             setInputValue({ ...inputValue, Loai: '' });
@@ -128,10 +134,18 @@ function ModalAddProduct(props) {
                 const newData = await getData();
                 await props.setData(newData);
                 props.setShow(false);
+                // setInputValue({
+                //     TenSP: '',
+                //     Loai: '',
+                //     DonGia: '',
+                //     GioiTinh: 1,
+                //     KhuyenMai: 0,
+                //     Anh: '',
+                // });
                 setAlert({
                     show: true,
                     type: 'success',
-                    message: 'Thêm thành công',
+                    message: 'Thêm sản phẩm thành công',
                 });
             }
         } else {

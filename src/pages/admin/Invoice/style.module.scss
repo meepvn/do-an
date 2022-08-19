@@ -17,9 +17,11 @@
 }
 
 .nav {
+    flex-grow: 1;
     display: flex;
     margin-bottom: 1rem;
     justify-content: space-between;
+    margin-bottom: 4rem;
     button {
         border: 1px solid var(--border-color);
     }
@@ -31,7 +33,6 @@
 .content {
     width: 100%;
     margin-top: 2rem;
-
     button {
         background-color: transparent;
         padding: 8px 12px;

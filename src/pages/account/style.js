@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 export const LoginRegisterWrapper = styled.div`
+    padding: 0 7rem;
     z-index: 1000;
     width: 100%;
     height: 100%;
     display: flex;
     position: relative;
+    .navLink {
+        position: absolute;
+        top: 2rem;
+    }
     :root {
         --white-color: #fff;
         --black-color: #000;

@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import style from './style.module.scss';
 function AlertWarning({ setDeleting, selectedProductId, handleDelete }) {
-    console.log(selectedProductId);
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => (document.body.style.overflow = 'unset');
+    }, []);
     return (
         <div className={style.comfirmWrapper}>
             <div className={style.cofirmOverlay}></div>
@@ -24,7 +27,6 @@ function AlertWarning({ setDeleting, selectedProductId, handleDelete }) {
                 <div className={style.comfirmBtn}>
                     <button
                         onClick={() => {
-                            // setShow(false);
                             setDeleting(false);
                         }}
                     >

@@ -1,14 +1,15 @@
 import style from './style.module.scss';
 // import { removeAccents } from '~/ultis';
 import { getInvoice } from '~/webService';
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect, createContext, useMemo } from 'react';
 import Alert from '~/components/infoModals/Alert';
 import InvoiceTable from './component/InvoiceTable';
 import InvoiceDetailTable from './component/InvoiceDetailTable';
-
+import SearchOptions from './component/SearchOptions';
+import { orderStatusToText } from '~/ultis';
 export const orderContext = createContext();
 function Invoice() {
-    // const [filterValue, setFilterValue] = useState('');
+    const [filterOptions, setFilterOptions] = useState(null);
     const [data, setData] = useState([]);
     const [table, setTable] = useState('invoice');
     const [alert, setAlert] = useState({
@@ -17,18 +18,43 @@ function Invoice() {
         type: '',
     });
 
-    // const { products = [], types: productTypes = [] } = data;
     useEffect(() => {
         getInvoice().then(setData).catch(console.log);
     }, []);
-    // const filterdData = useMemo(() => {
-    //     return products.filter((item) => {
-    //         const itemName = removeAccents(item.TenSP).toLowerCase();
-    //         const findName = removeAccents(filterValue).toLowerCase();
-    //         const typeName = removeAccents(item.Loai).toLowerCase();
-    //         return itemName.includes(findName) || typeName.includes(findName);
-    //     });
-    // }, [filterValue, products]);
+
+    console.log(filterOptions);
+    const filteredData = useMemo(() => {
+        let result = data;
+        if (!filterOptions) return result;
+        if (filterOptions.Text) {
+            result = result.filter((order) => {
+                return (
+                    order?.SDT?.startsWith(filterOptions.Text) ||
+                    filterOptions.Text.startsWith(order.id)
+                );
+            });
+        }
+        if (filterOptions.Nam) {
+            result = result?.filter((order) => {
+                const date = new Date(order.NgayTao);
+                const year = date.getFullYear();
+                return year === filterOptions.Nam;
+            });
+        }
+        if (filterOptions.Thang) {
+            result = result.filter((order) => {
+                const date = new Date(order.NgayTao);
+                const month = date.getMonth() + 1;
+                return month === filterOptions.Thang;
+            });
+        }
+
+        if (filterOptions.TinhTrang) {
+            result = result?.filter((order) => order.TinhTrang === filterOptions.TinhTrang);
+        }
+        return result;
+    }, [filterOptions, data]);
+    // console.log(filteredData);
     return (
         <orderContext.Provider
             value={{
@@ -38,18 +64,13 @@ function Invoice() {
         >
             <div className={style.wrapper}>
                 {alert.show && <Alert alert={alert} setAlert={setAlert} />}
-                {/* <AdminSearchBar
-                setFilterValue={setFilterValue}
-                data={products}
-                filterValue={filterValue}
-            /> */}
+
                 <div className={style.content}>
                     <div className={style.nav}>
-                        <div>
+                        <div style={{ display: 'flex' }}>
                             <button
                                 onClick={() => {
                                     setTable('invoice');
-                                    // setFilterValue('');
                                 }}
                                 className={table === 'invoice' ? style.active : null}
                             >
@@ -58,30 +79,29 @@ function Invoice() {
                             <button
                                 onClick={() => {
                                     setTable('invoiceDetail');
-                                    // setFilterValue('');
                                 }}
                                 className={table === 'invoiceDetail' ? style.active : null}
                             >
                                 Chi tiết đơn hàng{' '}
                             </button>
+                            <div>
+                                <SearchOptions
+                                    setFilterOptions={setFilterOptions}
+                                    filterOptions={filterOptions}
+                                />
+                            </div>
                         </div>
                     </div>
                     {table === 'invoice' && (
-                        <InvoiceTable data={data} setData={setData} setAlert={setAlert} />
+                        <InvoiceTable data={filteredData} setData={setData} setAlert={setAlert} />
                     )}
                     {table === 'invoiceDetail' && (
-                        <InvoiceDetailTable data={data} setData={setData} setAlert={setAlert} />
+                        <InvoiceDetailTable
+                            data={filteredData}
+                            setData={setData}
+                            setAlert={setAlert}
+                        />
                     )}
-                    {/* {table === 'product' && (
-                    <ProductTable
-                        setAlert={setAlert}
-                        setFilterValue={setFilterValue}
-                        data={filterdData}
-                        productTypes={productTypes}
-                        setData={setData}
-                        setTable={setTable}
-                    />
-                )} */}
                 </div>
             </div>
         </orderContext.Provider>

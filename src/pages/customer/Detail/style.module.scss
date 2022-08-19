@@ -1,11 +1,12 @@
 .wrapperDetail {
     display: flex;
     justify-content: space-between;
-    padding: 5rem 7rem;
+    padding: 7rem;
     position: relative;
+
     .wrapperNavigate {
         position: absolute;
-        top: 0;
+        top: 1rem;
     }
     .Image {
         width: calc((100% - 20rem) / 3);
@@ -13,6 +14,7 @@
         border-radius: 3px;
         max-height: 45rem;
         display: flex;
+
         justify-content: center;
         height: auto;
         padding: 0.3rem;

@@ -10,6 +10,8 @@ import RequireLogin from '~/components/infoModals/RequireLogin';
 import Alert from '~/components/infoModals/Alert';
 import { formatMoney } from '~/ultis/index';
 import Breadcrumb from '~/components/contents/Breadcumb';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 const Cart = () => {
     const auth = useAuth();
     const { cartIMG } = images;
@@ -77,6 +79,7 @@ const Cart = () => {
             <div className={style.wrapperNavigate}>
                 <Breadcrumb
                     links={[
+                        { location: -1, text: <FontAwesomeIcon icon={faArrowLeft} /> },
                         { location: '/', text: 'Trang chủ' },
                         { location: '#', text: 'Giỏ hàng' },
                     ]}

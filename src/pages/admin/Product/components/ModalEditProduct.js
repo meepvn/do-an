@@ -1,5 +1,5 @@
 import style from '../style.module.scss';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { getData, updateApi } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faUpload, faImage } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +14,10 @@ function ModalEditProduct({ selectedProduct, setData, setShowEdit, setAlert }) {
         KhuyenMai: selectedProduct.KhuyenMai,
     });
     console.log('Input', inputValue);
-
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => (document.body.style.overflow = 'unset');
+    }, []);
     const gender = [
         {
             id: 1,

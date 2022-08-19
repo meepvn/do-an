@@ -8,7 +8,7 @@ import AddOrderModal from './AddOrderModal';
 
 import AlertWarning from '~/components/infoModals/AlertWarning';
 import { deleteApi } from '~/webService';
-import { type } from '@testing-library/user-event/dist/type';
+import AddDetailModal from './AddDetailModal';
 function InvoiceTable({ setAlert, data, setData }) {
     const fomatDate = (init) => {
         var d = new Date(init);
@@ -23,6 +23,7 @@ function InvoiceTable({ setAlert, data, setData }) {
     const [adding, setAdding] = useState(false);
     const [show, setShow] = useState(false);
     const [editing, setEditing] = useState(false);
+    const [addingDetail, setAddingDetail] = useState(false);
     const selectedOrderRef = useRef();
     const handleDelete = async (id) => {
         const res = await deleteApi('order', id);
@@ -50,7 +51,8 @@ function InvoiceTable({ setAlert, data, setData }) {
                     selectedProductId={selectedOrderRef.current.id}
                 />
             )}
-            {adding && <AddOrderModal setAdding={setAdding} />}
+            {adding && <AddOrderModal setAdding={setAdding} setAddingDetail={setAddingDetail} />}
+            {addingDetail && <AddDetailModal setAddingDetail={addingDetail} />}
 
             {editing === true ? (
                 <EditOrderModal

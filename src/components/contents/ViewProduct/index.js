@@ -18,7 +18,7 @@ const ViewProduct = ({ data, hasFilter = false }) => {
                                 onClick={() => navigate(`/detail/${item.id}`)}
                             >
                                 <img src={`http://localhost:3100/images/${item.TenAnh}`} alt="aa" />
-                                {item.KhuyenMai && (
+                                {item.KhuyenMai > 0 && (
                                     <span className={style.discount}>-{item.KhuyenMai}%</span>
                                 )}
                             </div>

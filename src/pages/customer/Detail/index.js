@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import style from './style.module.scss';
 import { formatMoney } from '~/ultis';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus, faTruckFast } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCartPlus, faTruckFast } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import Alert from '~/components/infoModals/Alert';
 import RequireLogin from '~/components/infoModals/AlertWarning';
@@ -41,6 +41,7 @@ const Detail = () => {
     const links = (() => {
         const gender = parseInt(sessionStorage.getItem('gender'));
         return [
+            { location: -1, text: <FontAwesomeIcon icon={faArrowLeft} /> },
             { location: '/', text: 'Trang chủ' },
             {
                 location: gender === 2 ? '/women' : '/men',
@@ -133,7 +134,7 @@ const Detail = () => {
                                 });
                             }}
                         >
-                            <option value="">Chọn size</option>
+                            <option disabled={newItem.id_chitiet}>Chọn size</option>
                             {foundProduct.ChiTiet?.map((item) => {
                                 return (
                                     <option

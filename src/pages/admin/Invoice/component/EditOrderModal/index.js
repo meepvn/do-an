@@ -1,8 +1,8 @@
 import style from './style.module.scss';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { getData, getInvoice, updateApi } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose, faUpload, faImage } from '@fortawesome/free-solid-svg-icons';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 function EditOrderModal({ selectedOrder, setData, setEditing, setAlert }) {
     const [inputValue, setInputValue] = useState({
@@ -11,7 +11,12 @@ function EditOrderModal({ selectedOrder, setData, setEditing, setAlert }) {
         TinhTrang: selectedOrder.TinhTrang,
         GhiChu: selectedOrder.GhiChu,
     });
-    console.log(inputValue);
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => (document.body.style.overflow = 'unset');
+    }, []);
+
     const orderStatus = [
         { id: 1, title: 'Chờ xác nhận' },
         { id: 2, title: 'Đã xác nhận' },
@@ -52,7 +57,6 @@ function EditOrderModal({ selectedOrder, setData, setEditing, setAlert }) {
                     <div className={style.modalInput}>
                         <label>Tình trạng </label>
                         <select
-                            disabled={inputValue.TinhTrang === 4}
                             value={inputValue.TinhTrang}
                             onChange={(e) =>
                                 setInputValue({ ...inputValue, TinhTrang: e.target.value })

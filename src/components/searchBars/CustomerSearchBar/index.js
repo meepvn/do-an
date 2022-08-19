@@ -25,6 +25,7 @@ function CustomerSearchBar({ data }) {
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                             setShowSuggest(false);
+                            setInputValue('');
                             navigate(`/search/${removeAccents(inputValue.replaceAll(' ', '-'))}`);
                         }
                     }}
@@ -46,6 +47,7 @@ function CustomerSearchBar({ data }) {
                     className={style.findBtn}
                     onClick={() => {
                         setShowSuggest(false);
+                        setInputValue('');
                         navigate(`/search/${removeAccents(inputValue.replaceAll(' ', '-'))}`);
                     }}
                 >

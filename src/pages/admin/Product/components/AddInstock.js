@@ -1,14 +1,18 @@
 import style from '../style.module.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AddApi, getData } from '~/webService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 function AddInstock(props) {
-    const { setAlert, setShow } = props;
+    const { setAlert } = props;
     const [inputValue, setInputValue] = useState({
         Size: '',
         SoLuong: '',
     });
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => (document.body.style.overflow = 'unset');
+    }, []);
 
     const validateInput = () => {
         const arr = ['Size', 'SoLuong'];
@@ -50,7 +54,6 @@ function AddInstock(props) {
                 const newData = await getData();
                 await props.setData(newData);
                 props.setAdding(false);
-                setShow(false);
                 setAlert({
                     show: true,
                     type: 'success',
@@ -76,7 +79,6 @@ function AddInstock(props) {
                         className={style.icon}
                         icon={faClose}
                         onClick={() => {
-                            setShow(false);
                             props.setAdding(false);
                         }}
                     />

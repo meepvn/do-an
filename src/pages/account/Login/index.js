@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoginRegisterWrapper } from '../style';
 import { userApi } from '~/webService';
 import useAuth from '~/hooks/useAuth';
 import Alert from '~/components/infoModals/Alert';
+import Breadcrumb from '~/components/contents/Breadcumb';
 
 const Login = () => {
+    const focusRef = useRef();
     const [alert, setAlert] = useState({
         show: false,
         type: '',
@@ -47,6 +49,14 @@ const Login = () => {
                 if (e.key === 'Enter') handleSubmit();
             }}
         >
+            <div className="navLink">
+                <Breadcrumb
+                    links={[
+                        { location: '/', text: 'Về trang chủ' },
+                        { location: '#', text: 'Đăng nhập' },
+                    ]}
+                />
+            </div>
             {alert.show && <Alert alert={alert} setAlert={setAlert} />}
             <div className="wrapper__form">
                 <div className="head__form">
@@ -57,6 +67,7 @@ const Login = () => {
                 <div className="form__content" id="form__login">
                     <div className="content__form--group ">
                         <input
+                            autoFocus
                             type="text"
                             name="usernameLogin"
                             className="content__form--input"
@@ -88,7 +99,11 @@ const Login = () => {
                         <p>
                             Chưa có tài khoản?{' '}
                             <span className="switch__modal switch__modal-regis">
-                                <Link to="/account/register">Đăng ký</Link>
+                                <span
+                                    onClick={() => navigate('/account/register', { replace: true })}
+                                >
+                                    Đăng ký
+                                </span>
                             </span>
                         </p>
                     </div>

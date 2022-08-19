@@ -11,14 +11,12 @@ function InstockTable({ data, setData, setAlert }) {
     const [editting, setEditting] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const selectedProductRef = useRef();
-    const [show, setShow] = useState(false);
-    useEffect(() => {
-        if (show) document.body.style.overflow = 'hidden';
-        else document.body.style.overflow = 'unset';
-    }, [show]);
+    // useEffect(() => {
+    //     if (show) document.body.style.overflow = 'hidden';
+    //     else document.body.style.overflow = 'unset';
+    // }, [show]);
 
     const handleUpdate = () => {
-        setShow(true);
         setEditting(true);
     };
 
@@ -29,7 +27,7 @@ function InstockTable({ data, setData, setAlert }) {
             return;
         } else {
             const newData = await getData();
-            setShow(false);
+            // setShow(false);
             setData(newData);
             setAlert({
                 show: true,
@@ -42,7 +40,6 @@ function InstockTable({ data, setData, setAlert }) {
         <div className={style.wrapperTblPro}>
             {deleting && (
                 <AlertWarning
-                    setShow={setShow}
                     handleDelete={handleDelete}
                     setDeleting={setDeleting}
                     selectedProductId={selectedProductRef.current}
@@ -50,7 +47,6 @@ function InstockTable({ data, setData, setAlert }) {
             )}
             {adding === true ? (
                 <AddInstock
-                    setShow={setShow}
                     setAlert={setAlert}
                     setData={setData}
                     setAdding={setAdding}
@@ -63,7 +59,6 @@ function InstockTable({ data, setData, setAlert }) {
             ) : null}
             {editting === true ? (
                 <EditInstock
-                    setShow={setShow}
                     setAlert={setAlert}
                     setData={setData}
                     selectedProduct={{ ...selectedProductRef.current }}
@@ -121,7 +116,6 @@ function InstockTable({ data, setData, setAlert }) {
                                             <button
                                                 className={style.delete}
                                                 onClick={() => {
-                                                    setShow(true);
                                                     setDeleting(true);
                                                     selectedProductRef.current = instock.id;
                                                 }}
@@ -137,7 +131,6 @@ function InstockTable({ data, setData, setAlert }) {
                                     className={style.addInstock}
                                     colSpan={5}
                                     onClick={() => {
-                                        setShow(true);
                                         selectedProductRef.current = item;
                                         setAdding(true);
                                     }}

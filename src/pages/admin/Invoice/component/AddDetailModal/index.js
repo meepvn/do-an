@@ -1,16 +1,15 @@
-import FindCustomer from './FindCustomer';
 import React, { useState, useEffect } from 'react';
 import style from './style.module.scss';
 import AddOrder from './AddOrder';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-import { getUsers } from '~/webService';
+import { getData } from '~/webService';
+import FindPoduct from './FindPoduct';
 
-const AddOrderModal = ({ setAdding, setAddingDetail }) => {
+const AddDetailModal = ({ setAddingDetail }) => {
     const [data, setData] = useState([]);
-
     useEffect(() => {
-        getUsers().then(setData).catch(console.log);
+        getData().then(setData).catch(console.log);
         document.body.style.overflow = 'hidden';
         return () => (document.body.style.overflow = 'unset');
     }, []);
@@ -19,21 +18,17 @@ const AddOrderModal = ({ setAdding, setAddingDetail }) => {
         <div className={style.wrapperAddOrder}>
             <div className={style.container}>
                 <div className={style.title}>
-                    <span>Tạo đơn hàng</span>
-                    <span onClick={() => setAdding(false)}>
+                    <span>Thêm sản phẩm cho đơn hàng</span>
+                    <span onClick={() => setAddingDetail(false)}>
                         <FontAwesomeIcon icon={faClose} />
                     </span>
                 </div>
                 <div className={style.content}>
                     <div className={style.customer}>
-                        <FindCustomer data={data} />
+                        <FindPoduct data={data.products} />
                     </div>
                     <div className={style.order}>
-                        <AddOrder
-                            customers={data}
-                            setAdding={setAdding}
-                            setAddingDetail={setAddingDetail}
-                        />
+                        <AddOrder products={data.products} setAdding={setAddingDetail} />
                     </div>
                 </div>
             </div>
@@ -41,4 +36,4 @@ const AddOrderModal = ({ setAdding, setAddingDetail }) => {
     );
 };
 
-export default AddOrderModal;
+export default AddDetailModal;

@@ -3,7 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import useAuth from '~/hooks/useAuth';
 import style from './style.module.scss';
+import Alert from '~/components/infoModals/Alert';
+
 const MyDetail = () => {
+    const [alert, setAlert] = useState({ show: false, message: '', type: '' });
     const [inputValue, setInputValue] = useState({
         HoTen: '',
         SDT: '',
@@ -21,20 +24,27 @@ const MyDetail = () => {
         })();
     }, [auth.token]);
 
-    const handleUpdate = () => {
+    const handleUpdate = async () => {
         const Option = {
             method: 'PUT',
             body: JSON.stringify(inputValue),
             headers: { 'Content-Type': 'application/json', token: auth.token },
         };
         console.log(inputValue);
-        fetch(`http://localhost:3100/api/user/personal`, Option)
-            .then((res) => res.json())
-            .then((json) => console.log(json));
+        const res = await fetch(`http://localhost:3100/api/user/personal`, Option);
+        const json = await res.json();
+        if (json.status === 'OK') {
+            setAlert({
+                show: true,
+                message: 'Thay đổi thông tin thành công',
+                type: 'succes',
+            });
+        }
     };
 
     return (
         <div className={style.wrapper}>
+            {alert.show && <Alert alert={alert} setAlert={setAlert} />}
             <div className={style.header}>
                 <FontAwesomeIcon icon={faAddressCard} className={style.icon} />
                 <h2>Thông tin cá nhân</h2>

@@ -5,18 +5,18 @@
     right: 0;
     bottom: 0;
     background-color: rgba(255, 255, 255, 0.5);
-
     z-index: 3;
+
     .container {
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         position: absolute;
+        max-height: 80vh;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 90%;
         background-color: white;
-        overflow: hidden;
         .title {
             width: 100%;
             font-size: 3rem;

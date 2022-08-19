@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { userApi } from '~/webService';
 import validate from './validate';
 import Alert from '~/components/infoModals/Alert';
-
+import Breadcrumb from '~/components/contents/Breadcumb';
 function Register() {
     const [alert, setAlert] = useState({
         type: '',
@@ -49,12 +49,20 @@ function Register() {
             message: 'Đăng ký thành công',
         });
         setTimeout(() => {
-            navigate('/account/login');
+            navigate('/account/login', { replace: true });
         }, 1500);
     };
     return (
         <LoginRegisterWrapper>
             {alert.show && <Alert alert={alert} setAlert={setAlert} />}
+            <div className="navLink">
+                <Breadcrumb
+                    links={[
+                        { location: '/', text: 'Về trang chủ' },
+                        { location: '#', text: 'Đăng ký' },
+                    ]}
+                />
+            </div>
             <div className="wrapper__form">
                 <div className="head__form">
                     <span> Đăng ký</span>
@@ -63,6 +71,7 @@ function Register() {
                 <div className="form__content" id="form__regis">
                     <div className="content__form--group">
                         <input
+                            autoFocus
                             type="text"
                             name="name"
                             className="content__form--input"
@@ -151,7 +160,9 @@ function Register() {
                         <p>
                             Đã có tài khoản{' '}
                             <span className="switch__modal switch__modal-login">
-                                <Link to="/account/login">Đăng nhập</Link>
+                                <span onClick={() => navigate('/account/login', { replace: true })}>
+                                    Đăng nhập
+                                </span>
                             </span>
                         </p>
                     </div>

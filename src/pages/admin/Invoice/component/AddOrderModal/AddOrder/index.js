@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { orderContext } from '../../../index';
 
 import style from './style.module.scss';
-const AddOrder = ({ customers, setAdding }) => {
+const AddOrder = ({ customers, setAdding, setAddingDetail }) => {
     const [inputValue, setInputValue] = useState({
         TinhTrang: '',
         GhiChu: '',
@@ -18,6 +18,7 @@ const AddOrder = ({ customers, setAdding }) => {
         { id: 6, title: 'Hoàn đơn' },
     ];
     const handleSubmit = async () => {
+        // setAddingDetail(true);
         const validCustomer = customers.find(
             (customer) => customer.id.toString() === inputValue.id_nguoidung,
         );
@@ -47,6 +48,7 @@ const AddOrder = ({ customers, setAdding }) => {
         let json = await res.json();
 
         setAdding(false);
+
         setAlert({
             show: true,
             message: 'Tạo đơn hàng thành công',
