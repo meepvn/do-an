@@ -9,6 +9,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import Alert from '~/components/infoModals/Alert';
 import EditModal from './EditModal';
 import Account from '~/components/contents/Account';
+import SearchAccount from './SearchAccount';
 
 const AccountManager = () => {
     const [warning, setWarning] = useState(false);
@@ -52,7 +53,7 @@ const AccountManager = () => {
     return (
         <div className={style.wrapper}>
             {alert.show && <Alert alert={alert} setAlert={setAlert} />}
-
+            <SearchAccount />
             <div className={style.content}>
                 <div className={style.wrapperTblPro}>
                     {editting && (

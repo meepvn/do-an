@@ -4,7 +4,6 @@ import { orderContext } from '../../../index';
 import style from './style.module.scss';
 const AddOrder = ({ customers, setAdding, setAddingDetail }) => {
     const [inputValue, setInputValue] = useState({
-        TinhTrang: '',
         GhiChu: '',
         id_nguoidung: '',
     });
@@ -22,7 +21,7 @@ const AddOrder = ({ customers, setAdding, setAddingDetail }) => {
         const validCustomer = customers.find(
             (customer) => customer.id.toString() === inputValue.id_nguoidung,
         );
-        if (!inputValue.TinhTrang || !inputValue.id_nguoidung) {
+        if (!inputValue.id_nguoidung) {
             setAlert({
                 show: true,
                 message: 'Không được để trống thông tin !',
@@ -38,7 +37,6 @@ const AddOrder = ({ customers, setAdding, setAddingDetail }) => {
             });
             return;
         }
-        console.log(inputValue);
         const options = {
             method: 'POST',
             body: JSON.stringify(inputValue),
@@ -73,7 +71,7 @@ const AddOrder = ({ customers, setAdding, setAddingDetail }) => {
                         }
                     />
                 </div>
-                <div className={style.inputGroup}>
+                {/* <div className={style.inputGroup}>
                     <label>Tình trạng </label>
                     <select
                         onChange={(e) =>
@@ -87,7 +85,7 @@ const AddOrder = ({ customers, setAdding, setAddingDetail }) => {
                             </option>
                         ))}
                     </select>
-                </div>
+                </div> */}
                 <div className={style.inputGroup}>
                     <label>Ghi chú </label>
                     <textarea

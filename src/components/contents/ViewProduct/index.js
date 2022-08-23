@@ -38,14 +38,11 @@ const ViewProduct = ({ data, hasFilter = false }) => {
                                 <p className={style.price}>
                                     {item.KhuyenMai > 0 && (
                                         <span className={style.priceMain}>
-                                            {formatMoney(
-                                                item.DonGia * (1 - item.KhuyenMai / 100),
-                                                ' ',
-                                            )}{' '}
+                                            {formatMoney(item.DonGia, ' ₫')}
                                         </span>
                                     )}
-                                    <span className={style.monney}>
-                                        {formatMoney(item.DonGia, ' ₫')}
+                                    <span>
+                                        {formatMoney(item.DonGia * (1 - item.KhuyenMai / 100), '₫')}
                                     </span>
                                 </p>
                             </div>

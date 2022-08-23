@@ -8,7 +8,9 @@ import digitalIMG from '~/assets/images/download.png';
 import GiayIMG from '~/assets/images/giay.webp';
 import thoiTrangNamIMG from './thoitrannam.webp';
 import aoTheThao from './aothethao.webp';
+import bannerNu from './bannerNu2.webp';
 const images = {
+    bannerNu,
     menIMG,
     aoTheThao,
     GiayIMG,

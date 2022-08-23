@@ -66,11 +66,13 @@
         .title {
             max-width: 80%;
         }
+
         .headerItem {
             width: 100%;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             display: flex;
             padding: 1rem;
+            align-items: center;
             justify-content: space-between;
             margin: 1rem 0;
             border-bottom: 1px solid var(--border-color);
@@ -80,25 +82,12 @@
                 }
                 margin-right: 0.5rem;
             }
-            .infoShop span {
-                color: gray;
-                border: 1px solid;
-                padding: 0.3rem;
-                margin-left: 1rem;
-                cursor: pointer;
-                &:hover {
-                    color: black;
-                }
-            }
-            .statusOrder {
-                span {
-                    font-size: 1.4rem;
-                    color: orangered;
-                    padding-left: 1rem;
-                    margin-left: 1rem;
-                    border-left: 1px solid var(--border-color);
-                }
-            }
+        }
+        .info {
+            color: orangered;
+            font-size: 1.6rem;
+            border: none;
+            margin-left: 0.5rem;
         }
         .contentItem {
             display: flex;

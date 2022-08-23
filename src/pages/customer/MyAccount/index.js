@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import style from './style.module.scss';
 import images from '~/assets/images';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,6 +11,10 @@ import {
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import useAuth from '~/hooks/useAuth';
+import Home from '../Home';
+import MyOrder from '../MyOrder';
+import Account from '~/components/contents/Account';
+import MyDetail from '~/components/contents/MyDetail';
 const MyAccount = () => {
     const { logoBlack, digitalIMG } = images;
     const auth = useAuth();
@@ -37,22 +41,32 @@ const MyAccount = () => {
                                 Hi,<span>{auth.userInfo.HoTen}</span>
                             </div>
                         </li>
-                        <li className={style.listItem} onClick={() => navigate('/')}>
+                       
+                        <li className={style.listItem} >
+                        <NavLink to='/' element={<Home/>}className={({ isActive }) => (isActive ? style.active : style.inactive)} >
                             <FontAwesomeIcon icon={faHome} className={style.icon} />
                             <span>Trang chủ</span>
+                        </NavLink>
                         </li>
                         <li className={style.listItem} onClick={() => navigate('my-detail')}>
+                        <NavLink to='my-detail' element={<MyDetail/>}className={({ isActive }) => (isActive ? style.active : style.inactive)} >
                             <FontAwesomeIcon icon={faAddressCard} className={style.icon} />
                             <span>Thông tin cá nhân</span>
+                        </NavLink>
                         </li>
                         <li className={style.listItem} onClick={() => navigate('account')}>
-                            <FontAwesomeIcon icon={faUser} className={style.icon} />
+                        <NavLink to='account' element={<Account/>}className={({ isActive }) => (isActive ? style.active : style.inactive)} >
+                        <FontAwesomeIcon icon={faUser} className={style.icon} />
                             <span>Tài khoản</span>
+                        </NavLink>
                         </li>
                         <li className={style.listItem} onClick={() => navigate('my-order')}>
+                        <NavLink to='my-order' element={<MyOrder/>}className={({ isActive }) => (isActive ? style.active : style.inactive)} >
                             <FontAwesomeIcon icon={faBox} className={style.icon} />
                             <span>Đơn hàng của tôi</span>
+                        </NavLink>
                         </li>
+                        
                         <li
                             className={style.listItem}
                             onClick={() => {

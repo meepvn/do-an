@@ -9,7 +9,7 @@ import AddOrderModal from './AddOrderModal';
 import AlertWarning from '~/components/infoModals/AlertWarning';
 import { deleteApi } from '~/webService';
 import AddDetailModal from './AddDetailModal';
-function InvoiceTable({ setAlert, data, setData }) {
+function InvoiceTable({ setAlert, data, setData, setFilterOptions, setTable }) {
     const fomatDate = (init) => {
         var d = new Date(init);
         var date = d.getDate();
@@ -95,13 +95,7 @@ function InvoiceTable({ setAlert, data, setData }) {
                                     <button
                                         className={style.edit}
                                         onClick={() => {
-                                            selectedOrderRef.current = {
-                                                id: item.id,
-                                                HoTen: item.HoTen,
-                                                GhiChu: item.GhiChu,
-                                                SDT: item.SDT,
-                                                TinhTrang: item.TinhTrang,
-                                            };
+                                            selectedOrderRef.current = data[index];
                                             setEditing(true);
                                         }}
                                     >
@@ -120,7 +114,17 @@ function InvoiceTable({ setAlert, data, setData }) {
                                     </button>
                                 </td>
                                 <td>
-                                    <button className={style.edit}>Chi tiết</button>
+                                    <button
+                                        className={style.edit}
+                                        onClick={() => {
+                                            setTable('invoiceDetail');
+                                            setFilterOptions((prev) => {
+                                                return { ...prev, Text: item.id.toString() };
+                                            });
+                                        }}
+                                    >
+                                        Chi tiết
+                                    </button>
                                 </td>
                             </tr>
                         );

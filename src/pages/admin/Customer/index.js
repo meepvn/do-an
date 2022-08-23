@@ -1,7 +1,6 @@
 import style from './style.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
-import AdminSearchBar from '~/components/searchBars/AdminSearchBar';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { removeAccents } from '~/ultis';
 import AlertWarning from '~/components/infoModals/AlertWarning';
 import { useState, useEffect, useMemo, useRef } from 'react';
@@ -119,10 +118,10 @@ function Customer() {
                                                     handleEdit(item.id);
                                                 }}
                                             >
-                                                <FontAwesomeIcon icon={faPenToSquare} /> Sửa
+                                                <FontAwesomeIcon icon={faPenToSquare} /> Cập nhật
                                             </button>
                                         </td>
-                                        <td>
+                                        {/* <td>
                                             <button
                                                 className={style.delete}
                                                 onClick={() => {
@@ -132,7 +131,7 @@ function Customer() {
                                             >
                                                 <FontAwesomeIcon icon={faTrash} /> Xóa
                                             </button>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 );
                             })}

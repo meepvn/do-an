@@ -22,7 +22,6 @@ function Invoice() {
         getInvoice().then(setData).catch(console.log);
     }, []);
 
-    console.log(filterOptions);
     const filteredData = useMemo(() => {
         let result = data;
         if (!filterOptions) return result;
@@ -30,7 +29,7 @@ function Invoice() {
             result = result.filter((order) => {
                 return (
                     order?.SDT?.startsWith(filterOptions.Text) ||
-                    filterOptions.Text.startsWith(order.id)
+                    filterOptions?.Text?.startsWith(order.id)
                 );
             });
         }
@@ -93,7 +92,13 @@ function Invoice() {
                         </div>
                     </div>
                     {table === 'invoice' && (
-                        <InvoiceTable data={filteredData} setData={setData} setAlert={setAlert} />
+                        <InvoiceTable
+                            data={filteredData}
+                            setData={setData}
+                            setAlert={setAlert}
+                            setTable={setTable}
+                            setFilterOptions={setFilterOptions}
+                        />
                     )}
                     {table === 'invoiceDetail' && (
                         <InvoiceDetailTable

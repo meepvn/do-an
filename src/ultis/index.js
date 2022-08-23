@@ -6,6 +6,14 @@ const formatMoney = (n, currency) => {
         }) + currency
     );
 };
+const formatDate = (init) => {
+    var d = new Date(init);
+    var date = d.getDate();
+    var month = d.getMonth() + 1; // Since getMonth() returns month from 0-11 not 1-12
+    var year = d.getFullYear();
+    var newDate = date + '/' + month + '/' + year;
+    return newDate;
+};
 const orderStatusToText = (statusCode) => {
     switch (statusCode) {
         case 1:
@@ -49,4 +57,4 @@ function removeAccents(str) {
     return str;
 }
 
-export { removeAccents, formatMoney, orderStatusToText, validator };
+export { removeAccents, formatMoney, orderStatusToText, validator, formatDate };

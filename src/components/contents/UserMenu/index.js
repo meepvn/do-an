@@ -71,7 +71,7 @@ const UserMenu = () => {
                         </li>
                     )}
                     <li className={style.listItem}>
-                        <span onClick={() => navigate('/my-account')}>
+                        <span onClick={() => navigate('/my-account/my-detail')}>
                             <FontAwesomeIcon icon={faUserLarge} className={style.icon} /> Tài khoản
                             của tôi
                         </span>

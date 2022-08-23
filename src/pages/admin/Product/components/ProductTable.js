@@ -17,10 +17,12 @@ function ProductTable(props) {
         setShow(!show);
     };
 
-    const handleDelete = async (idProduct) => {
+    const handleDelete = async () => {
         try {
-            const res = await deleteApi('product', idProduct);
-            await res.json();
+            console.log(selectedProductRef.current.id);
+            const res = await deleteApi('product', selectedProductRef.current.id);
+            const json = await res.json();
+            console.log(json);
             const newData = await getData();
             props.setData(newData);
             setAlert({

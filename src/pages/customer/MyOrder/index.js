@@ -1,13 +1,13 @@
-import { faBox, faShop } from '@fortawesome/free-solid-svg-icons';
+import { faBox } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import useAuth from '~/hooks/useAuth';
 import style from './style.module.scss';
-import { formatMoney, orderStatusToText } from '~/ultis';
-import { useNavigate } from 'react-router-dom';
+import { formatMoney, formatDate, orderStatusToText } from '~/ultis';
+// import { useNavigate } from 'react-router-dom';
 const MyOrder = () => {
     const [data, setData] = useState([]);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const auth = useAuth();
     useEffect(() => {
         const Option = {
@@ -32,16 +32,23 @@ const MyOrder = () => {
                 return (
                     <div key={item.id} className={style.wrapperItem}>
                         <div className={style.headerItem}>
-                            <div className={style.infoShop}>
-                                <FontAwesomeIcon icon={faShop} className={style.icon} /> asos.com
-                                <span onClick={() => navigate('/men')}>
-                                    <FontAwesomeIcon icon={faShop} className={style.icon} /> Xem
-                                    shop
-                                </span>
-                            </div>
+                            <span>
+                                Mã đơn hàng: <span className={style.info}>{item.id}</span>
+                            </span>
                             <div className={style.statusOrder}>
-                                Người gửi đang liên hệ với bạn xin chú ý điện thoại
-                                <span>{orderStatusToText(item.TinhTrang)}</span>
+                                Ngày đặt hàng:{' '}
+                                <span
+                                    className={style.info}
+                                    style={{
+                                        borderRight: '1px solid var(--border-color)',
+                                        paddingRight: '1rem',
+                                    }}
+                                >
+                                    {formatDate(item.NgayTao)}
+                                </span>
+                                <span className={style.info}>
+                                    {orderStatusToText(item.TinhTrang)}
+                                </span>
                             </div>
                         </div>
                         {item.ChiTiet?.map((element) => {

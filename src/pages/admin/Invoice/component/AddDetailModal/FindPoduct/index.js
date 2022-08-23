@@ -9,7 +9,7 @@ function FindPoduct({ data }) {
     const [showInfo, setShowInfo] = useState(false);
     const [filterValue, setFilterValue] = useState('');
     const [inputValue, setInputValue] = useState('');
-    const { setAlert, setData } = useContext(orderDetailContext);
+    const { setAlert } = useContext(orderDetailContext);
     const filteredData = useMemo(() => {
         return data?.filter((item) => {
             const itemName = removeAccents(item.TenSP).toLowerCase();
@@ -47,7 +47,11 @@ function FindPoduct({ data }) {
                             <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </span>
                     </div>
-                    {filterValue && <span className={style.btnRemoveFilter}>Bỏ tìm kiếm</span>}
+                    {filterValue && (
+                        <span className={style.btnRemoveFilter} onClick={() => setFilterValue('')}>
+                            Bỏ tìm kiếm
+                        </span>
+                    )}
                 </div>
                 <div className={style.content}>
                     <div className={style.wrapperTblPro}>

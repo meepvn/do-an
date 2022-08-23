@@ -15,22 +15,51 @@ const Men = () => {
     const [filterOptions, setFilterOptions] = useState({
         Loai: '',
         Gia: '',
+        Sort: '',
     });
     useEffect(() => {
         if (products) setLoading(false);
     }, [products]);
     if (loading) return <h1>Đang tải ...</h1>;
-    const maleProducts = products?.filter(
-        (product) => product.GioiTinh === 1 || product.GioiTinh === 3,
-    );
+    const maleProducts = (() => {
+        let result = products?.filter(
+            (product) => product.GioiTinh === 1 || product.GioiTinh === 3,
+        );
+        result = result.map((product) => {
+            return { ...product, GiaKM: product.DonGia * (1 - product.KhuyenMai / 100) };
+        });
+        return result;
+    })();
     const maleTypes = maleProducts?.reduce((result, current) => {
         if (result.includes(current.Loai)) return result;
         return [...result, current.Loai];
     }, []);
-    const filteredData = maleProducts?.filter((item) => {
-        if (filterOptions.Loai) return item.Loai === filterOptions.Loai;
-        return true;
-    });
+
+    const filteredData = (() => {
+        let result = maleProducts;
+        if (filterOptions.Loai)
+            result = result.filter((product) => product.Loai === filterOptions.Loai);
+        if (filterOptions.Gia) {
+            if (filterOptions.Gia === '1') {
+                result = result.filter((product) => product.GiaKM <= 100000);
+            } else if (filterOptions.Gia === '2') {
+                result = result.filter(
+                    (product) => product.GiaKM > 100000 && product.GiaKM <= 200000,
+                );
+            }
+        }
+        if (filterOptions.Sort) {
+            console.log(filterOptions.Sort);
+            if (filterOptions.Sort === '1') {
+                result = result?.sort((a, b) => parseFloat(a.GiaKM) - parseFloat(b.GiaKM));
+            }
+            if (filterOptions.Sort === '2') {
+                result = result?.sort((a, b) => parseFloat(b.GiaKM) - parseFloat(a.GiaKM));
+            }
+        }
+        return result;
+    })();
+
     return (
         <div className={style.wrapperPage}>
             <SliderIMG

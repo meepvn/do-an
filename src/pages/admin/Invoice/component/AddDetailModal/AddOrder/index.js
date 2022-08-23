@@ -95,7 +95,11 @@ const AddOrder = ({ products, setAdding }) => {
                     </option>
                     {foundProduct?.ChiTiet?.map((instock) => {
                         return (
-                            <option value={instock.id} disabled={instock.SoLuong === 0}>
+                            <option
+                                value={instock.id}
+                                disabled={instock.SoLuong === 0}
+                                key={instock.id}
+                            >
                                 {instock.Size} {instock.SoLuong === 0 && '- Hết hàng'}
                             </option>
                         );
@@ -138,7 +142,7 @@ const AddOrder = ({ products, setAdding }) => {
                 </div> */}
 
                 <div className={style.btnSubmit} id={style.change}>
-                    <button onClick={handleSubmit}>Tạo đơn hàng</button>
+                    <button onClick={handleSubmit}>Thêm sản phẩm</button>
                 </div>
                 <div className={style.btnSubmit} id={style.change}>
                     <button onClick={() => setAdding(false)}>Đóng</button>

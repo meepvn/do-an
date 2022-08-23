@@ -133,15 +133,15 @@ function ModalAddProduct(props) {
             } else {
                 const newData = await getData();
                 await props.setData(newData);
-                props.setShow(false);
-                // setInputValue({
-                //     TenSP: '',
-                //     Loai: '',
-                //     DonGia: '',
-                //     GioiTinh: 1,
-                //     KhuyenMai: 0,
-                //     Anh: '',
-                // });
+                // props.setShow(false);
+                setInputValue({
+                    TenSP: '',
+                    Loai: '',
+                    DonGia: '',
+                    GioiTinh: 2,
+                    KhuyenMai: 0,
+                    Anh: '',
+                });
                 setAlert({
                     show: true,
                     type: 'success',

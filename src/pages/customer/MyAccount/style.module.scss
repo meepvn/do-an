@@ -14,19 +14,45 @@
         display: flex;
         width: 100%;
         padding: 0 19rem;
+        .active{
+            background-color: aquamarine;
+            
+        }
         .navBar {
             width: 30%;
+            a{
+                width: 100%;
+                cursor: pointer;
+                padding: 2rem 2.5rem;
+                font-size: 1.6rem;
+                color: black;
+                &:hover span
+                 {  
+                    
+                    text-decoration: underline;
+                }
+            }
             .list {
                 .listItem {
                     background-color: white;
-                    padding: 2rem 2.5rem;
-                    font-size: 1.6rem;
+                    border-radius: 3px;
                     margin-bottom: 0.8rem;
                     display: flex;
                     align-items: center;
-                    cursor: pointer;
-                    &:hover span {
-                        text-decoration: underline;
+                    
+                    &:first-child{
+                        font-size: 1.6rem;
+                        padding: 2rem 2.5rem;
+                    }
+                    &:last-child{
+                        cursor: pointer;
+                        font-size: 1.6rem;
+                        padding: 2rem 2.5rem;
+                        &:hover span
+                 {  
+                    
+                    text-decoration: underline;
+                }
                     }
                     &:first-child:hover span,
                     &:first-child:hover {

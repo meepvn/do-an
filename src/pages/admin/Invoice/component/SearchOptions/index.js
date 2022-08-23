@@ -15,7 +15,6 @@ const SearchOptions = ({ setFilterOptions, filterOptions }) => {
     });
     const [isOpen, setIsOpen] = useState(false);
     const lastInputRef = useRef();
-    console.log('values', filterValues);
     const handleInputChange = (e) => {
         setFitlterValues({ ...filterValues, Text: e.target.value });
     };
@@ -65,7 +64,10 @@ const SearchOptions = ({ setFilterOptions, filterOptions }) => {
                         onKeyDown={(e) => {
                             if (e.key === '.' || e.key === '+' || e.key === '-  ')
                                 e.preventDefault();
-                            if (e.key === 'Enter') setFilterOptions({ ...filterValues });
+                            if (e.key === 'Enter') {
+                                setFitlterValues({ ...filterValues, Text: '' });
+                                setFilterOptions({ ...filterValues });
+                            }
                         }}
                     />
                 </span>

@@ -10,7 +10,7 @@ import SliderIMG from '~/components/contents/SliderIMG';
 import Breadcrumb from '~/components/contents/Breadcumb';
 const Women = () => {
     sessionStorage.setItem('gender', 2);
-    const sliderIMG = [images.womenIMG, images.GiayIMG];
+    const sliderIMG = [images.womenIMG, images.bannerNu];
     const [{ products }] = useOutletContext();
     const [loading, setLoading] = useState(true);
     const [filterOptions, setFilterOptions] = useState({
@@ -21,17 +21,50 @@ const Women = () => {
         if (products) setLoading(false);
     }, [products]);
     if (loading) return <h1>Đang tải ...</h1>;
-    const maleProducts = products?.filter(
-        (product) => product.GioiTinh === 2 || product.GioiTinh === 3,
-    );
+    const maleProducts = (() => {
+        let result = products?.filter(
+            (product) => product.GioiTinh === 2 || product.GioiTinh === 3,
+        );
+        result = result.map((product) => {
+            return { ...product, GiaKM: product.DonGia * (1 - product.KhuyenMai / 100) };
+        });
+        return result;
+    })();
     const maleTypes = maleProducts?.reduce((result, current) => {
         if (result.includes(current.Loai)) return result;
         return [...result, current.Loai];
     }, []);
-    const filteredData = maleProducts?.filter((item) => {
-        if (filterOptions.Loai) return item.Loai === filterOptions.Loai;
-        return true;
-    });
+    const filteredData = (() => {
+        let result = maleProducts;
+        if (filterOptions.Loai)
+            result = result.filter((product) => product.Loai === filterOptions.Loai);
+        if (filterOptions.Gia) {
+            if (filterOptions.Gia === '1') {
+                result = result.filter((product) => product.GiaKM <= 100000);
+            } else if (filterOptions.Gia === '2') {
+                result = result.filter(
+                    (product) => product.GiaKM > 100000 && product.GiaKM <= 200000,
+                );
+            } else if (filterOptions.Gia === '3') {
+                result = result.filter(
+                    (product) => product.GiaKM > 200000 && product.GiaKM <= 500000,
+                );
+            } else if (filterOptions.Gia === '4') {
+                result = result.filter((product) => product.GiaKM >= 500000);
+            }
+        }
+        if (filterOptions.Sort) {
+            console.log(filterOptions.Sort);
+            if (filterOptions.Sort === '1') {
+                result = result?.sort((a, b) => parseFloat(a.GiaKM) - parseFloat(b.GiaKM));
+            }
+            if (filterOptions.Sort === '2') {
+                result = result?.sort((a, b) => parseFloat(b.GiaKM) - parseFloat(a.GiaKM));
+            }
+        }
+        return result;
+    })();
+
     return (
         <div className={style.wrapperPage}>
             <SliderIMG images={sliderIMG} />
