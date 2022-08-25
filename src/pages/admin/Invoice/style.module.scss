@@ -86,8 +86,12 @@
                 justify-content: center;
                 button {
                     min-width: 12rem;
-                    background-color: var(--success);
+                    background-color: #50b9e0;
                     color: white;
+                    &:hover {
+                        transform: scale(1.01);
+                        box-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.5);
+                    }
                 }
             }
             .gender {
@@ -113,7 +117,7 @@
                 width: 48%;
                 margin-bottom: 1rem;
                 label {
-                    min-width: 12rem;
+                    min-width: 15rem;
                     display: block;
                 }
                 select {

@@ -70,7 +70,7 @@ const Cart = () => {
         setAlert({
             show: true,
             type: 'sucess',
-            message: 'Thanh toán thành công',
+            message: 'Đặt hàng thành công',
         });
     };
 
@@ -116,9 +116,9 @@ const Cart = () => {
                         );
                     })}
                     <div className={style.btnPay}>
-                        <span>Tổng thanh toán ({cartItems.length} sản phẩm ): </span>
+                        <span>Tổng tiền ({cartItems.length} sản phẩm ): </span>
                         <span className={style.price}>{formatMoney(totalPrice, 'đ')}</span>
-                        <button onClick={createOrder}>Thanh toán</button>
+                        <button onClick={createOrder}>Đặt hàng</button>
                     </div>
                 </div>
             )}

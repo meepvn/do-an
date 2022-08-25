@@ -39,6 +39,12 @@ const MyDetail = () => {
                 message: 'Thay đổi thông tin thành công',
                 type: 'succes',
             });
+        } else {
+            setAlert({
+                show: true,
+                message: json.message,
+                type: 'error',
+            });
         }
     };
 
