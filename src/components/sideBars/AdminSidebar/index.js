@@ -57,8 +57,8 @@ function AdminSidebar() {
                         className={({ isActive }) => (isActive ? style.active : style.inactive)}
                     >
                         <li className={style.list}>
-                            <FontAwesomeIcon className={style.icon} icon={faUser} /> Quản lý tài
-                            khoản
+                            <FontAwesomeIcon className={style.icon} icon={faUser} /> Quản lý người
+                            dùng
                         </li>
                     </NavLink>
                 )}

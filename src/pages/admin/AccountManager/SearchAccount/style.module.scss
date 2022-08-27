@@ -65,11 +65,12 @@
         background-color: white;
         z-index: 999;
         min-height: 4.6rem;
-        width: 100.2%;
+        width: calc(100% + 2px);
         height: auto;
         border: 1px solid var(--border-color);
         position: absolute;
         top: 4.5rem;
+        left: -1px;
         & > span {
             width: 100%;
             display: flex;

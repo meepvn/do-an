@@ -1,14 +1,10 @@
 import React from 'react';
 import style from './style.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash, faPlus, faClose } from '@fortawesome/free-solid-svg-icons';
-// import AdminSearchBar from '~/components/searchBars/AdminSearchBar';
-import { removeAccents } from '~/ultis';
-import AlertWarning from '~/components/infoModals/AlertWarning';
+import { faPenToSquare, faClose } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import Alert from '~/components/infoModals/Alert';
 import EditModal from './EditModal';
-import Account from '~/components/contents/Account';
 import SearchAccount from './SearchAccount';
 
 const AccountManager = () => {
@@ -39,21 +35,22 @@ const AccountManager = () => {
         setWarning(false);
         setAlert({ show: true, message: 'Đặt lại mật khẩu thành công', type: 'success' });
     };
-    // const filterdData = useMemo(() => {
-    //     return data.filter((item) => {
-    //         const itemName = removeAccents(item.HoTen).toLowerCase();
-    //         const findName = removeAccents(filterValue).toLowerCase();
-
-    //         return itemName.includes(findName);
-    //     });
-    // }, [filterValue, data]);
+    const filterdData = useMemo(() => {
+        return data.filter((item) => {
+            const itemEmail = item.Email.toLowerCase();
+            const findEmail = filterValue.toLowerCase();
+            return (
+                itemEmail.includes(findEmail) || item.MaNguoiDung.toString().includes(filterValue)
+            );
+        });
+    }, [filterValue, data]);
     const handleEdit = () => {
         setEditting(true);
     };
     return (
         <div className={style.wrapper}>
             {alert.show && <Alert alert={alert} setAlert={setAlert} />}
-            <SearchAccount />
+            <SearchAccount data={data} setFilterValue={setFilterValue} filterValue={filterValue} />
             <div className={style.content}>
                 <div className={style.wrapperTblPro}>
                     {editting && (
@@ -77,7 +74,7 @@ const AccountManager = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data?.map((item, index) => {
+                            {filterdData?.map((item, index) => {
                                 if (item.Quyen > 1) return null;
                                 else
                                     return (

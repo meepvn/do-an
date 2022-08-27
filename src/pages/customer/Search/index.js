@@ -18,8 +18,10 @@ export default function Search() {
         const filterValue = q.replaceAll('-', ' ');
         const filterName = removeAccents(item.TenSP);
         const filterType = removeAccents(item.Loai);
-
-        return filterName.includes(filterValue) || filterType.includes(filterValue);
+        return (
+            filterName.toLowerCase().includes(filterValue.toLowerCase()) ||
+            filterType.toLowerCase().includes(filterValue.toLowerCase())
+        );
     });
     return (
         <div className={style.wapperSearchPage}>

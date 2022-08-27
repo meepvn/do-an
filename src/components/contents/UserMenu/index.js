@@ -14,7 +14,7 @@ const UserMenu = () => {
     });
     const [displayMenu, setDisplayMenu] = useState(false);
     const navigate = useNavigate();
-    const { userInfo } = JSON.parse(localStorage.getItem('user'));
+    const { userInfo } = auth;
     return (
         <div className={style.wrapperUserMenu} onClick={() => setDisplayMenu(!displayMenu)}>
             <FontAwesomeIcon className={style.icon} icon={faUserLarge} />

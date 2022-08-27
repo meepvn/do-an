@@ -14,7 +14,7 @@ const SearchOptions = ({ setFilterOptions, filterOptions }) => {
         Text: '',
     });
     const [isOpen, setIsOpen] = useState(false);
-    const lastInputRef = useRef();
+    // const lastInputRef = useRef();
     const handleInputChange = (e) => {
         setFitlterValues({ ...filterValues, Text: e.target.value });
     };
@@ -82,14 +82,18 @@ const SearchOptions = ({ setFilterOptions, filterOptions }) => {
 
                 {isOpen && (
                     <div className={style.contentFilter}>
-                        <div className={style.filterItem}>
+                        <div
+                            className={style.filterItem}
+                            style={{ display: 'flex', justifyContent: 'space-between' }}
+                        >
+                            <h3>Lọc theo</h3>
                             <span className={style.icon}>
                                 <FontAwesomeIcon icon={faClose} onClick={() => setIsOpen(false)} />
                             </span>
                         </div>
                         <div className={style.filterItem}>
                             <SelectOptions
-                                defaultTitle="Theo năm"
+                                defaultTitle="Năm"
                                 options={arrYear}
                                 setFitlterValues={setFitlterValues}
                                 filterKey="Nam"
@@ -97,7 +101,7 @@ const SearchOptions = ({ setFilterOptions, filterOptions }) => {
                         </div>
                         <div className={style.filterItem}>
                             <SelectOptions
-                                defaultTitle="Theo tháng"
+                                defaultTitle="Tháng"
                                 options={arrMonth}
                                 setFitlterValues={setFitlterValues}
                                 filterKey="Thang"

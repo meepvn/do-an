@@ -7,23 +7,14 @@ import { deleteApi, getData } from '~/webService';
 import AlertWarning from '~/components/infoModals/AlertWarning';
 import { formatMoney, orderStatusToText } from '~/ultis';
 import AddDetailModal from './AddDetailModal';
+import EditInvoiceDetail from './EditInvoiceDetail';
 export const orderDetailContext = createContext();
 function InvoiceDetailTable({ data, setData, setAlert }) {
     const [addingDetail, setAddingDetail] = useState(false);
-    // const [editting, setEditting] = useState(false);
+    const [editing, setEditing] = useState(false);
     const [deletingDetail, setDeletingDetail] = useState(false);
-    // const selectedProductRef = useRef();
-    const [show, setShow] = useState(false);
+    const selectedDetailRef = useRef();
     const selectedOrderRef = useRef();
-    console.log(selectedOrderRef.current);
-    useEffect(() => {
-        if (show) document.body.style.overflow = 'hidden';
-        else document.body.style.overflow = 'unset';
-    }, [show]);
-    // const handleUpdate = () => {
-    //     setShow(true);
-    //     setEditting(true);
-    // };
 
     const handleDelete = async () => {
         let res = await deleteApi('detail', selectedOrderRef.current);
@@ -50,28 +41,16 @@ function InvoiceDetailTable({ data, setData, setAlert }) {
                     <AlertWarning handleDelete={handleDelete} setDeleting={setDeletingDetail} />
                 )}
                 {addingDetail && <AddDetailModal setAddingDetail={setAddingDetail} />}
-                {/* {adding === true ? (
-                <AddInstock
-                    setShow={setShow}
-                    setAlert={setAlert}
-                    setData={setData}
-                    setAdding={setAdding}
-                    selectedProduct={{
-                        id: selectedProductRef.current.id,
-                        TenSP: selectedProductRef.current.TenSP,
-                        SoLuong: selectedProductRef.current.SoLuong,
-                    }}
-                />
-            ) : null} */}
-                {/* {editting === true ? (
-                <EditInstock
-                    setShow={setShow}
-                    setAlert={setAlert}
-                    setData={setData}
-                    selectedProduct={{ ...selectedProductRef.current }}
-                    setEditting={setEditting}
-                />
-            ) : null} */}
+
+                {editing === true ? (
+                    <EditInvoiceDetail
+                        setAlert={setAlert}
+                        setData={setData}
+                        selectedDetail={{ ...selectedDetailRef.current }}
+                        selectedOrder={{ ...selectedOrderRef.current }}
+                        setEditing={setEditing}
+                    />
+                ) : null}
                 <table border="1">
                     <thead>
                         <tr>
@@ -90,9 +69,6 @@ function InvoiceDetailTable({ data, setData, setAlert }) {
                             <tbody key={item.id}>
                                 <tr>
                                     <td rowSpan={item.ChiTiet.length + 3}>{item.id}</td>
-                                    {/* {item.SoLuong.length === 0 && (
-                                    <td colSpan="4">Sản phẩm chưa có số lượng</td>
-                                )} */}
                                 </tr>
                                 {item.ChiTiet.map((element) => {
                                     return (
@@ -126,16 +102,9 @@ function InvoiceDetailTable({ data, setData, setAlert }) {
                                                             });
                                                             return;
                                                         }
-                                                        // handleUpdate();
-                                                        // selectedProductRef.current = {
-                                                        //     id: item.id,
-                                                        //     TenSP: item.TenSP,
-                                                        //     element: {
-                                                        //         id: element.id,
-                                                        //         Size: element.Size,
-                                                        //         SoLuong: element.SoLuong,
-                                                        //     },
-                                                        // };
+                                                        setEditing(true);
+                                                        selectedDetailRef.current = element;
+                                                        selectedOrderRef.current = item;
                                                     }}
                                                 >
                                                     <FontAwesomeIcon icon={faPenToSquare} /> Sửa

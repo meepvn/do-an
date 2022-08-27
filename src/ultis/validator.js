@@ -6,11 +6,9 @@ class Validator {
         return num <= 100 && num >= 0;
     }
     username = (username) => {
-        // const regex = new RegExp(
-        //     '^[a-zA-Z0-9](_(?!(.|_))|.(?!(_|.))|[a-zA-Z0-9]){6,18}[a-zA-Z0-9]$',
-        // );
-        // return regex.test(username);
-        return true;
+        const regex = /^[a-zA-Z0-9]+$/;
+        const lowerCaseName = username.toLowerCase();
+        return regex.test(username) && !lowerCaseName.startsWith('user');
     };
     name = (name) => {
         const regex =

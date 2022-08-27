@@ -72,7 +72,7 @@ const EditModal = ({ setEditting, setAlert, setData, selectedAccount }) => {
             <div className={style.modalLayer}></div>
             <div className={style.modalContainer}>
                 <div className={style.modalHeader}>
-                    <h3>Cập nhật số lượng sản phẩm</h3>
+                    <h3>Cập nhật thông tin người dùng</h3>
                     <FontAwesomeIcon
                         className={style.icon}
                         icon={faClose}

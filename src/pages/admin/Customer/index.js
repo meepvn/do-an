@@ -121,17 +121,6 @@ function Customer() {
                                                 <FontAwesomeIcon icon={faPenToSquare} /> Cập nhật
                                             </button>
                                         </td>
-                                        {/* <td>
-                                            <button
-                                                className={style.delete}
-                                                onClick={() => {
-                                                    customer.current.id = item.id;
-                                                    setDeleting(true);
-                                                }}
-                                            >
-                                                <FontAwesomeIcon icon={faTrash} /> Xóa
-                                            </button>
-                                        </td> */}
                                     </tr>
                                 );
                             })}

@@ -56,12 +56,12 @@
                     cursor: pointer;
                     padding: 0 1rem;
                     justify-content: flex-end;
-                    opacity: 0.5;
                     .icon {
+                        opacity: 0.5;
                         font-size: 2rem;
-                    }
-                    &:hover {
-                        opacity: 1;
+                        &:hover {
+                            opacity: 1;
+                        }
                     }
                 }
             }

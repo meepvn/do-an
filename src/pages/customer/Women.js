@@ -43,11 +43,11 @@ const Women = () => {
                 result = result.filter((product) => product.GiaKM <= 100000);
             } else if (filterOptions.Gia === '2') {
                 result = result.filter(
-                    (product) => product.GiaKM > 100000 && product.GiaKM <= 200000,
+                    (product) => product.GiaKM >= 100000 && product.GiaKM < 200000,
                 );
             } else if (filterOptions.Gia === '3') {
                 result = result.filter(
-                    (product) => product.GiaKM > 200000 && product.GiaKM <= 500000,
+                    (product) => product.GiaKM >= 200000 && product.GiaKM <= 500000,
                 );
             } else if (filterOptions.Gia === '4') {
                 result = result.filter((product) => product.GiaKM >= 500000);

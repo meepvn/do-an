@@ -1,6 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState, useEffect } from 'react';
-import { faPenToSquare, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+    faPenToSquare,
+    faPlus,
+    faTrash,
+    faAngleLeft,
+    faAngleRight,
+} from '@fortawesome/free-solid-svg-icons';
 import style from './style.module.scss';
 import AddInstock from './AddInstock';
 import EditInstock from './EditInstock';
@@ -11,6 +17,36 @@ function InstockTable({ data, setData, setAlert }) {
     const [editting, setEditting] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const selectedProductRef = useRef();
+    const [currentPage, setCurrentPage] = useState(0);
+    const itemsPerPage = 10;
+    const numberOfPages = Math.ceil(data?.length / itemsPerPage);
+    const firstIndex = currentPage * itemsPerPage;
+    const lastIndex = firstIndex + itemsPerPage;
+    const pageItems = data.slice(firstIndex, lastIndex);
+    const number = [];
+    (() => {
+        for (let i = 1; i <= numberOfPages; i++) {
+            number.push(i);
+        }
+    })();
+    const handlePageNumber = (number) => {
+        console.log(number);
+        setCurrentPage(number);
+    };
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, [currentPage]);
+    const goToNextPage = () => {
+        if (currentPage >= numberOfPages - 1) setCurrentPage(0);
+        else setCurrentPage(currentPage + 1);
+    };
+    const goToPreviousPage = () => {
+        if (currentPage <= 0) setCurrentPage(numberOfPages - 1);
+        else setCurrentPage(currentPage - 1);
+    };
     // useEffect(() => {
     //     if (show) document.body.style.overflow = 'hidden';
     //     else document.body.style.overflow = 'unset';
@@ -74,7 +110,7 @@ function InstockTable({ data, setData, setAlert }) {
                         <th colSpan="2">Thao Tác</th>
                     </tr>
                 </thead>
-                {data.map((item) => {
+                {pageItems.map((item) => {
                     return (
                         <tbody key={item.id}>
                             <tr>
@@ -142,6 +178,23 @@ function InstockTable({ data, setData, setAlert }) {
                     );
                 })}
             </table>
+            <div className={style.pagination}>
+                <button onClick={goToPreviousPage} disabled={currentPage === 0}>
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {number.map((item) => (
+                    <button
+                        className={item - 1 === currentPage ? style.pageActive : null}
+                        key={item}
+                        onClick={() => handlePageNumber(item - 1)}
+                    >
+                        {item}
+                    </button>
+                ))}
+                <button onClick={goToNextPage} disabled={numberOfPages === currentPage + 1}>
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </div>
     );
 }
